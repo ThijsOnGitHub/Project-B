@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE android.support.constraint.ConstraintLayout [<!ELEMENT android.support.constraint.ConstraintLayout (ImageButton|ImageView)*><!ATTLIST android.support.constraint.ConstraintLayoutxmlns:android CDATA #REQUIREDxmlns:app CDATA #REQUIREDxmlns:tools CDATA #REQUIREDandroid:layout_width CDATA #REQUIREDandroid:layout_height CDATA #REQUIREDandroid:visibility CDATA #REQUIREDtools:context CDATA #REQUIRED><!ELEMENT ImageButton (#PCDATA)><!ATTLIST ImageButtonandroid:id CDATA #REQUIREDandroid:layout_height CDATA #REQUIREDandroid:layout_marginBottom CDATA #REQUIREDandroid:layout_marginEnd CDATA #REQUIREDandroid:layout_marginLeft CDATA #REQUIREDandroid:layout_marginRight CDATA #REQUIREDandroid:layout_marginStart CDATA #REQUIREDandroid:layout_marginTop CDATA #REQUIREDandroid:layout_width CDATA #REQUIREDapp:layout_constraintBottom_toBottomOf CDATA #REQUIREDapp:layout_constraintEnd_toEndOf CDATA #REQUIREDapp:layout_constraintStart_toStartOf CDATA #REQUIREDapp:layout_constraintTop_toTopOf CDATA #REQUIREDapp:srcCompat CDATA #REQUIREDtools:onClick CDATA #REQUIRED><!ELEMENT ImageView (#PCDATA)><!ATTLIST ImageViewandroid:id CDATA #REQUIREDandroid:layout_width CDATA #REQUIREDandroid:layout_height CDATA #REQUIREDapp:srcCompat CDATA #REQUIREDtools:layout_editor_absoluteX CDATA #REQUIREDtools:layout_editor_absoluteY CDATA #REQUIRED>]>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context="com.example.MainActivity">
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="52dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="343dp"
+        android:layout_marginLeft="343dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="467dp"
+        android:contentDescription="@string/arrow_right"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_up_float"
+        tools:onClick="onClick" />
+
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="52dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="343dp"
+        android:layout_marginRight="343dp"
+        android:layout_marginBottom="467dp"
+        android:contentDescription="@string/arrow_left"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_up_float"
+        tools:onClick="onClick" />
+
+    <ImageView
+        android:id="@+id/mainImage"
+        android:layout_width="267dp"
+        android:layout_height="359dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/beginning_by_ryky"
+        android:contentDescription="@string/mainImage"/>
+
+</android.support.constraint.ConstraintLayout>
