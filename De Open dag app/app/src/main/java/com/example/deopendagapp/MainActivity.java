@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper myDb;
-    EditText editName, editSurname, editMarks;
-    Button btnAddData, btnViewAll;
+    EditText editName, editSurname, editMarks, editId;
+    Button btnAddData, btnViewAll, btnUpdate, btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,15 +21,52 @@ public class MainActivity extends AppCompatActivity {
 
         myDb = new DatabaseHelper(this);
 
+        editId = (EditText)findViewById(R.id.edittext_id);
         editName = (EditText)findViewById(R.id.edittext_name);
         editSurname = (EditText)findViewById(R.id.edittext_surname);
         editMarks = (EditText)findViewById(R.id.edittext_marks);
         btnAddData = (Button)findViewById(R.id.button_adddata);
         btnViewAll = (Button)findViewById(R.id.button_viewall);
+        btnUpdate = (Button)findViewById(R.id.button_update);
+        btnDelete = (Button)findViewById(R.id.button_delete);
 
+
+        DeleteData();// delete Button
+        UpdateData(); // update Button
         AddData(); // addData button
         viewAll(); // viewAll button
     }
+
+    public void DeleteData() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isDeleted = myDb.deleteData(editId.getText().toString(), editName.getText().toString(), editSurname.getText().toString(), editMarks.getText().toString());
+
+                if(isDeleted == true) {
+                    showBottomMessage("Data is deleted");
+                } else {
+                    showBottomMessage("Data is not deleted");
+                }
+            }
+        });
+    }
+
+    public void UpdateData() {
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isUpdated = myDb.updateData(editId.getText().toString(), editName.getText().toString(), editSurname.getText().toString(), editMarks.getText().toString());
+
+                if(isUpdated == true) {
+                    showBottomMessage("Data is updated");
+                } else {
+                    showBottomMessage("Data is not updated");
+                }
+            }
+        });
+    }
+
     // INSERT name, surname, marks into the 'students_table' TABLE WHEN clicked on btnAddData
     public void AddData() {
         btnAddData.setOnClickListener(new View.OnClickListener() {

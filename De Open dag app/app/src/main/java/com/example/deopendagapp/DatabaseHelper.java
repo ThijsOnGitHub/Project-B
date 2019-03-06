@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             -------------------------------------
     */
 
-    private  static final int DATABASE_VERSION = 2; // when updating structure increase by 1
+    private  static final int DATABASE_VERSION = 2; // when updating structure increase this number by 1
     private static final String DATABASE_NAME = "student.db";
         public static final String TABLE_NAME_1 = "student_table";
             public static final String COL_1 = "ID";
@@ -78,5 +78,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME_1, null);
         return res;
+    }
+
+    public boolean updateData(String id, String name, String surname, String marks) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // columns, values stored in contentvalues
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_1, id);
+        contentValues.put(COL_2, name);
+        contentValues.put(COL_3, surname);
+        contentValues.put(COL_4, marks);
+
+        db.update(TABLE_NAME_1, contentValues, "ID = ?", new String[]{id});
+        return true;
+    }
+
+    public boolean deleteData(String id, String name, String surname, String marks) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_NAME_1, "ID = ?", new String[]{id});
+        return true;
     }
 }
