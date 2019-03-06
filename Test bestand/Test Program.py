@@ -5,4 +5,6 @@ elif tekst=="":
     print("jij bent slim!")
 else:
     print(tekst)
+
+//vinden jullie deze commit goed?
     
