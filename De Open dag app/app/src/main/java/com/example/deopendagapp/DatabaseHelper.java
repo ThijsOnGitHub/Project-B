@@ -6,42 +6,46 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+// https://www.youtube.com/watch?v=cp2rL3sAFmI&list=PLS1QulWo1RIaRdy16cOzBO5Jr6kEagA07
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     /*
 
-    DATABASE NAME = 'student.db'
-        - TABLE NAME = 'student_table'
-            =====================================
-            | ID    | NAME  | SURNAME   | MARKS |
-            =====================================
-            |       |       |           |       |
-            -------------------------------------
+    DATABASE NAME = 'open_days.db'
+        - TABLE NAME = 'workshops'
+            ===============================================
+            | ID | ROOMCODE | STUDY | STARTTIME | SUBJECT |
+            ===============================================
+            |    |          |       |           |         |
+            -----------------------------------------------
     */
 
-    private  static final int DATABASE_VERSION = 2; // when updating structure increase this number by 1
-    private static final String DATABASE_NAME = "student.db";
-        public static final String TABLE_NAME_1 = "student_table";
-            public static final String COL_1 = "ID";
-            public static final String COL_2 = "NAME";
-            public static final String COL_3 = "SURNAME";
-            public static final String COL_4 = "MARKS";
+    private  static final int DB_DATABASE_VERSION = 1; // when updating structure increase this number by 1
+    private static final String DB_DATABASE_OPEN_DAYS = "open_days.db";
+        public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS = "workshops";
+            public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_ID = "ID";
+            public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_ROOMCODE = "ROOMCODE";
+            public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STUDY = "STUDY";
+            public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STARTDATETIME = "STARTTIME";
+            public static final String DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_SUBJECT = "SUBJECT";
 
 
 
     // CREATE DATABASE WHEN CALLED
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DB_DATABASE_OPEN_DAYS, null, DB_DATABASE_VERSION);
     }
 
     // CREATE TABLE WHEN CALLED
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_NAME_1 + "(" +
-                COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_2 + " TEXT, " +
-                COL_3 + " TEXT, " +
-                COL_4 + " INTEGER" +
+        String query = "CREATE TABLE " + DB_OPEN_DAYS_TABLE_WORKSHOPS + "(" +
+                DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_ROOMCODE + " TEXT, " +
+                DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STUDY + " TEXT, " +
+                DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STARTDATETIME + " TEXT, " +
+                DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_SUBJECT + " TEXT" +
                 ")";
 
         db.execSQL(query);
@@ -50,54 +54,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // DELETE TABLE AND CREATE AGAIN WHEN CALLED
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_1);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_OPEN_DAYS_TABLE_WORKSHOPS);
         onCreate(db);
     }
 
-
-    public boolean insertData(String col2_value, String col3_value, String col4_value) {
+    public boolean insertData(String roomcode, String study, String startdatetime, String subject) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // columns, values stored in contentvalues
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2, col2_value);
-        contentValues.put(COL_3, col3_value);
-        contentValues.put(COL_4, col4_value);
+        contentValues.put(DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_ROOMCODE, roomcode);
+        contentValues.put(DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STUDY, study);
+        contentValues.put(DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_STARTDATETIME, startdatetime);
+        contentValues.put(DB_OPEN_DAYS_TABLE_WORKSHOPS_COL_SUBJECT, subject);
 
-        long result = db.insert(TABLE_NAME_1, null, contentValues);
+        long result = db.insert(DB_OPEN_DAYS_TABLE_WORKSHOPS, null, contentValues);
 
-        if (result == -1) {
-            return false; // error, not inserted
-        } else {
-            return true; // inserted
-        }
+        return result != -1;
     }
 
-    public Cursor getAllData(){
+    public Cursor viewData() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME_1, null);
-        return res;
-    }
+        String query = "SELECT * FROM " + DB_OPEN_DAYS_TABLE_WORKSHOPS;
+        Cursor cursor = db.rawQuery(query, null);
 
-    public boolean updateData(String id, String name, String surname, String marks) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // columns, values stored in contentvalues
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1, id);
-        contentValues.put(COL_2, name);
-        contentValues.put(COL_3, surname);
-        contentValues.put(COL_4, marks);
-
-        db.update(TABLE_NAME_1, contentValues, "ID = ?", new String[]{id});
-        return true;
-    }
-
-    public boolean deleteData(String id, String name, String surname, String marks) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.delete(TABLE_NAME_1, "ID = ?", new String[]{id});
-        return true;
+        return cursor;
     }
 }

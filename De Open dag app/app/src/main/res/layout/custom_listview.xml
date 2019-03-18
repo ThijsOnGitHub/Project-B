@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout   xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:weightSum="72.5"
+                android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="17.5">
+
+        <TextView
+            android:id="@+id/textview_subject"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="Subject"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textview_study"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/textview_subject"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="Study"
+            android:textColor="@color/colorPrimaryDark" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textview_roomcode"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="27.5"
+        android:gravity="center"
+        android:text="Room code"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="27.5">
+
+        <TextView
+            android:id="@+id/textview_starttime"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:text="Start time"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/textview_timeleft"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical|fill_vertical"
+            android:text="Time left"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

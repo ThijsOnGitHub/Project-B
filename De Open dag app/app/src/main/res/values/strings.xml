@@ -1,11 +1,3 @@
 <resources>
     <string name="app_name">De open dag app</string>
-    <string name="button_delete">Delete</string>
-    <string name="button_update">Update</string>
-    <string name="button_insert">Add data</string>
-    <string name="button_select">View all</string>
-    <string name="input_name">Name</string>
-    <string name="input_surname">Surname</string>
-    <string name="input_marks">Marks</string>
-    <string name="input_id">ID</string>
 </resources>
