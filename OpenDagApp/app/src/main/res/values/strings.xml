@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Open Dag App</string>
+    <string name="Homeapage">Homepage</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="Education">Education</string>
+    <string name="Map">Map</string>
+    <string name="OpenDay">Open Day</string>
+    <string name="Contact">Contact</string>
+</resources>
