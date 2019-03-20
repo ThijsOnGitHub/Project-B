@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Open Dag App</string>
+    <string name="Homeapage">Thuispagina</string>
+    <string name="Education">Opleidingen</string>
+    <string name="Map">Plattegrond</string>
+    <string name="OpenDay">Open Dag</string>
+    <string name="Contact">Contact</string>
+</resources>
