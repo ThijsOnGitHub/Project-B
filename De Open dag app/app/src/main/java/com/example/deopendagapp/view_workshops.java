@@ -12,6 +12,7 @@ import java.util.List;
 public class view_workshops extends AppCompatActivity {
 
     DatabaseHelper myDb;
+
     private ListView listView_workshop;
     private Workshoplistadapter adapter;
     private List<Workshops> mWorkshoplist;
@@ -36,7 +37,12 @@ public class view_workshops extends AppCompatActivity {
             Toast.makeText(this, "No data to show :(", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
-                mWorkshoplist.add(new Workshops(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),""));
+                mWorkshoplist.add(new Workshops(
+                        cursor.getString(1), // Roomcode column index
+                        cursor.getString(2), // Study column index
+                        cursor.getString(3), // Starttime column index
+                        cursor.getString(4)  // Subject column index
+                ));
             }
 
             adapter = new Workshoplistadapter(getApplicationContext(), mWorkshoplist);
