@@ -1,1 +1,0 @@
-Inside the folders inside these folders are android studio projects.
