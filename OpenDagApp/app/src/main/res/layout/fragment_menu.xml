@@ -9,16 +9,16 @@
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/Menu"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
+        android:background="@color/hogeschoolRood"
         app:itemBackground="@color/hogeschoolRood"
-        app:itemHorizontalTranslationEnabled="false"
         app:itemIconTint="@android:color/background_light"
         app:itemTextColor="@android:color/background_light"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/main_menu" />
 </android.support.constraint.ConstraintLayout>
