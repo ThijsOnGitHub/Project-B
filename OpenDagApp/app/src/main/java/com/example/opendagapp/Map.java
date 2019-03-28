@@ -21,7 +21,7 @@ import java.util.zip.Inflater;
 public class Map extends AppCompatActivity {
 
     class floorManager{
-        public String[] buildingsList= new String[] {"h99","wd103","wn107"};
+        public String[] buildingsList= new String[] {"h107","wd103","wn99"};
         public String building=buildingsList[0];
         public int buildingNum=0;
         public int floor=0;
@@ -54,10 +54,16 @@ public class Map extends AppCompatActivity {
 
         public void updateImage(){
             showFloor.setImageResource(0);
+
             //https://stackoverflow.com/questions/16369814/how-to-access-the-drawable-resources-by-name-in-android
             int id=context.getResources().getIdentifier(createName(),"drawable",context.getPackageName());
+
             showFloor.setImageResource(id);
             testView.setText(createName()+"\n"+id);
+        }
+
+        private boolean floorExist(String name){
+
         }
 
         private int stayBetweenIncl(int min,int max,int number){
@@ -82,6 +88,7 @@ public class Map extends AppCompatActivity {
     }
 
     public void clickUp(View v){
+        System.out.println("hallo");
         floor.floorUp(showFloor);
     }
 }
