@@ -16,66 +16,92 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.zip.Inflater;
+class DrawableManager{
+    private static Context context = null;
+    private static Resources resources;
 
+    public DrawableManager(Context c) {
+        context = c;
+        resources=context.getResources();
+    }
 
-public class Map extends AppCompatActivity {
+    //By myself
+    public static int getID(String name){
+        int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
+        return resourceId;
+    }
 
-    class floorManager{
-        public String[] buildingsList= new String[] {"h107","wd103","wn99"};
-        public String building=buildingsList[0];
-        public int buildingNum=0;
-        public int floor=0;
-        public Context context;
-        public ImageView floorView;
-        public TextView testView;
+    public static boolean nameExist(String name){
+        if (getID(name)==0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+}
 
-        public floorManager(Context c,ImageView showFloor ,TextView testViewi){
-            context=c;
-            floorView=showFloor;
-            testView=testViewi;
+class floorManager{
+    public String[] buildingsList= new String[] {"h107","wd103","wn99"};
+    public String building=buildingsList[0];
+    public int buildingNum=0;
+    public int floor=0;
+    public Context context;
+    public ImageView showFloor;
+    public TextView testView;
+    public DrawableManager getPic;
+    public Button upButton,downButton,leftButton,rightButton;
+
+    //,Button upBut,Button downBut,Button leftBut,Button rightBut
+    public floorManager(Context c,ImageView showFloorInvoer ,TextView testViewi){
+        DrawableManager getPic = new DrawableManager(c);
+        context=c;
+        showFloor=showFloorInvoer;
+        testView=testViewi;
+        updateImage();
+    }
+
+    public void changeBuilding(int amount){
+        if (getPic.nameExist(createName(floor,buildingsList[stayBetweenIncl(0,2,buildingNum+amount)]))) {
+            buildingNum = stayBetweenIncl(0, 2, buildingNum + amount);
+            building = buildingsList[buildingNum];
             updateImage();
-        }
-
-        public void changeBuilding(int amount){
-            buildingNum= stayBetweenIncl(0,2,buildingNum+amount);
-            building=buildingsList[buildingNum];
-            updateImage();
-        }
-
-        public void floorUp(ImageView showFloor){
-            floor+=1;
-            updateImage();
-        }
-
-        public String createName(){
-            return building+Integer.toString(floor)+"e";
-        }
-
-
-        public void updateImage(){
-            showFloor.setImageResource(0);
-
-            //https://stackoverflow.com/questions/16369814/how-to-access-the-drawable-resources-by-name-in-android
-            int id=context.getResources().getIdentifier(createName(),"drawable",context.getPackageName());
-
-            showFloor.setImageResource(id);
-            testView.setText(createName()+"\n"+id);
-        }
-
-        private boolean floorExist(String name){
-
-        }
-
-        private int stayBetweenIncl(int min,int max,int number){
-            if (number<min){
-                return min;
-            }else if (number>max){
-                return max;
-            }
-            return number;
         }
     }
 
+    public void changeFloor(int amount){
+        if (getPic.nameExist(createName(floor+amount,building))) {
+            floor += amount;
+            updateImage();
+        }
+    }
+
+    public String createName(){
+        return building+Integer.toString(floor)+"e";
+    }
+
+    public String createName(int floor,String building){
+        return building+Integer.toString(floor)+"e";
+    }
+
+
+    public void updateImage(){
+        showFloor.setImageResource(0);
+        int id=getPic.getID(createName());
+        showFloor.setImageResource(id);
+        testView.setText(createName()+"\n");
+    }
+
+    private int stayBetweenIncl(int min,int max,int number){
+        if (number<min){
+            return min;
+        }else if (number>max){
+            return max;
+        }
+        return number;
+    }
+}
+public class Map extends AppCompatActivity {
     floorManager floor;
     ImageView showFloor;
     @Override
@@ -88,7 +114,18 @@ public class Map extends AppCompatActivity {
     }
 
     public void clickUp(View v){
-        System.out.println("hallo");
-        floor.floorUp(showFloor);
+        floor.changeFloor(1);
+    }
+
+    public void clickDown(View v){
+       floor.changeFloor(-1);
+    }
+
+    public void clickLeft(View v){
+        floor.changeBuilding(-1);
+    }
+
+    public void clickRight(View v){
+        floor.changeBuilding(1);
     }
 }
