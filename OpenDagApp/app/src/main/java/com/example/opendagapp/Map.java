@@ -41,7 +41,7 @@ class DrawableManager{
     }
 }
 
-class floorManager{
+class mapManager{
     public String[] buildingsList= new String[] {"h107","wd103","wn99"};
     public String building=buildingsList[0];
     public int buildingNum=0;
@@ -53,7 +53,7 @@ class floorManager{
     public Button upButton,downButton,leftButton,rightButton;
 
     //,Button upBut,Button downBut,Button leftBut,Button rightBut
-    public floorManager(Context c,ImageView showFloorInvoer ,TextView testViewi){
+    public mapManager(Context c,ImageView showFloorInvoer ,TextView testViewi){
         DrawableManager getPic = new DrawableManager(c);
         context=c;
         showFloor=showFloorInvoer;
@@ -102,7 +102,7 @@ class floorManager{
     }
 }
 public class Map extends AppCompatActivity {
-    floorManager floor;
+    mapManager floor;
     ImageView showFloor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,7 @@ public class Map extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         showFloor= findViewById(R.id.showFloor);
         TextView testView = findViewById(R.id.TestView);
-        floor = new floorManager(this,showFloor,testView);
+        floor = new mapManager(this,showFloor,testView);
     }
 
     public void clickUp(View v){
