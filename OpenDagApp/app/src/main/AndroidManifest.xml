@@ -9,15 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD:OpenDagApp/app/src/main/AndroidManifest.xml
         <activity android:name=".Contact"></activity>
         <activity android:name=".OpenDays" />
         <activity android:name=".Education" />
         <activity android:name=".Map" />
         <activity android:name=".Homepage">
-=======
-        <activity android:name=".MainActivity">
->>>>>>> parent of 1245805... custom listview (study, subject,roomcode, time, timeleft) about workshops:De Open dag app/app/src/main/AndroidManifest.xml
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
