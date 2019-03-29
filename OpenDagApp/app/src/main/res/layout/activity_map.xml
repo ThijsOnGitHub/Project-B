@@ -7,7 +7,7 @@
     tools:context=".Map">
 
     <ImageView
-        android:id="@+id/showFloor"
+        android:id="@+id/ImageView_showFloor"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -17,7 +17,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="TODO"
-        android:onClick="clickUp"
         android:rotation="90"
         android:scaleType="centerInside"
         android:scaleX="1.4"
@@ -55,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/TestView"
+        android:id="@+id/TextView_FloorIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -65,8 +64,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
+        android:textColor="@android:color/black"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/showFloor"
+        app:layout_constraintBottom_toBottomOf="@+id/ImageView_showFloor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
