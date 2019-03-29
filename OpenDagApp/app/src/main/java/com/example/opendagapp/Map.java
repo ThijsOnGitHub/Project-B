@@ -172,7 +172,6 @@ public class Map extends AppCompatActivity{
         floor = new mapManager(this, attributes);
     }
 
-
     public void clickUp(View v){
         floor.changeFloor(1);
     }
