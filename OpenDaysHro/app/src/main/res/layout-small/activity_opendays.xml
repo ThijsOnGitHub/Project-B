@@ -65,18 +65,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/page-container">
 
                 <!--
                     Code here!!!
                 -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Open Days"
-                    android:textAlignment="center"
-                    android:gravity="center" />
 
             </LinearLayout>
 
