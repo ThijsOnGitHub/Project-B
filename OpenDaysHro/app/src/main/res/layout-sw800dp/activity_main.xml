@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:screenOrientation="portrait">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:ignore="Suspicious0dp"
+            android:id="@+id/header"
+            android:background="@color/hro_red">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/logo"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:text="Hogeschool Rotterdam"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="15sp"
+                    android:autoSizeMaxTextSize="26sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:layout_marginRight="10dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            tools:ignore="Suspicious0dp">
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/page-container"
+                    android:layout_margin="10dp">
+
+                    <!--
+                        Code here!!!
+                    -->
+
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <include
+                layout="@layout/activity_menu" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
