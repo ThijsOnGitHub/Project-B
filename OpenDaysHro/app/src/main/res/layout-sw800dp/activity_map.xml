@@ -16,41 +16,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75"
+            android:layout_weight="1"
             tools:ignore="Suspicious0dp"
             android:id="@+id/header"
             android:background="@color/hro_red">
-            <LinearLayout
+            <fragment
+                android:id="@+id/fragment33"
+                android:name="project.b.topBar_fragment"
+                android:layout_margin="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/logo"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:textColor="@color/text"
-                        android:text="Hogeschool Rotterdam"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="26sp"
-                        android:autoSizeStepGranularity="2sp"
-                        android:layout_marginRight="10dp"/>
-                </RelativeLayout>
-            </LinearLayout>
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 
@@ -59,7 +34,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6.75"
+            android:layout_weight="8"
             tools:ignore="Suspicious0dp">
 
             <android.support.v4.widget.NestedScrollView
@@ -86,13 +61,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75"
+            android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <include
-                layout="@layout/activity_menu" />
+            <fragment
+                android:id="@+id/fragment13"
+                android:name="project.b.menu_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 
