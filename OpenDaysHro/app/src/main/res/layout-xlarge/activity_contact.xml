@@ -14,44 +14,18 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
-            tools:ignore="Suspicious0dp"
-            android:id="@+id/header"
-            android:background="@color/hro_red">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/logo"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:textColor="@color/text"
-                        android:text="Hogeschool Rotterdam"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="26sp"
-                        android:autoSizeStepGranularity="2sp"
-                        android:layout_marginRight="10dp"/>
-                </RelativeLayout>
-            </LinearLayout>
+            android:layout_weight="0.7"
+            android:background="@color/hro_red"
+            tools:ignore="Suspicious0dp">
 
+            <fragment
+                android:id="@+id/fragment29"
+                android:name="project.b.topBar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
 
