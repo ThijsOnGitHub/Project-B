@@ -85,9 +85,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <include
-                layout="@layout/activity_menu" />
-
+            <fragment
+                android:id="@+id/fragment23"
+                android:name="project.b.menu_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
     </LinearLayout>
