@@ -21,7 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_TABLE_INSTITUTE_ID = "id"; // Primary key, autoincrement
     public static final String DB_TABLE_INSTITUTE_FULLNAME = "fullname"; // Text
     public static final String DB_TABLE_INSTITUTE_SHORTNAME = "shortname"; // Text
-    public static final String DB_TABLE_INSTITUTE_GENERALINFORMATION = "generalinformation"; // Text
+    public static final String DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH = "generalinformation_english"; // Text
+    public static final String DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH = "generalinformation_dutch"; // Text
 
     public static final String DB_TABLE_STUDY = "study";
     public static final String DB_TABLE_STUDY_ID = "id"; // Primary key, autoincrement
@@ -37,7 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_TABLE_ACTIVITY_STARTTIME = "starttime"; // text
     public static final String DB_TABLE_ACTIVITY_ENDTIME = "endtime"; // text
     public static final String DB_TABLE_ACTIVITY_CLASSROOM = "classroom"; // text
-    public static final String DB_TABLE_ACTIVITY_INFORMATION = "information"; // text
+    public static final String DB_TABLE_ACTIVITY_INFORMATION_ENGLISH = "information_english"; // text
+    public static final String DB_TABLE_ACTIVITY_INFORMATION_DUTCH = "information_dutch"; // text
 
     public static final String DB_TABLE_LOCATION = "location";
     public static final String DB_TABLE_LOCATION_ID = "id"; // Primary key, autoincrement
@@ -60,9 +62,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DB_TABLE_OPENDAY + "(" + DB_TABLE_OPENDAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_OPENDAY_DATE + " TEXT, " + DB_TABLE_OPENDAY_STARTTIME + " TEXT, " + DB_TABLE_OPENDAY_ENDTIME + " TEXT, " + DB_TABLE_OPENDAY_INSTITUTEFULLNAME + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_INSTITUTE + "(" + DB_TABLE_INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_INSTITUTE_FULLNAME + " TEXT, " + DB_TABLE_INSTITUTE_SHORTNAME + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + DB_TABLE_INSTITUTE + "(" + DB_TABLE_INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_INSTITUTE_FULLNAME + " TEXT, " + DB_TABLE_INSTITUTE_SHORTNAME + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_STUDY + "(" + DB_TABLE_STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_STUDY_INSTITUTEFULLNAME + " TEXT, " + DB_TABLE_STUDY_NAME + " TEXT, " + DB_TABLE_STUDY_TYPE + " TEXT, " + DB_TABLE_STUDY_LOCATIONADRESS + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_ACTIVITY + "(" + DB_TABLE_ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_ACTIVITY_OPENDAYDATE + " TEXT, " + DB_TABLE_ACTIVITY_STUDYNAME + " TEXT, " + DB_TABLE_ACTIVITY_STARTTIME + " TEXT, " + DB_TABLE_ACTIVITY_ENDTIME + " TEXT, " + DB_TABLE_ACTIVITY_CLASSROOM + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + DB_TABLE_ACTIVITY + "(" + DB_TABLE_ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_ACTIVITY_OPENDAYDATE + " TEXT, " + DB_TABLE_ACTIVITY_STUDYNAME + " TEXT, " + DB_TABLE_ACTIVITY_STARTTIME + " TEXT, " + DB_TABLE_ACTIVITY_ENDTIME + " TEXT, " + DB_TABLE_ACTIVITY_CLASSROOM + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_LOCATION + "(" + DB_TABLE_LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_LOCATION_ADDRESS + " TEXT, " + DB_TABLE_LOCATION_ZIPCODE + " TEXT, " + DB_TABLE_LOCATION_PHONENUMBER + " TEXT, " + DB_TABLE_LOCATION_IMAGEDESCRIPRION + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_IMAGE + "(" + DB_TABLE_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_IMAGE_FILENAME + " TEXT, " + DB_TABLE_IMAGE_CONTEXT + " TEXT, " + DB_TABLE_IMAGE_DESCRIPTION + " TEXT, " + DB_TABLE_IMAGE_FLOORNUMBER + " TEXT" + ")");
     }
@@ -92,13 +94,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // if result == true then the values are inserted
     }
 
-    public boolean createInstitute(String fullname, String shortname, String generalinformation) {
+    public boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DB_TABLE_INSTITUTE_FULLNAME, fullname);
         contentValues.put(DB_TABLE_INSTITUTE_SHORTNAME, shortname);
-        contentValues.put(DB_TABLE_INSTITUTE_GENERALINFORMATION, generalinformation);
+        contentValues.put(DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
+        contentValues.put(DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
 
         long result = db.insert(DB_TABLE_INSTITUTE, null, contentValues);
         db.close();
@@ -119,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // if result == true then the values are inserted
     }
 
-    public boolean createActivity(String openday_date, String study_name, String starttime, String endtime, String classroom, String information) {
+    public boolean createActivity(String openday_date, String study_name, String starttime, String endtime, String classroom, String information_english, String information_dutch) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -128,7 +131,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DB_TABLE_ACTIVITY_STARTTIME, starttime);
         contentValues.put(DB_TABLE_ACTIVITY_ENDTIME, endtime);
         contentValues.put(DB_TABLE_ACTIVITY_CLASSROOM, classroom);
-        contentValues.put(DB_TABLE_ACTIVITY_INFORMATION, information);
+        contentValues.put(DB_TABLE_ACTIVITY_INFORMATION_ENGLISH, information_english);
+        contentValues.put(DB_TABLE_ACTIVITY_INFORMATION_DUTCH, information_dutch);
 
         long result = db.insert(DB_TABLE_ACTIVITY, null, contentValues);
         db.close();
@@ -172,7 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor viewInstitutes() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_INSTITUTE_ID + ", " + DB_TABLE_INSTITUTE_FULLNAME + ", " + DB_TABLE_INSTITUTE_SHORTNAME + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION + " FROM " + DB_TABLE_INSTITUTE;
+        String query = "SELECT " + DB_TABLE_INSTITUTE_ID + ", " + DB_TABLE_INSTITUTE_FULLNAME + ", " + DB_TABLE_INSTITUTE_SHORTNAME + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH + " FROM " + DB_TABLE_INSTITUTE;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
@@ -186,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor viewActivities() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_ACTIVITY_ID + ", " + DB_TABLE_ACTIVITY_OPENDAYDATE + ", " + DB_TABLE_ACTIVITY_STUDYNAME + ", " + DB_TABLE_ACTIVITY_STARTTIME + ", " + DB_TABLE_ACTIVITY_ENDTIME + ", " + DB_TABLE_ACTIVITY_CLASSROOM + ", " + DB_TABLE_ACTIVITY_INFORMATION + " FROM " + DB_TABLE_ACTIVITY;
+        String query = "SELECT " + DB_TABLE_ACTIVITY_ID + ", " + DB_TABLE_ACTIVITY_OPENDAYDATE + ", " + DB_TABLE_ACTIVITY_STUDYNAME + ", " + DB_TABLE_ACTIVITY_STARTTIME + ", " + DB_TABLE_ACTIVITY_ENDTIME + ", " + DB_TABLE_ACTIVITY_CLASSROOM + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH  + ", " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " FROM " + DB_TABLE_ACTIVITY;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
