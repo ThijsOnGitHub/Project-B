@@ -7,9 +7,14 @@ import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 class DrawableManager{
     private static Context context = null;
@@ -155,6 +160,7 @@ class mapManager{
     }
 }
 
+
 public class map_activity extends AppCompatActivity {
     mapManager floor;
 
@@ -168,7 +174,6 @@ public class map_activity extends AppCompatActivity {
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
         AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator), (Button) findViewById(R.id.Button_FloorUp), (Button) findViewById(R.id.Button_FloorDown), (Button) findViewById(R.id.Button_BuildingLeft), (Button) findViewById(R.id.Button_BuildingRight));
         floor = new mapManager(this, attributes);
-        System.out.println("test123");
     }
 
     public void clickUp(View v){
