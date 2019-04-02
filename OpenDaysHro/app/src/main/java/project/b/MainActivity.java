@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-
+/*
 
     int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+*/
 
 
     @Override
@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+    }
+        /*
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
         int numOfListItems = 5;
@@ -99,5 +100,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
+*/
 }
