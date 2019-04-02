@@ -174,6 +174,7 @@ public class map_activity extends AppCompatActivity {
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
         AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator), (Button) findViewById(R.id.Button_FloorUp), (Button) findViewById(R.id.Button_FloorDown), (Button) findViewById(R.id.Button_BuildingLeft), (Button) findViewById(R.id.Button_BuildingRight));
         floor = new mapManager(this, attributes);
+        //Test123
     }
 
     public void clickUp(View v){
