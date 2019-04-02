@@ -159,22 +159,41 @@
             android:onClick="swapPages">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.4">
+
+                    <ImageView
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:src="@drawable/calendar_icon"
+                        android:gravity="center"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.1">
 
                     <TextView
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Open\nDays"
+                        android:text="Open Days"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="26sp"
+                        android:autoSizeMaxTextSize="16sp"
                         android:autoSizeStepGranularity="2sp"
                         android:textAlignment="center"
                         android:textColor="@color/text"
-                        android:gravity="center"/>
+                        android:gravity="bottom"/>
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 
