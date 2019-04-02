@@ -57,10 +57,10 @@ public class opendays_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opendays);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        for(int i = 0; i < 3; i++) {
+        int numOfListItems = 30;
+
+        for(int i = 0; i < numOfListItems; i++) {
             addToLayout("ListItem", "Informatica\n04/04/2019\nWijnhaven 107", "Options");
         }
     }
-
-
 }

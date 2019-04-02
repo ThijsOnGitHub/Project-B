@@ -15,6 +15,4 @@ public class contact_activity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-
-
 }
