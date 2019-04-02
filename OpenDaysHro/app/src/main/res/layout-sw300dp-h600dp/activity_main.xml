@@ -79,12 +79,12 @@
                         app:srcCompat="@android:drawable/arrow_up_float"
                         tools:onClick="onClick" />
                     </LinearLayout>
+
                     <LinearLayout
+                        android:id="@+id/hallo_wereld"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/hallo_wereld"
-                        >
+                        android:orientation="vertical">
 
                     </LinearLayout>
 
