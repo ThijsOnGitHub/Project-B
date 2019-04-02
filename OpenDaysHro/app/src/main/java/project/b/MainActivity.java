@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    DatabaseHelper myDatabase;
 
 
     @Override
@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        myDatabase = new DatabaseHelper(this);
+//        myDatabase.createOpenday("09-04-2020", "09:00:00", "16:00:00", "Communicatie, Media en ICT");
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
