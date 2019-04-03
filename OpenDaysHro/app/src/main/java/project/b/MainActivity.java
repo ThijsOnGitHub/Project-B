@@ -73,11 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
+
         int numOfListItems = 5;
 
         for(int i = 0; i < numOfListItems; i++) {
             addToLayout("ListItem", "Informatica\n04/04/2019\nWijnhaven 107", "Options");
         }
+        
     }
 
 
