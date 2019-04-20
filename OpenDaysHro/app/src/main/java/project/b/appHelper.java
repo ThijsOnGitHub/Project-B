@@ -24,8 +24,6 @@ public class appHelper extends AppCompatActivity {
 
         public LayoutHelper(Context context){ this.context = context; }
 
-        public void goToOtherPageWithInformation(String[] info) { System.out.println(info); }
-
         public void ListItem_openday( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -64,8 +62,16 @@ public class appHelper extends AppCompatActivity {
             ((RelativeLayout) listItem_time).addView(listItem_Time);
                 ((LinearLayout)LinearLayout_main).addView((RelativeLayout)listItem_time);
 
-            String[] infoToPass = {ListItem_Description, ListItem_Location, ListItem_Time};
-            //LinearLayout_main.callOnClick( goToOtherPageWithInformation(infoToPass) );
+            final String[] infoToPass = {ListItem_Description, ListItem_Location, ListItem_Time};
+            LinearLayout_main.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent gotoOpenDay_activity = new Intent(context, opendays_activity.class);
+                        gotoOpenDay_activity.putExtra("INFO", infoToPass);
+                        gotoOpenDay_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(gotoOpenDay_activity);
+                }
+            });
 
             LinearLayout main = (LinearLayout)findViewById( addToThisLayout );
                 ((LinearLayout)main).addView((LinearLayout)LinearLayout_main);
