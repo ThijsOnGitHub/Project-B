@@ -28,7 +28,7 @@ public class educations_activity extends appHelper {
         layout = new LayoutHelper(this, true);
         if (passedName == null) {
             int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
-            String[] text = new String[]{"testing", "the", "generated", "button", "menu"};
+            String[] text = new String[]{ "Informatica", "CMD", "Communicatie", "Technische Informatica", "CMGT" };
 
             layout.generate_study_program_menu(R.id.page_container, images, text);
         }

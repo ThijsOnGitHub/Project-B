@@ -140,9 +140,23 @@ public class appHelper extends AppCompatActivity {
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout Main_layout = new LinearLayout(this.context);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
+
+            String longest_string;
+            int Chars = 0;
+
+            for ( int counter = 0; counter < List_with_text.length; counter++ ) {
+                if ( List_with_text[counter].length() > Chars ) { longest_string = List_with_text[counter]; Chars = List_with_text[counter].length(); }
+            }
+
+            // Technische Informatica = 22 char. textSize = 17 for 500 width (22 char). textSize = 22 for 500 width (12 char).
+            calc text_size_calculator_backup = (x, y, z) -> (int) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y );
+            calc text_size_calculator = (x, y, z) -> (int) ( (float) ( (float) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y ) / (float) metrics.density ) * (float) 2.625 );
+
+            int textSize_backup = (int) ( (float) ( (float) text_size_calculator.xyz(Chars, button_size, 28) / (float) metrics.density ) * (float) 2.625 );
+            int textSize = text_size_calculator.xyz(Chars, button_size, 28);
+            System.out.println(metrics.density + "     " + textSize);
+
             for (int i = 0; i < ammountOfItems; i++){
-
-
 
                 //zet er 2 naast elkaar
                 if (i + max_ammount_of_buttons_in_a_row - 1 < ammountOfItems){
@@ -170,6 +184,7 @@ public class appHelper extends AppCompatActivity {
                                 button_text.setGravity(Gravity.CENTER);
                                 TextView text = new TextView(this.context);
                                     text.setText(List_with_text[i]);
+                                    text.setTextSize(textSize);
                                     button_text.addView(text);
                             Button.addView(button_image);
                             Button.addView(button_text);
@@ -222,6 +237,7 @@ public class appHelper extends AppCompatActivity {
                             button_text.setGravity(Gravity.CENTER);
                             TextView text = new TextView(this.context);
                                 text.setText(List_with_text[i]);
+                                text.setTextSize(textSize);
                                 button_text.addView(text);
                         Button.addView(button_image);
                         Button.addView(button_text);
