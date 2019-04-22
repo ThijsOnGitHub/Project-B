@@ -14,9 +14,12 @@ import android.content.Intent;
 
 import org.w3c.dom.Text;
 
-public class opendays_activity extends AppCompatActivity {
+public class opendays_activity extends appHelper {
+
+    LayoutHelper layout;
 
     String[] passedInfo;
+
     String Description;
     String Location;
     String Time;
@@ -27,23 +30,18 @@ public class opendays_activity extends AppCompatActivity {
         setContentView(R.layout.activity_opendays);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        layout = new LayoutHelper(this, false);
+
         passedInfo = getIntent().getStringArrayExtra("INFO");
-        Description = passedInfo[0];
-        Location = passedInfo[1];
-        Time = passedInfo[2];
+            Description = passedInfo[0];
+            Location = passedInfo[1];
+            Time = passedInfo[2];
 
-        TextView info1 = new TextView(this);
-        info1.setText(Description);
-        TextView info2 = new TextView(this);
-        info2.setText(Location);
-        TextView info3 = new TextView(this);
-        info3.setText(Time);
-        LinearLayout page = (LinearLayout) findViewById(R.id.page_container);
-        page.setOrientation(LinearLayout.VERTICAL);
+        layout.ListItem_openday("General Information\n" + Description,"H2.002", Time,R.id.page_container);
+        layout.ListItem_openday("General Information\n" + Description,"H2.002", Time,R.id.page_container);
+        layout.ListItem_openday("General Information\n" + Description,"H2.002", Time,R.id.page_container);
 
-        page.addView(info1);
-        page.addView(info2);
-        page.addView(info3);
+
     }
 
 

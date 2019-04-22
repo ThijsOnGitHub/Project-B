@@ -40,7 +40,7 @@ public class MainActivity extends appHelper {
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
-        layout = new LayoutHelper(this);
+        layout = new LayoutHelper(this, true);
 
         String[] desc = {"Informatica","Technische Informatica", "CMGT", "Informatica"};
         String[] loc = {"Wijnhaven 107", "Wijnhaven 107", "Wijnhaven 108", "Wijnhaven 107"};
