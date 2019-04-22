@@ -33,9 +33,12 @@ public class opendays_activity extends appHelper {
         layout = new LayoutHelper(this, false);
 
         passedInfo = getIntent().getStringArrayExtra("INFO");
+        try {
             Description = passedInfo[0];
             Location = passedInfo[1];
             Time = passedInfo[2];
+        }
+        catch (Exception e){ Description = ""; Location = ""; Time = ""; System.out.println("Something went wrong!"); }
 
         layout.ListItem_openday("General Information\n" + Description,"H2.002", Time,R.id.page_container);
         layout.ListItem_openday("General Information\n" + Description,"H2.002", Time,R.id.page_container);

@@ -6,17 +6,30 @@ import android.content.pm.ActivityInfo;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import static java.security.AccessController.getContext;
+
 
 public class appHelper extends AppCompatActivity {
 
     // https://stackoverflow.com/questions/3204852/android-add-a-textview-to-linear-layout-programmatically
+
+    @FunctionalInterface
+    private interface calc {
+        int xyz(int x, int y, int z);
+    }
 
     public class LayoutHelper {
         Context context;
@@ -25,6 +38,11 @@ public class appHelper extends AppCompatActivity {
         int menuColor = R.color.dark_grey;
 
         public LayoutHelper(Context context, boolean Enable_Onclick){ this.context = context; this.enable_onclick = Enable_Onclick; }
+
+
+
+
+
 
         public void ListItem_openday( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
@@ -84,7 +102,37 @@ public class appHelper extends AppCompatActivity {
 
         }
 
+
+
+
+
+
         public void generate_study_program_menu(int addToThisLayout, int[] List_with_images, String[] List_with_text){
+
+            /*
+             https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
+
+             Getting the screen size. In case of an oneplus 6 it is width: 1080, height: 2200.
+            */
+
+            int max_ammount_of_buttons_in_a_row = 2;
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int phone_width = metrics.widthPixels;
+                int phone_height = metrics.heightPixels;
+            calc calculator = (x, y, z) -> (int) ( ( (float) x / (float) y) * (float) z);
+
+            int button_size = calculator.xyz(500, 1080, phone_width);
+            int standaard_margin = ((FrameLayout.LayoutParams) findViewById(addToThisLayout).getLayoutParams()).leftMargin;
+            int button_margin = calculator.xyz(phone_width, 1080, 20) - (standaard_margin / max_ammount_of_buttons_in_a_row);
+                if (button_margin < 0) { button_margin = 0; } // prevent crashing (not needed so far)
+
+            // picture_margin = int[]{left,top,right,bottom}
+            int[] picture_margin = new int[] {calculator.xyz(90, 500, button_size), calculator.xyz(30, 500, button_size), calculator.xyz(90, 500, button_size), calculator.xyz(10, 500, button_size)};
+
+            System.out.println(button_size + "  " + button_margin + "   { " + picture_margin[0] + ", " + picture_margin[1] + ", " + picture_margin[2] + ", " + picture_margin[3] + " }");
+
             int ammountOfItems;
             if (List_with_images.length < List_with_text.length) { ammountOfItems = List_with_images.length; } else { ammountOfItems = List_with_text.length; }
 
@@ -94,40 +142,56 @@ public class appHelper extends AppCompatActivity {
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
             for (int i = 0; i < ammountOfItems; i++){
 
+
+
                 //zet er 2 naast elkaar
-                if (i + 1 < ammountOfItems){
-                    i++;
+                if (i + max_ammount_of_buttons_in_a_row - 1 < ammountOfItems){
                     LinearLayout horizontal = new LinearLayout(this.context);
                     horizontal.setOrientation(LinearLayout.HORIZONTAL);
 
-                    LinearLayout Button = new LinearLayout(this.context);
-                        Button.setBackground(getDrawable(List_with_images[i-1]));
-                        LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(500, 500));
-                            btnSize.setMargins(10,10,10,10);
-                            Button.setLayoutParams(btnSize);
+                    for (int y = 0; y < max_ammount_of_buttons_in_a_row; y++) {
+                        LinearLayout Button = new LinearLayout(this.context);
+                            Button.setOrientation(LinearLayout.VERTICAL);
+                            Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                            LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
+                                btnSize.setMargins(button_margin,button_margin,button_margin,button_margin);
+                                Button.setLayoutParams(btnSize);
+                            RelativeLayout button_image = new RelativeLayout(this.context);
+                                button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                                button_image.setGravity(Gravity.CENTER);
+                                LinearLayout the_image = new LinearLayout(this.context);
+                                    LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
+                                        the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
+                                        the_image.setLayoutParams(the_image_params);
+                                    the_image.setBackground(getDrawable(List_with_images[i]));
+                                    button_image.addView(the_image);
+                            RelativeLayout button_text = new RelativeLayout(this.context);
+                                button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                                button_text.setGravity(Gravity.CENTER);
+                                TextView text = new TextView(this.context);
+                                    text.setText(List_with_text[i]);
+                                    button_text.addView(text);
+                            Button.addView(button_image);
+                            Button.addView(button_text);
+
+                        String this_button_text = List_with_text[i];
                         Button.isClickable();
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // do stuff
+                                Intent gotoPage = new Intent(context, educations_activity.class);
+                                    gotoPage.putExtra("NAME", this_button_text);
+                                    gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(gotoPage);
                             }
                         });
 
-                    LinearLayout Button2 = new LinearLayout(this.context);
-                        Button2.setBackground(getDrawable(List_with_images[i]));
-                        LinearLayout.LayoutParams btn2Size = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(500, 500));
-                            btn2Size.setMargins(10,10,10,10);
-                            Button2.setLayoutParams(btn2Size);
-                        Button2.isClickable();
-                        Button2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // do stuff
-                            }
-                        });
+                        i++;
 
-                    horizontal.addView(Button);
-                    horizontal.addView(Button2);
+                        horizontal.addView(Button);
+                    }
+                    i--;
+
                     Main_layout.addView(horizontal);
                 }
                 // zet er 1 in het midden
@@ -139,15 +203,38 @@ public class appHelper extends AppCompatActivity {
                         horizontal.setGravity(Gravity.CENTER_HORIZONTAL);
 
                     LinearLayout Button = new LinearLayout(this.context);
-                        Button.setBackground(getDrawable(List_with_images[i]));
-                        LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(500, 500));
-                            btnSize.setMargins(10,10,10,10);
+                        Button.setOrientation(LinearLayout.VERTICAL);
+                        Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                        LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
+                            btnSize.setMargins(button_margin,button_margin,button_margin,button_margin);
                             Button.setLayoutParams(btnSize);
+                        RelativeLayout button_image = new RelativeLayout(this.context);
+                            button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                            button_image.setGravity(Gravity.CENTER);
+                            LinearLayout the_image = new LinearLayout(this.context);
+                                LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
+                                    the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
+                                    the_image.setLayoutParams(the_image_params);
+                                the_image.setBackground(getDrawable(List_with_images[i]));
+                                button_image.addView(the_image);
+                        RelativeLayout button_text = new RelativeLayout(this.context);
+                            button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                            button_text.setGravity(Gravity.CENTER);
+                            TextView text = new TextView(this.context);
+                                text.setText(List_with_text[i]);
+                                button_text.addView(text);
+                        Button.addView(button_image);
+                        Button.addView(button_text);
+
+                        String this_button_text = List_with_text[i];
                         Button.isClickable();
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // do stuff
+                                Intent gotoPage = new Intent(context, educations_activity.class);
+                                    gotoPage.putExtra("NAME", this_button_text);
+                                    gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(gotoPage);
                             }
                         });
 
