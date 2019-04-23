@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         myDatabase = new DatabaseHelper(this);
-//        myDatabase.createOpenday("09-04-2020", "09:00:00", "16:00:00", "Communicatie, Media en ICT");
+        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 

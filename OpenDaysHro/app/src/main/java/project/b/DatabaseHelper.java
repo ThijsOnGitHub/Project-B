@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 1;
+    private static final int DB_DATABASE_HROOPENDAY_VERSION = 20;
     private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
 
     public static final String DB_TABLE_OPENDAY = "openday";
@@ -78,6 +78,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_LOCATION);
         db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_IMAGE);
         onCreate(db);
+    }
+
+    public void fillDatabase() {
+        // Create CMI with study Programs
+        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
+        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Voltijd", "Wijnhaven 107");
+        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Deeltijd", "Wijnhaven 107");
+        createStudy("Communicatie, Media en Informatietechnologie", "Technisch Informatica", "Voltijd", "Wijnhaven 107");
+        createStudy("Communicatie, Media en Informatietechnologie", "Creative Media and Game Technologies", "Voltijd", "Wijnhaven 99");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Voltijd", "Wijnhaven 107");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Deeltijd", "Wijnhaven 107");
+    }
+
+    public boolean emptyDatabase() {
+        boolean empty = true;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_OPENDAY, null);
+        if (cur != null && cur.moveToFirst()) {
+            empty = (cur.getInt (0) == 0);
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_INSTITUTE, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_STUDY, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_LOCATION, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_IMAGE, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_ACTIVITY, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        cur.close();
+        db.close();
+
+        return empty;
     }
 
     public boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
@@ -181,28 +241,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor viewStudies() {
+    public Cursor viewStudies(String institute_fullname) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + DB_TABLE_STUDY_ID + ", " + DB_TABLE_STUDY_INSTITUTEFULLNAME + ", " + DB_TABLE_STUDY_NAME + ", " +DB_TABLE_STUDY_TYPE + ", " + DB_TABLE_STUDY_LOCATIONADRESS + " FROM " + DB_TABLE_STUDY;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
 
-    public Cursor viewActivities() {
+    public Cursor viewActivities(String openday_date, String studyname) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + DB_TABLE_ACTIVITY_ID + ", " + DB_TABLE_ACTIVITY_OPENDAYDATE + ", " + DB_TABLE_ACTIVITY_STUDYNAME + ", " + DB_TABLE_ACTIVITY_STARTTIME + ", " + DB_TABLE_ACTIVITY_ENDTIME + ", " + DB_TABLE_ACTIVITY_CLASSROOM + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH  + ", " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " FROM " + DB_TABLE_ACTIVITY;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
 
-    public Cursor viewLocations() {
+    public Cursor viewLocations(String institute_fullname, String studyname) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + DB_TABLE_LOCATION_ID + ", " + DB_TABLE_LOCATION_ADDRESS + ", " + DB_TABLE_LOCATION_ZIPCODE + ", " + DB_TABLE_LOCATION_PHONENUMBER + ", " + DB_TABLE_LOCATION_IMAGEDESCRIPRION + " FROM " + DB_TABLE_LOCATION;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
 
-    public Cursor viewImages() {
+    public Cursor viewImages(String address, Integer floornumber) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + DB_TABLE_IMAGE_ID + ", " + DB_TABLE_IMAGE_FILENAME + ", " + DB_TABLE_IMAGE_CONTEXT + ", " + DB_TABLE_IMAGE_DESCRIPTION + ", " + DB_TABLE_IMAGE_FLOORNUMBER + " FROM " + DB_TABLE_IMAGE;
         Cursor cursor = db.rawQuery(query, null);
