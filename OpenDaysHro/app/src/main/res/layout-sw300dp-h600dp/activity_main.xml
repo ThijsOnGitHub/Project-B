@@ -53,32 +53,62 @@
                     -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                    <ImageButton
-                        android:id="@+id/rightButton"
-                        android:layout_width="50dp"
                         android:layout_height="150dp"
-                        android:contentDescription="arrow_right"
-                        android:onClick="onClick"
-                        app:srcCompat="@android:drawable/arrow_up_float"
-                        tools:onClick="onClick" />
-
-                    <ImageView
+                        android:orientation="horizontal"
                         android:id="@+id/mainImage"
-                        android:layout_width="300dp"
-                        android:layout_height="150dp"
-                        app:srcCompat="@drawable/beginning_by_ryky" />
+                        android:background="@drawable/beginning_by_ryky">
 
-                    <ImageButton
-                        android:id="@+id/leftButton"
-                        android:layout_width="50dp"
-                        android:layout_height="150dp"
-                        android:contentDescription="arrow_left"
-                        android:onClick="onClick"
-                        app:srcCompat="@android:drawable/arrow_up_float"
-                        tools:onClick="onClick" />
+
+                        <LinearLayout
+                            android:id="@+id/leftButton"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:onClick="onClick"
+                            android:gravity="center"
+                            >
+
+                            <TextView
+                                android:id="@+id/text1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            >
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rightButton"
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:onClick="onClick"
+                            android:gravity="center"
+                            >
+
+                            <TextView
+                                android:id="@+id/text2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+
                     </LinearLayout>
+
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

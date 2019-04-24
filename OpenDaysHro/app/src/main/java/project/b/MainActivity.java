@@ -19,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
     int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
 
     int imageCounter = 0;
-    ImageView mainImage;
+    LinearLayout mainImage;
+    TextView text1;
+    TextView text2;
+
 
 
     // https://stackoverflow.com/questions/3204852/android-add-a-textview-to-linear-layout-programmatically
@@ -68,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mainImage = (ImageView)findViewById(R.id.mainImage);
+        mainImage = (LinearLayout)findViewById(R.id.mainImage);
+
+        text1 = (TextView)findViewById(R.id.text1); text1.setText("<"); text1.setTextSize(40); text1.setTextColor(getResources().getColor(R.color.white));
+        text2 = (TextView)findViewById(R.id.text2); text2.setText(">"); text2.setTextSize(40); text2.setTextColor(getResources().getColor(R.color.white));
+
 
         int numOfListItems = 5;
 
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 if (imageCounter < 0){
                     imageCounter = drawables.length - 1;
                 }
-                mainImage.setImageResource(drawables[imageCounter]);
+                mainImage.setBackground(getDrawable(drawables[imageCounter]));
                 break;
 
             case R.id.rightButton:
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 if(imageCounter > drawables.length - 1){
                     imageCounter = 0;
                 }
-                mainImage.setImageResource(drawables[imageCounter]);
+                mainImage.setBackground(getDrawable(drawables[imageCounter]));
                 break;
         }
     }
