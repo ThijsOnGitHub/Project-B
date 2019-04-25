@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         myDatabase = new DatabaseHelper(this);
         if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
 
+//        CASLAY'S list met studies by CMI in het nederlands (voor engels wijzig false in true)
+//        ArrayList<String> studyNames = myDatabase.getNamesOfStudiesByInstitute("Communicatie, Media en Informatietechnologie", false);
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
