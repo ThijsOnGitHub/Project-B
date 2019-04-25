@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 9050;
+    private static final int DB_DATABASE_HROOPENDAY_VERSION = 1;
     private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
 
     public static final String DB_TABLE_OPENDAY = "openday";
@@ -74,30 +74,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Part-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "", "");
         // CMI locations
-        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "rotterdamwijnhaven107");
-        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "rotterdamwijnhaven103");
-        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "rotterdamwijnhaven99");
+        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
+        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
+        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "3011WN99");
         // CMI Images
-        createImage("h1070e.png", "plattegrond 0e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "0");
-        createImage("h1071e.png", "plattegrond 1e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "1");
-        createImage("h1072e.png", "plattegrond 2e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "2");
-        createImage("h1073e.png", "plattegrond 3e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "3");
-        createImage("h1074e.png", "plattegrond 4e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "4");
-        createImage("h1075e.png", "plattegrond 5e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "5");
-        createImage("h1076e.png", "plattegrond 6e wijnhaven 107 rotterdam", "rotterdamwijnhaven107", "6");
-        createImage("wd1030e.png", "plattegrond 0e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "0");
-        createImage("wd1031e.png", "plattegrond 1e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "1");
-        createImage("wd1032e.png", "plattegrond 2e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "2");
-        createImage("wd1033e.png", "plattegrond 3e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "3");
-        createImage("wd1034e.png", "plattegrond 4e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "4");
-        createImage("wd1035e.png", "plattegrond 5e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "5");
-        createImage("wd1036e.png", "plattegrond 6e wijnhaven 103 rotterdam", "rotterdamwijnhaven103", "6");
-        createImage("wn990e.png", "plattegrond 0e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "0");
-        createImage("wn991e.png", "plattegrond 1e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "1");
-        createImage("wn992e.png", "plattegrond 2e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "2");
-        createImage("wn993e.png", "plattegrond 3e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "3");
-        createImage("wn994e.png", "plattegrond 4e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "4");
-        createImage("wn995e.png", "plattegrond 5e wijnhaven 99 rotterdam", "rotterdamwijnhaven99", "5");
+        createImage("h1070e.png", "H.00", "3011WN107", "0");
+        createImage("h1071e.png", "H.01", "3011WN107", "1");
+        createImage("h1072e.png", "H.02", "3011WN107", "2");
+        createImage("h1073e.png", "H.03", "3011WN107", "3");
+        createImage("h1074e.png", "H.04", "3011WN107", "4");
+        createImage("h1075e.png", "H.05", "3011WN107", "5");
+        createImage("h1076e.png", "H.06", "3011WN107", "6");
+        createImage("wd1030e.png", "WD.00", "3011WN103", "0");
+        createImage("wd1031e.png", "WD.01", "3011WN103", "1");
+        createImage("wd1032e.png", "WD.02", "3011WN103", "2");
+        createImage("wd1033e.png", "WD.03", "3011WN103", "3");
+        createImage("wd1034e.png", "WD.04", "3011WN103", "4");
+        createImage("wd1035e.png", "WD.05", "3011WN103", "5");
+        createImage("wd1036e.png", "WD.06", "3011WN103", "6");
+        createImage("wn990e.png", "WN.00", "3011WN99", "0");
+        createImage("wn991e.png", "WN.01", "3011WN99", "1");
+        createImage("wn992e.png", "WN.02", "3011WN99", "2");
+        createImage("wn993e.png", "WN.03", "3011WN99", "3");
+        createImage("wn994e.png", "WN.04", "3011WN99", "4");
+        createImage("wn995e.png", "WN.05", "3011WN99", "5");
+
+        // Create openday for CMI
+        createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("09-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+
+        // Create activities for CMI
+        createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "WD.02.002", "Python stuff", "Python dingen");
+        createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314-C120", "General Information", "Algemene informatie");
+        createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
     }
     public Boolean emptyDatabase() {
         Boolean empty = true;
