@@ -21,6 +21,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import static java.security.AccessController.getContext;
 
+/*
+
+FUNCTIONS:
+- ListItem_openday ( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout)
+- generate_study_program_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text)
+- generate_page_study_programs (int Image, String Text, int addViewTo)
+- generate_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text, Intent[] gotoThisPage)
+
+Status (updated 27-04-2019):
+- ListItem_openday: Layout needs to be adjusted
+- generate_study_program_menu: need to add support for broken strings (test\ntest)
+- generate_page_study_programs: Layout needs to be adjusted
+- generate_menu: Layout needs to be adjusted.
+
+*/
 
 public class appHelper extends AppCompatActivity {
 
@@ -336,10 +351,10 @@ public class appHelper extends AppCompatActivity {
 
             calc text_size_calculator = (x, y, z) -> (int) ( (float) ( (float) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y ) / (float) metrics.density ) * (float) 2.625 );
 
-            int textSize = text_size_calculator.xyz(Chars, button_size, 10);
+            int textSize = text_size_calculator.xyz(Chars, button_size, 30);
             System.out.println(metrics.density + "     " + textSize);
 
-            for (int i = 0; i < List_with_images.length; ){
+            for (int i = 0; i < List_with_images.length; i++){
                 LinearLayout Button = new LinearLayout(this.context);
                     Button.setOrientation(LinearLayout.VERTICAL);
                     Button.setBackgroundColor(getResources().getColor(R.color.hro_red));
@@ -365,10 +380,11 @@ public class appHelper extends AppCompatActivity {
                     Button.addView(button_text);
 
                 Button.isClickable();
+                int counter = i;
                 Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(gotoThisPage[i].addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        startActivity(gotoThisPage[counter].addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                 });
 

@@ -18,10 +18,12 @@ public class contact_activity extends appHelper {
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), educations_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
-        Intent[] myIntents = new Intent[]{home,educations,home,home};
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
-        String[] text = new String[]{"home","educations","test","test"};
+        String[] text = new String[]{"home","educations","About CMI","Contact"};
 
         layout.generate_menu(R.id.page_container,images,text,myIntents);
         }
