@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import static java.security.AccessController.getContext;
 
 public class educations_activity extends appHelper {
 
+    DatabaseHelper myDatabase;
     LayoutHelper layout;
     String passedName;
 
@@ -27,17 +31,24 @@ public class educations_activity extends appHelper {
 
         layout = new LayoutHelper(this, true);
         if (passedName == null) {
+
+            myDatabase = new DatabaseHelper(this);
+
+            // getting a list with names of all studies. (for english use false and for dutch use true). ~Credits: Christian.
+            ArrayList<String> studyNames = myDatabase.getNamesOfStudiesByInstitute("Communicatie, Media en Informatietechnologie", false);
+
             int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
-            String[] text = new String[]{ "Informatica", "CMD", "Communicatie", "Technische Informatica", "CMGT" };
+            String[] text = new String[studyNames.size()];
+
+            // creating a string[] from a ArrayList<String>
+            for ( int x = 0; x < studyNames.size(); x++) { text[x] = studyNames.get(x); }
 
             layout.generate_study_program_menu(R.id.page_container, images, text);
         }
         else {
-            TextView test = new TextView(this);
-                test.setText(passedName);
-            LinearLayout lay = (LinearLayout) findViewById(R.id.page_container);
-            lay.addView(test);
+            layout.generate_page_study_programs(R.drawable.beginning_by_ryky,passedName,R.id.page_container);
         }
     }
+
 
 }

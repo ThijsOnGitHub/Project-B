@@ -1,15 +1,33 @@
 package project.b;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/*
+public class menu_fragment extends appHelper{
+       protected void onCreate(Bundle savedInstanceState) {
+           super.onCreate(savedInstanceState);
+           setContentView(R.layout.activity_educations);
+           setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+           LayoutHelper layout = new LayoutHelper(this, true);
 
+           Intent home = new Intent(getBaseContext(), MainActivity.class);
+           Intent educations = new Intent(getBaseContext(), educations_activity.class);
+
+           Intent[] myIntents = new Intent[]{home,educations,home,home};
+           int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+           String[] text = new String[]{"home","educations","test","test"};
+
+           layout.generate_menu(R.id.page_container,images,text,myIntents);
+       }
+
+   */
 public class menu_fragment extends Fragment implements View.OnClickListener{
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
