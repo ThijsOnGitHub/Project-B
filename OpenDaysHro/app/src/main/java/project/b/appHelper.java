@@ -28,12 +28,14 @@ FUNCTIONS:
 - generate_study_program_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text)
 - generate_page_study_programs (int Image, String Text, int addViewTo)
 - generate_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text, Intent[] gotoThisPage)
+- Image_with_Buttons (int addToThisLinearLayout, int[] images)
 
 Status (updated 27-04-2019):
 - ListItem_openday: Layout needs to be adjusted
 - generate_study_program_menu: need to add support for broken strings (test\ntest)
-- generate_page_study_programs: Layout needs to be adjusted
+- generate_page_study_programs: Layout needs to be adjusted. also the image needs to has the centered logo and text.
 - generate_menu: Layout needs to be adjusted.
+- Image_with_Buttons : need to add functionality.
 
 */
 
@@ -47,12 +49,20 @@ public class appHelper extends AppCompatActivity {
     }
 
     public class LayoutHelper {
-        Context context;
-        boolean enable_onclick;
+        Context context; boolean enable_onclick; DisplayMetrics metrics; int imageCounter; int phone_width; int phone_height; int default_margin;
 
         int menuColor = R.color.dark_grey;
 
-        public LayoutHelper(Context context, boolean Enable_Onclick){ this.context = context; this.enable_onclick = Enable_Onclick; }
+        public LayoutHelper(Context context, boolean Enable_Onclick){
+            this.context = context;
+            this.enable_onclick = Enable_Onclick;
+            this.imageCounter = 0;
+            this.metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            this.phone_width = metrics.widthPixels;
+            this.phone_height = metrics.heightPixels;
+            this.default_margin = (int) ( (float) 2.4 * (float)( (float) phone_width / (float) 100) );
+        }
 
 
 
@@ -132,15 +142,11 @@ public class appHelper extends AppCompatActivity {
 
             int max_ammount_of_buttons_in_a_row = 2;
 
-            DisplayMetrics metrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int phone_width = metrics.widthPixels;
-                int phone_height = metrics.heightPixels;
+
             calc calculator = (x, y, z) -> (int) ( ( (float) x / (float) y) * (float) z);
 
             int button_size = calculator.xyz(500, 1080, phone_width);
-            int standaard_margin = ((FrameLayout.LayoutParams) findViewById(addToThisLayout).getLayoutParams()).leftMargin;
-            int button_margin = calculator.xyz(phone_width, 1080, 20) - (standaard_margin / max_ammount_of_buttons_in_a_row);
+            int button_margin = calculator.xyz(phone_width, 1080, 20) - (default_margin / max_ammount_of_buttons_in_a_row);
                 if (button_margin < 0) { button_margin = 0; } // prevent crashing (not needed so far)
 
             // picture_margin = int[]{left,top,right,bottom}
@@ -154,6 +160,9 @@ public class appHelper extends AppCompatActivity {
             LinearLayout main = (LinearLayout) findViewById(addToThisLayout);
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout Main_layout = new LinearLayout(this.context);
+                LinearLayout.LayoutParams my_main_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
+                Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
 
             String longest_string;
@@ -164,10 +173,10 @@ public class appHelper extends AppCompatActivity {
             }
 
             // Technische Informatica = 22 char. textSize = 17 for 500 width (22 char). textSize = 22 for 500 width (12 char).
-            calc text_size_calculator_backup = (x, y, z) -> (int) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y );
+            //calc text_size_calculator_backup = (x, y, z) -> (int) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y );
             calc text_size_calculator = (x, y, z) -> (int) ( (float) ( (float) ( ( ( (float) z - ( (float) x / 2 ) ) / (float) 500) * (float) y ) / (float) metrics.density ) * (float) 2.625 );
 
-            int textSize_backup = (int) ( (float) ( (float) text_size_calculator.xyz(Chars, button_size, 28) / (float) metrics.density ) * (float) 2.625 );
+            //int textSize_backup = (int) ( (float) ( (float) text_size_calculator.xyz(Chars, button_size, 28) / (float) metrics.density ) * (float) 2.625 );
             int textSize = text_size_calculator.xyz(Chars, button_size, 28);
             System.out.println(metrics.density + "     " + textSize);
 
@@ -293,12 +302,8 @@ public class appHelper extends AppCompatActivity {
 
             String[] contentList = new String[]{Text,content};
 
-            DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int phone_width = metrics.widthPixels;
-                int phone_height = metrics.heightPixels;
-
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
                 this_page.setOrientation(LinearLayout.VERTICAL);
@@ -312,11 +317,16 @@ public class appHelper extends AppCompatActivity {
             LinearLayout this_page_text = new LinearLayout(this.context);
                 this_page_text.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                this_page_text_lp.setMargins(0,default_margin,0,default_margin);
                 this_page_text.setLayoutParams(this_page_text_lp);
 
             for (int x = 0; x < contentList.length; x++) {
                 TextView this_text = new TextView(this.context);
+                LinearLayout.LayoutParams text_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+                    text_params.setMargins(default_margin,0,default_margin,0);
+                    this_text.setLayoutParams(text_params);
                 this_text.setText(contentList[x]);
+                this_text.setTextSize(textSize);
                 this_page_text.addView(this_text);
             }
             LinearLayout main = (LinearLayout) findViewById(addViewTo);
@@ -327,12 +337,8 @@ public class appHelper extends AppCompatActivity {
 
         public void generate_menu(int addToThisLayout, int[] List_with_images, String[] List_with_text, Intent[] gotoThisPage){
 
-            DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
             calc calculator = (x, y, z) -> (int) ( ( (float) x / (float) y ) * (float) z);
-            int phone_width = metrics.widthPixels;
-            int phone_height = metrics.heightPixels;
-            int button_size = calculator.xyz(1, List_with_images.length, phone_width);
+            int button_size = calculator.xyz(1, List_with_images.length, (phone_width - (default_margin * 2)));
 
             int ammountOfItems;
             if (List_with_images.length < List_with_text.length) { ammountOfItems = List_with_images.length; } else { ammountOfItems = List_with_text.length; }
@@ -340,6 +346,9 @@ public class appHelper extends AppCompatActivity {
             LinearLayout main = (LinearLayout) findViewById(addToThisLayout);
             main.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout Main_layout = new LinearLayout(this.context);
+            LinearLayout.LayoutParams main_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                Main_layout.setLayoutParams(main_params);
+            Main_layout.setBackgroundColor(getResources().getColor(R.color.hro_red));
             Main_layout.setOrientation(LinearLayout.HORIZONTAL);
 
             String longest_string;
@@ -359,16 +368,18 @@ public class appHelper extends AppCompatActivity {
                     Button.setOrientation(LinearLayout.VERTICAL);
                     Button.setBackgroundColor(getResources().getColor(R.color.hro_red));
                     LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
-                        btnSize.setMargins(0,0,0,0);
                         Button.setLayoutParams(btnSize);
+
                     RelativeLayout button_image = new RelativeLayout(this.context);
                         button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
                         button_image.setGravity(Gravity.CENTER);
                         LinearLayout the_image = new LinearLayout(this.context);
                             LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
+                                the_image_params.setMargins((phone_width / ((50 / ammountOfItems) * 5)),0,(phone_width / ((50 / ammountOfItems) * 5)),0);
                                 the_image.setLayoutParams(the_image_params);
                             the_image.setBackground(getDrawable(List_with_images[i]));
                         button_image.addView(the_image);
+
                     RelativeLayout button_text = new RelativeLayout(this.context);
                         button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                         button_text.setGravity(Gravity.CENTER);
@@ -392,6 +403,67 @@ public class appHelper extends AppCompatActivity {
 
             }
             main.addView(Main_layout);
+        }
+
+        public void Image_with_Buttons(int addToThisLinearLayout, int[] images){
+            int image_height = (int) ( (float) phone_height / (float) 3.5 );
+            int text_size = (int) ( (float) ( (float) (float) 40 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
+            LinearLayout the_image = new LinearLayout(this.context);
+                the_image.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams image_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, image_height));
+                the_image.setLayoutParams(image_lp);
+                the_image.setBackground(getDrawable(images[0]));
+
+            if (enable_onclick == true) {
+                RelativeLayout button_left = new RelativeLayout(this.context);
+                button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                    TextView button1_txt = new TextView(this.context);
+                        button1_txt.setText("<");
+                        button1_txt.setTextSize(text_size);
+                        button_left.setGravity(Gravity.CENTER); button1_txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        button1_txt.setTextColor(getResources().getColor(R.color.white));
+                        button_left.addView(button1_txt);
+                the_image.addView(button_left);
+
+                RelativeLayout space = new RelativeLayout(this.context);
+                    space.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 11));
+                    the_image.addView(space);
+
+                RelativeLayout button_right = new RelativeLayout(this.context);
+                button_right.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                    TextView button2_txt = new TextView(this.context);
+                        button2_txt.setText(">");
+                        button2_txt.setTextSize(text_size);
+                        button_right.setGravity(Gravity.CENTER); button2_txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        button2_txt.setTextColor(getResources().getColor(R.color.white));
+                        button_right.addView(button2_txt);
+                the_image.addView(button_right);
+
+
+                button_left.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageCounter = imageCounter - 1;
+                        if (imageCounter < 0) { imageCounter = images.length - 1; }
+                        the_image.setBackground(getDrawable(images[imageCounter]));
+                    }
+                });
+                button_right.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageCounter = imageCounter + 1;
+                        if (imageCounter > images.length - 1) { imageCounter = 0; }
+                        the_image.setBackground(getDrawable(images[imageCounter]));
+                    }
+                });
+
+            }
+
+            the_image.setBackground(getDrawable(images[0]));
+
+
+            LinearLayout main = (LinearLayout) findViewById(addToThisLinearLayout);
+            main.addView(the_image);
         }
     }
 }

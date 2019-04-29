@@ -3,6 +3,7 @@ package project.b;
 
 
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.ImageView;
 import android.content.pm.ActivityInfo;
@@ -22,11 +23,9 @@ public class MainActivity extends appHelper {
     LayoutHelper layout;
 
     int numOfListItems;
-    int imageCounter = 0;
 
     int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
 
-    ImageView mainImage;
 
 
     @Override
@@ -35,12 +34,12 @@ public class MainActivity extends appHelper {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        layout = new LayoutHelper(this, true);
+
         myDatabase = new DatabaseHelper(this);
         if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
 
-        mainImage = (ImageView)findViewById(R.id.mainImage);
-
-        layout = new LayoutHelper(this, true);
+        layout.Image_with_Buttons(R.id.page_container,drawables);
 
         String[] desc = {"Informatica","Technische Informatica", "CMGT", "Informatica"};
         String[] loc = {"Wijnhaven 107", "Wijnhaven 107", "Wijnhaven 108", "Wijnhaven 107"};
@@ -48,34 +47,9 @@ public class MainActivity extends appHelper {
         numOfListItems = desc.length;
 
         for (int i = 0; i < numOfListItems; i++) {
-            layout.ListItem_openday(desc[i], loc[i], time[i], R.id.list);
+            layout.ListItem_openday(desc[i], loc[i], time[i], R.id.page_container);
         }
 
-    }
-
-
-
-
-
-    public void onClick(View v){
-        switch (v.getId()){
-
-            case R.id.leftButton:
-                imageCounter = imageCounter-1;
-                if (imageCounter < 0){
-                    imageCounter = drawables.length - 1;
-                }
-                mainImage.setImageResource(drawables[imageCounter]);
-                break;
-
-            case R.id.rightButton:
-                imageCounter = imageCounter + 1;
-                if(imageCounter > drawables.length - 1){
-                    imageCounter = 0;
-                }
-                mainImage.setImageResource(drawables[imageCounter]);
-                break;
-        }
     }
 
 }
