@@ -59,6 +59,7 @@
                     android:layout_height="100dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="24dp"
+                    android:onClick="clickFacebookPage"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
                     app:srcCompat="@drawable/facebook_logo" />
@@ -103,6 +104,7 @@
                     android:layout_height="100dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
+                    android:onClick="clickTwitterPage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
                     app:srcCompat="@drawable/twitter" />
@@ -112,6 +114,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="24dp"
+                    android:onClick="clickInstagramPage"
                     app:layout_constraintEnd_toStartOf="@+id/imageView4"
                     app:layout_constraintHorizontal_bias="0.418"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
