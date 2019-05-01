@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 1;
+    private static final int DB_DATABASE_HROOPENDAY_VERSION = 4;
     private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
 
     public static final String DB_TABLE_OPENDAY = "openday";
@@ -65,6 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void fillDatabase() {
         // Create CMI
         createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
+
         // CMI Studies
         createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Part-time", "", "");
@@ -73,31 +74,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Part-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "", "");
+
         // CMI locations
         createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
         createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
         createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "3011WN99");
+
         // CMI Images
-        createImage("h1070e.png", "H.00", "3011WN107", "0");
-        createImage("h1071e.png", "H.01", "3011WN107", "1");
-        createImage("h1072e.png", "H.02", "3011WN107", "2");
-        createImage("h1073e.png", "H.03", "3011WN107", "3");
-        createImage("h1074e.png", "H.04", "3011WN107", "4");
-        createImage("h1075e.png", "H.05", "3011WN107", "5");
-        createImage("h1076e.png", "H.06", "3011WN107", "6");
-        createImage("wd1030e.png", "WD.00", "3011WN103", "0");
-        createImage("wd1031e.png", "WD.01", "3011WN103", "1");
-        createImage("wd1032e.png", "WD.02", "3011WN103", "2");
-        createImage("wd1033e.png", "WD.03", "3011WN103", "3");
-        createImage("wd1034e.png", "WD.04", "3011WN103", "4");
-        createImage("wd1035e.png", "WD.05", "3011WN103", "5");
-        createImage("wd1036e.png", "WD.06", "3011WN103", "6");
-        createImage("wn990e.png", "WN.00", "3011WN99", "0");
-        createImage("wn991e.png", "WN.01", "3011WN99", "1");
-        createImage("wn992e.png", "WN.02", "3011WN99", "2");
-        createImage("wn993e.png", "WN.03", "3011WN99", "3");
-        createImage("wn994e.png", "WN.04", "3011WN99", "4");
-        createImage("wn995e.png", "WN.05", "3011WN99", "5");
+        for (int i = 0; i <= 6; i++) {
+            // Wijnhaven 107 (0-6)
+            createImage("h107"+ Integer.toString(i) +"e.png", "H.0" + Integer.toString(i), "3011WN107", Integer.toString(i));
+            // Wijnhaven 103 (0-6)
+            createImage("wd103"+ Integer.toString(i) +"e.png", "WD.0" + Integer.toString(i), "3011WN103", Integer.toString(i));
+            // Wijnhaven 99 (0-5)
+            if (i < 6) {
+                createImage("wn99"+ Integer.toString(i) +"e.png", "WN.0" + Integer.toString(i), "3011WN99", Integer.toString(i));
+            }
+        }
 
         // Create openday for CMI
         createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
