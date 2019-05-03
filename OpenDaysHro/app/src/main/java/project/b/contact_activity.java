@@ -80,4 +80,7 @@ public class contact_activity extends AppCompatActivity {
         startActivity(callIntent);
     }
 
+    public void askAQuetionClick(View v){
+        startActivity(new Intent(this,askAQuestion_activity.class));
+    }
 }
