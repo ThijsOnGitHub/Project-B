@@ -42,8 +42,8 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="825dp"
-                    android:layout_height="337dp"
+                    android:layout_width="796dp"
+                    android:layout_height="333dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,10 +55,11 @@
 
                 <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="76dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginTop="24dp"
+                    android:onClick="clickFacebookPage"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
                     app:srcCompat="@drawable/facebook_logo" />
@@ -74,7 +75,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="Social Media"
                     android:textColor="#000000"
-                    android:textSize="75dp"
+                    android:textSize="40dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.497"
@@ -92,26 +93,28 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="Contact"
                     android:textColor="#000000"
-                    android:textSize="75dp"
+                    android:textSize="40dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="75dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="72dp"
+                    android:onClick="clickTwitterPage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"
                     app:srcCompat="@drawable/twitter" />
 
                 <ImageView
                     android:id="@+id/imageView5"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="24dp"
+                    android:onClick="clickInstagramPage"
                     app:layout_constraintEnd_toStartOf="@+id/imageView4"
                     app:layout_constraintHorizontal_bias="0.418"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -120,33 +123,35 @@
 
                 <ImageView
                     android:id="@+id/imageView6"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
+                    android:onClick="askAQuetionClick"
                     app:layout_constraintEnd_toStartOf="@+id/imageView9"
-                    app:layout_constraintHorizontal_bias="0.402"
                     app:layout_constraintStart_toEndOf="@+id/imageView8"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
                     app:srcCompat="@drawable/ask_question" />
 
                 <ImageView
                     android:id="@+id/imageView8"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="76dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginTop="24dp"
+                    android:onClick="clickWebsite"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
                     app:srcCompat="@drawable/button_website" />
 
                 <ImageView
                     android:id="@+id/imageView9"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="72dp"
+                    android:onClick="clickCall"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
                     app:srcCompat="@drawable/button_call_us" />

@@ -67,8 +67,17 @@ public class contact_activity extends AppCompatActivity {
             } catch (Exception e) {
                 startIntentWithAction("https://twitter.com/"+twitterUsername);
             }
-        }
+    }
 
+    public void clickWebsite(View v){
+        startIntentWithAction("https://www.hogeschoolrotterdam.nl/");
+    }
 
+    public void clickCall(View v){
+        //https://developer.android.com/training/basics/intents/sending.html#java
+        Uri number = Uri.parse("tel:31623657150");
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+        startActivity(callIntent);
+    }
 
 }
