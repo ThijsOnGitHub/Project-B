@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         myDatabase = new DatabaseHelper(this);
-        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+        myDatabase.initializeDatabase();
 
 
 //        ArrayList<String> cmi = myDatabase.getAllLocationsStreetsByInstitute("Communicatie, Media en Informatietechnologie");
