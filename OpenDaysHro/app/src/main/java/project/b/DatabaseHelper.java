@@ -10,7 +10,7 @@ import android.os.strictmode.SqliteObjectLeakedViolation;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 4;
+    private static final int DB_DATABASE_HROOPENDAY_VERSION = 6;
     private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
 
     public static final String DB_TABLE_OPENDAY = "openday";
@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_TABLE_LOCATION_CITY = "city";
     public static final String DB_TABLE_LOCATION_ZIPCODE = "zipcode";
     public static final String DB_TABLE_LOCATION_PHONENUMBER = "phonenumber";
-    public static final String DB_TABLE_LOCATION_IMAGEDESCRIPRION = "image_description";
+    public static final String DB_TABLE_LOCATION_IMAGEDESCRIPTION = "image_description";
 
     public static final String DB_TABLE_IMAGE = "image";
     public static final String DB_TABLE_IMAGE_ID = "id";
@@ -151,6 +151,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return empty;
     }
+    public String getImageByImageDescriptionAndFloornumber(String image_description, String floornumber) {
+        String mString = "";
+        Cursor mCursor = viewAllImagesByLocationAndFloornumber(image_description, floornumber);
+        String filename = DB_TABLE_IMAGE_FILENAME;
+
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            while (!mCursor.isAfterLast()) {
+                mString = mCursor.getString(mCursor.getColumnIndex(filename));
+                mCursor.moveToNext();
+            }
+        }
+
+        return  mString;
+    }
+    public String getImageDescriptionByStreet(String street) {
+        String mString = "";
+        Cursor mCursor = viewAllLocationsByStreet(street);
+        String imagedescription = DB_TABLE_LOCATION_IMAGEDESCRIPTION;
+
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            while (!mCursor.isAfterLast()) {
+                mString = mCursor.getString(mCursor.getColumnIndex(imagedescription));
+                mCursor.moveToNext();
+            }
+        }
+
+        return mString;
+    }
     public ArrayList<String> getNamesOfStudiesByInstitute(String institute_fullname, Boolean english) {
         ArrayList<String> mArrayList = new ArrayList<>();
         Cursor mCursor = viewAllStudiesByInstitute(institute_fullname);
@@ -174,7 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return  mArrayList;
     }
-    public ArrayList<String> getAllImagesByLocation(String image_description) {
+    public ArrayList<String> getAllImagesByImageDescription(String image_description) {
         ArrayList<String> mArrayList = new ArrayList<>();
         Cursor mCursor = viewAllImagesByLocation(image_description);
         String filename = DB_TABLE_IMAGE_FILENAME;
@@ -191,20 +221,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return  mArrayList;
     }
-    public String getImageByLocationAndFloornumber(String image_description, String floornumber) {
-        String mString = "";
-        Cursor mCursor = viewAllImagesByLocationAndFloornumber(image_description, floornumber);
-        String filename = DB_TABLE_IMAGE_FILENAME;
+    public ArrayList<String> getAllLocationsStreetsByInstitute(String institute_fullname) {
+        ArrayList<String> mArrayList = new ArrayList<>();
+        Cursor mCursor = viewAllLocationsByInstitute(institute_fullname);
+        String street = DB_TABLE_LOCATION_STREET;
 
         if (mCursor != null) {
             mCursor.moveToFirst();
             while (!mCursor.isAfterLast()) {
-                mString = mCursor.getString(mCursor.getColumnIndex(filename));
+                if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(street)))) {
+                    mArrayList.add(mCursor.getString(mCursor.getColumnIndex(street)));
+                }
                 mCursor.moveToNext();
             }
         }
 
-        return  mString;
+        return mArrayList;
     }
     // APP FUNCTIONS
 
@@ -275,7 +307,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DB_TABLE_LOCATION_INSTITUTEFULLNAME, institute_fullname);
         contentValues.put(DB_TABLE_LOCATION_ZIPCODE, zipcode);
         contentValues.put(DB_TABLE_LOCATION_PHONENUMBER, phonenumber);
-        contentValues.put(DB_TABLE_LOCATION_IMAGEDESCRIPRION, image_description);
+        contentValues.put(DB_TABLE_LOCATION_IMAGEDESCRIPTION, image_description);
 
         long result = db.insert(DB_TABLE_LOCATION, null, contentValues);
         db.close();
@@ -315,16 +347,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
-    private Cursor viewAllLocations() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_LOCATION_ID + ", " + DB_TABLE_LOCATION_STREET + ", " + DB_TABLE_LOCATION_CITY + ", " + DB_TABLE_LOCATION_ZIPCODE + ", " + DB_TABLE_LOCATION_PHONENUMBER + ", " + DB_TABLE_LOCATION_IMAGEDESCRIPRION + " FROM " + DB_TABLE_LOCATION;
-        Cursor cursor = db.rawQuery(query, null);
-        return cursor;
-    }
     private Cursor viewAllImages() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + DB_TABLE_IMAGE_ID + ", " + DB_TABLE_IMAGE_FILENAME + ", " + DB_TABLE_IMAGE_CONTEXT + ", " + DB_TABLE_IMAGE_DESCRIPTION + ", " + DB_TABLE_IMAGE_FLOORNUMBER + " FROM " + DB_TABLE_IMAGE;
         Cursor cursor = db.rawQuery(query, null);
+        return cursor;
+    }
+    private Cursor viewAllLocationsByStreet(String street) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + DB_TABLE_LOCATION_ID + ", " + DB_TABLE_LOCATION_STREET + ", " + DB_TABLE_LOCATION_CITY + ", " + DB_TABLE_LOCATION_ZIPCODE + ", " + DB_TABLE_LOCATION_PHONENUMBER + ", " + DB_TABLE_LOCATION_IMAGEDESCRIPTION + " FROM " + DB_TABLE_LOCATION + " WHERE " +  DB_TABLE_LOCATION_STREET + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[] {street});
         return cursor;
     }
     private Cursor viewAllImagesByLocation(String image_description) {
@@ -345,6 +377,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, new String[] {institute_fullname});
         return cursor;
     }
+    private Cursor viewAllLocationsByInstitute(String institute_fullname) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + DB_TABLE_LOCATION_ID + ", " + DB_TABLE_LOCATION_STREET + ", " + DB_TABLE_LOCATION_CITY + ", " + DB_TABLE_LOCATION_ZIPCODE + ", " + DB_TABLE_LOCATION_PHONENUMBER + ", " + DB_TABLE_LOCATION_IMAGEDESCRIPTION + " FROM " + DB_TABLE_LOCATION + " WHERE " + DB_TABLE_LOCATION_INSTITUTEFULLNAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[] {institute_fullname});
+        return cursor;
+    }
     // SELECT * FROM TABLE
 
     // DATABASE NORMAL
@@ -357,7 +395,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + DB_TABLE_INSTITUTE + "(" + DB_TABLE_INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_INSTITUTE_FULLNAME + " TEXT, " + DB_TABLE_INSTITUTE_SHORTNAME + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_STUDY + "(" + DB_TABLE_STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_STUDY_INSTITUTEFULLNAME + " TEXT, " + DB_TABLE_STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + DB_TABLE_STUDY_NAME_DUTCH + " TEXT, " + DB_TABLE_STUDY_TYPE + " TEXT, " + DB_TABLE_STUDY_NAME_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_ACTIVITY + "(" + DB_TABLE_ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_ACTIVITY_OPENDAYDATE + " TEXT, " + DB_TABLE_ACTIVITY_STUDYNAME_DUTCH + " TEXT, " + DB_TABLE_ACTIVITY_STARTTIME + " TEXT, " + DB_TABLE_ACTIVITY_ENDTIME + " TEXT, " + DB_TABLE_ACTIVITY_CLASSROOM + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_LOCATION + "(" + DB_TABLE_LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_LOCATION_STREET + " TEXT, " + DB_TABLE_LOCATION_CITY + " TEXT, " + DB_TABLE_LOCATION_ZIPCODE + " TEXT, " + DB_TABLE_LOCATION_PHONENUMBER + " TEXT, " + DB_TABLE_LOCATION_IMAGEDESCRIPRION + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + DB_TABLE_LOCATION + "(" + DB_TABLE_LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_LOCATION_STREET + " TEXT, " + DB_TABLE_LOCATION_CITY + " TEXT, " + DB_TABLE_LOCATION_ZIPCODE + " TEXT, " + DB_TABLE_LOCATION_INSTITUTEFULLNAME + " TEXT, " + DB_TABLE_LOCATION_PHONENUMBER + " TEXT, " + DB_TABLE_LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + DB_TABLE_IMAGE + "(" + DB_TABLE_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_IMAGE_FILENAME + " TEXT, " + DB_TABLE_IMAGE_CONTEXT + " TEXT, " + DB_TABLE_IMAGE_DESCRIPTION + " TEXT, " + DB_TABLE_IMAGE_FLOORNUMBER + " TEXT" + ")");
     }
     @Override

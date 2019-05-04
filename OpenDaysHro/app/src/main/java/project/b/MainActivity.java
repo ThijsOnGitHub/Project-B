@@ -72,7 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
         myDatabase = new DatabaseHelper(this);
         if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
-        
+
+
+//        ArrayList<String> cmi = myDatabase.getAllLocationsStreetsByInstitute("Communicatie, Media en Informatietechnologie");
+//        Integer gebouw = 0; // index 0
+//        Integer etage = 1; // etage 1
+//        ArrayList<String> wijnhaven107alleetages = myDatabase.getAllImagesByImageDescription(myDatabase.getImageDescriptionByStreet(cmi.get(gebouw)));
+//        String wijnhaven107etage1 = myDatabase.getImageByImageDescriptionAndFloornumber(myDatabase.getImageDescriptionByStreet(cmi.get(gebouw)), Integer.toString(etage));
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
