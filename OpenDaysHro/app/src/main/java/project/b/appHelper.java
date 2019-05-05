@@ -158,10 +158,13 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+
+            int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
+
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
-                LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
+                LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
