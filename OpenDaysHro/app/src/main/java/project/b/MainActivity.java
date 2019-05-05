@@ -3,19 +3,8 @@ package project.b;
 
 
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.View;
-import android.widget.ImageView;
 import android.content.pm.ActivityInfo;
-import android.view.Gravity;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
-
-import java.util.ArrayList;
 
 public class MainActivity extends appHelper {
 
@@ -34,21 +23,32 @@ public class MainActivity extends appHelper {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        layout = new LayoutHelper(this, true);
+        layout = new LayoutHelper(this);
 
         myDatabase = new DatabaseHelper(this);
         if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
-        String[] desc = {"Informatica","Technische Informatica", "CMGT", "Informatica"};
+        String[] desc = {"Thursday\n4 April 2019","Thursday\n11 April 2019", "Thursday\n18 April 2019", "Thursday\n25 April 2019"};
         String[] loc = {"Wijnhaven 107", "Wijnhaven 107", "Wijnhaven 108", "Wijnhaven 107"};
-        String[] time = {"8:00\nStart over: 20 min", "9:00\nStart over: 1 day", "8:00\nStart over: 59 min", "18:50\nStart over: 160 hours"};
+        String[] time = {"8:00-10:00", "9:00-18:00", "8:00-16:00", "7:00-15:00"};
         numOfListItems = desc.length;
 
         for (int i = 0; i < numOfListItems; i++) {
             layout.ListItem_openday(desc[i], loc[i], time[i], R.id.page_container);
         }
+
+        Intent home = new Intent(getBaseContext(), MainActivity.class);
+        Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
+
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+
+        layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 
     }
 

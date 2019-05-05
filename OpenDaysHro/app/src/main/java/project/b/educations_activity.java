@@ -29,7 +29,7 @@ public class educations_activity extends appHelper {
 
         try { passedName = getIntent().getStringExtra("NAME"); } catch (Exception e){ System.out.println(e); passedName = null; }
 
-        layout = new LayoutHelper(this, true);
+        layout = new LayoutHelper(this);
         if (passedName == null) {
 
             myDatabase = new DatabaseHelper(this);
@@ -48,6 +48,18 @@ public class educations_activity extends appHelper {
         else {
             layout.generate_page_study_programs(R.drawable.beginning_by_ryky,passedName,R.id.page_container);
         }
+
+        Intent home = new Intent(getBaseContext(), MainActivity.class);
+        Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
+
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+
+        layout.generate_menu(R.id.menu_bar,images,text,myIntents);
+
     }
 
 

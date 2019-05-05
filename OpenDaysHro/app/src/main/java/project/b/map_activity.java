@@ -161,9 +161,9 @@ class mapManager{
 }
 
 
-public class map_activity extends AppCompatActivity {
+public class map_activity extends appHelper {
     mapManager floor;
-
+    LayoutHelper layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +174,18 @@ public class map_activity extends AppCompatActivity {
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
         AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator), (Button) findViewById(R.id.Button_FloorUp), (Button) findViewById(R.id.Button_FloorDown), (Button) findViewById(R.id.Button_BuildingLeft), (Button) findViewById(R.id.Button_BuildingRight));
         floor = new mapManager(this, attributes);
+
+        Intent home = new Intent(getBaseContext(), MainActivity.class);
+        Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
+
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+
+        layout = new LayoutHelper(this);
+        layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }
 
     public void clickUp(View v){
