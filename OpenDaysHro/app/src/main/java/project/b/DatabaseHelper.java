@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,6 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_TABLE_IMAGE_CONTEXT = "context";
     private static final String DB_TABLE_IMAGE_DESCRIPTION = "description";
     private static final String DB_TABLE_IMAGE_FLOORNUMBER = "floornumber";
+
+    // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // GET DATA
     public ArrayList<String> getAllLocationsByInstitute(String institute_fullname) {
@@ -132,6 +135,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result.add(type);
         result.add(name);
         result.add(general_information);
+
+        return result;
+    }
+    public ArrayList<String> getCalendarData(String institute_fullname, String inputdate) {
+        ArrayList<String> result = new ArrayList<>();
+        String institute_shortname = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_SHORTNAME).get(0);
+        String zipcode = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_LOCATION_ZIPCODE).get(0);
+        String starttime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_STARTTIME).get(0);
+        String endtime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_ENDTIME).get(0);
+        String date = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_DATE).get(0);
+
+        result.add(institute_shortname);
+        result.add(zipcode);
+        result.add(starttime);
+        result.add(endtime);
+        result.add(date);
 
         return result;
     }
@@ -313,6 +332,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return empty;
     }
+
+    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // GET Handler
     private ArrayList<String> getHandler(String table, List<String> arguments, List<String> values, String returnColumn) {
