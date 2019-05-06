@@ -79,28 +79,42 @@ public class MainActivity extends AppCompatActivity {
             myDatabase.fillDatabase();
         }
 
-        ArrayList<String> institutefullname_all = myDatabase.getAllInstituteFullName();
-        ArrayList<String> locationsByInstitute_all = myDatabase.getAllLocationsByInstitute(institutefullname_all.get(0));
-        ArrayList<String> floorplansByLocation_all = myDatabase.getAllFloorplansByLocation(locationsByInstitute_all.get(0));
-        ArrayList<String> floor2ofwijnhaven107 = myDatabase.getAllFloorplanByFloornumber(locationsByInstitute_all.get(0), "2");
-        ArrayList<String> studyofCMI_all_dutch = myDatabase.getNamesOfStudiesByInstitute(institutefullname_all.get(0), true);
-        ArrayList<String> studyofCMI_all_english = myDatabase.getNamesOfStudiesByInstitute(institutefullname_all.get(0), false);
-        ArrayList<String> locationinfo = myDatabase.getLocationInformation(locationsByInstitute_all.get(0));
+        // For testing the database
+//        ArrayList<String> institutefullname_all = myDatabase.getAllInstituteFullName();
+//        ArrayList<String> locationsByInstitute_all = myDatabase.getAllLocationsByInstitute(institutefullname_all.get(0));
+//        ArrayList<String> floorplansByLocation_all = myDatabase.getAllFloorplansByLocation(locationsByInstitute_all.get(0));
+//        ArrayList<String> floor2ofwijnhaven107 = myDatabase.getAllFloorplanByFloornumber(locationsByInstitute_all.get(0), "2");
+//        ArrayList<String> studyofCMI_all_dutch = myDatabase.getNamesOfStudiesByInstitute(institutefullname_all.get(0), true);
+//        ArrayList<String> studyofCMI_all_english = myDatabase.getNamesOfStudiesByInstitute(institutefullname_all.get(0), false);
+//        ArrayList<String> locationinfo = myDatabase.getLocationInformation(locationsByInstitute_all.get(0));
 //        ArrayList<String> studyinfo_dutch_dutch = myDatabase.getStudyInformation(studyofCMI_all_dutch.get(0), true);
 //        ArrayList<String> studyinfo_english_dutch = myDatabase.getStudyInformation(studyofCMI_all_english.get(0), true);
 //        ArrayList<String> studyinfo_english_english = myDatabase.getStudyInformation(studyofCMI_all_english.get(0), false);
 //        ArrayList<String> studyinfo_dutch_english = myDatabase.getStudyInformation(studyofCMI_all_dutch.get(0), false);
-
-        Log.d("ALL INSTITUTE FULLNAME", "onCreate: " + institutefullname_all);
-        Log.d("ALL LOCATIONS BY CMI", "onCreate: " + locationsByInstitute_all);
-        Log.d("ALL FLOORPLANS FROM H", "onCreate: " + floorplansByLocation_all);
-        Log.d("FLOOR 2 OF WIJNHVEN 107", "onCreate: " + floor2ofwijnhaven107);
-        Log.d("WIJNHAVEN 107 INFO", "onCreate: " + locationinfo);
+//        ArrayList<String> opendayid_all = myDatabase.getAllOpendaysID();
+//        ArrayList<String> openday_specific = myDatabase.getOpendayByID(opendayid_all.get(1));
+//        ArrayList<String> activities_all = myDatabase.getAllActivitiesIDByInstituteAndDate(openday_specific.get(0), openday_specific.get(1));
+//        ArrayList<String> activity_specific_dutch = myDatabase.getActivityById(activities_all.get(0), true);
+//        ArrayList<String> activity_specific_english = myDatabase.getActivityById(activities_all.get(0), false);
+//        ArrayList<String> calender_info = myDatabase.getCalenderInfoByInstituteAndDate(institutefullname_all.get(0), openday_specific.get(1));
+//        ArrayList<String> institute_info = myDatabase.getInstituteInformation(institutefullname_all.get(0), true);
+//
+//        Log.d("ALL INSTITUTE FULLNAME", "onCreate: " + institutefullname_all);
+//        Log.d("ALL LOCATIONS BY CMI", "onCreate: " + locationsByInstitute_all);
+//        Log.d("ALL FLOORPLANS FROM H", "onCreate: " + floorplansByLocation_all);
+//        Log.d("FLOOR 2 OF WIJNHVEN 107", "onCreate: " + floor2ofwijnhaven107);
+//        Log.d("WIJNHAVEN 107 INFO", "onCreate: " + locationinfo);
 //        Log.d("STUDY INFO DUTCH-DUTCH", "onCreate: " + studyinfo_dutch_dutch);
 //        Log.d("STUDY INFO DUTCH-ENGLI", "onCreate: " + studyinfo_dutch_english);
 //        Log.d("STUDY INFO ENGLI-DUTCH", "onCreate: " + studyinfo_english_dutch);
 //        Log.d("STUDY INFO ENGLI-ENGLI", "onCreate: " + studyinfo_english_english);
-
+//        Log.d("OPENDAY ALL", "onCreate: " + opendayid_all);
+//        Log.d("SPECIFIC OPENDAY", "onCreate: " + openday_specific);
+//        Log.d("ALL ACTIVITIES", "onCreate: " + activities_all);
+//        Log.d("SPECIFIC ACTIVITY IN DUTCH", "onCreate: " + activity_specific_dutch);
+//        Log.d("SPECIFIC ACTIVITY IN ENGLI", "onCreate: " + activity_specific_english);
+//        Log.d("CALENDAR INFO", "onCreate: " + calender_info);
+//        Log.d("INSTITUTE INFO", "onCreate: " + institute_info);
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
