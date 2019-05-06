@@ -130,12 +130,12 @@ class mapManager{
         updateVisabilatyButtons();
     }
 
-    public void zoomAdd(float amount){
+    public void scaleAdd(float amount){
         scale+=amount;
         zoomCheck();
     }
 
-    public void zoomTimes(float amount){
+    public void scaleTimes(float amount){
         scale*=amount;
         zoomCheck();
     }
@@ -278,11 +278,11 @@ public class map_activity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void clickZoomIn(View v){
-        floor.zoomAdd(0.5f);
+        floor.scaleAdd(0.5f);
     }
 
     public void clickZoomOut(View v){
-        floor.zoomAdd(-0.5f);
+        floor.scaleAdd(-0.5f);
     }
 
     public void clickResetZoom(View v){
@@ -332,17 +332,19 @@ public class map_activity extends AppCompatActivity implements View.OnTouchListe
         float differenceY=e2.getY()-e1.getY();
         System.out.println(differenceX);
         System.out.println(differenceY);
-        if (Math.abs(differenceX)>Math.abs(differenceY)){
-            if (differenceX<0){
-                floor.changeFloor(-1);
-            }else{
-                floor.changeFloor(1);
-            }
-        }else{
-            if (differenceY<0){
-                floor.changeBuilding(-1);
-            }else{
-                floor.changeBuilding(1);
+        if(velocityX>1.5f |velocityY>1.5f) {
+            if (Math.abs(differenceX) > Math.abs(differenceY)) {
+                if (differenceX < 0) {
+                    floor.changeFloor(-1);
+                } else {
+                    floor.changeFloor(1);
+                }
+            } else {
+                if (differenceY < 0) {
+                    floor.changeBuilding(-1);
+                } else {
+                    floor.changeBuilding(1);
+                }
             }
         }
         return true;
@@ -352,7 +354,7 @@ public class map_activity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         System.out.println(detector.getScaleFactor());
-        floor.zoomTimes(detector.getScaleFactor());
+        floor.scaleTimes(detector.getScaleFactor());
         return true;
     }
 
