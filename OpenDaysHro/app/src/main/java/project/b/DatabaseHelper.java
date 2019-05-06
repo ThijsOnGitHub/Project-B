@@ -138,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-    public ArrayList<String> getCalendarData(String institute_fullname, String inputdate) {
+    public ArrayList<String> getCalenderInfoByInstituteAndDate(String institute_fullname, String inputdate) {
         ArrayList<String> result = new ArrayList<>();
         String institute_shortname = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_SHORTNAME).get(0);
         String zipcode = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_LOCATION_ZIPCODE).get(0);
@@ -154,7 +154,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-        // TODO: info openday, activity, institute
+    public ArrayList<String> getOpendayByID(String ID) {
+        ArrayList<String> result = new ArrayList<>();
+        String institute_fullname = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_INSTITUTEFULLNAME).get(0);
+        String date = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_DATE).get(0);
+        String startime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_STARTTIME).get(0);
+        String endtime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_ENDTIME).get(0);
+
+        result.add(institute_fullname);
+        result.add(date);
+        result.add(startime);
+        result.add(endtime);
+
+        return result;
+    }
+    public ArrayList<String> getAllOpendaysID() {
+        return getHandler(DB_TABLE_OPENDAY, null, null, DB_TABLE_OPENDAY_ID);
+    }
+        // TODO: info activity, institute
 
     // SET DATA
     public Boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
