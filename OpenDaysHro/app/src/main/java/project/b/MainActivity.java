@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,14 +75,9 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         myDatabase = new DatabaseHelper(this);
-        myDatabase.initializeDatabase();
-
-
-//        ArrayList<String> cmi = myDatabase.getAllLocationsStreetsByInstitute("Communicatie, Media en Informatietechnologie");
-//        Integer gebouw = 0; // index 0
-//        Integer etage = 1; // etage 1
-//        ArrayList<String> wijnhaven107alleetages = myDatabase.getAllImagesByImageDescription(myDatabase.getImageDescriptionByStreet(cmi.get(gebouw)));
-//        String wijnhaven107etage1 = myDatabase.getImageByImageDescriptionAndFloornumber(myDatabase.getImageDescriptionByStreet(cmi.get(gebouw)), Integer.toString(etage));
+        if (myDatabase.emptyDatabase() == true) {
+            myDatabase.fillDatabase();
+        }
 
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
