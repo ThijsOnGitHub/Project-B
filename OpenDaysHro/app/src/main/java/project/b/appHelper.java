@@ -458,6 +458,10 @@ public class appHelper extends AppCompatActivity {
             int margin_vertical; if ( menu_part_height < button_width ) { margin_vertical = 0; } else { margin_vertical = (int) ( (float) ( (float) menu_part_height - (float) button_width ) / (float) 2 );  }
 
 
+            int image_size_height = (menu_part_height / 2);
+            int image_size_width = image_size_height - (menu_part_height / 10);
+
+
             for (int i = 0; i < List_with_images.length; i++){
                 LinearLayout Button = new LinearLayout(this.context);
                     Button.setOrientation(LinearLayout.VERTICAL);
@@ -469,8 +473,8 @@ public class appHelper extends AppCompatActivity {
                         button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
                         button_image.setGravity(Gravity.CENTER);
                         LinearLayout the_image = new LinearLayout(this.context);
-                            LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
-                                the_image_params.setMargins(margin_horizontal,margin_vertical,margin_horizontal,margin_vertical);
+                            LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( image_size_width, image_size_height ));
+                                the_image_params.setMargins(0,(menu_part_height / 10),0,0);
                                 the_image.setLayoutParams(the_image_params);
                             the_image.setBackground(getDrawable(List_with_images[i]));
                         button_image.addView(the_image);
