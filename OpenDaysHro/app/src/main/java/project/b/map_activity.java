@@ -327,12 +327,11 @@ public class map_activity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
         float differenceX=e2.getX()-e1.getX();
         float differenceY=e2.getY()-e1.getY();
         System.out.println(differenceX);
         System.out.println(differenceY);
-        if(velocityX>1.5f |velocityY>1.5f) {
+        if(velocityX>3.0f ||velocityY>3.0f) {
             if (Math.abs(differenceX) > Math.abs(differenceY)) {
                 if (differenceX < 0) {
                     floor.changeFloor(-1);
