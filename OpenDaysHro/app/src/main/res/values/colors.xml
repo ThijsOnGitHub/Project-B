@@ -5,6 +5,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="hro_red">#CC0033</color>
+    <color name="light_grey">#d2d2d2</color>
+    <color name="dark_grey">#aeaeae</color>
+
+
     <color name="white">#FFFFFF</color>
     <color name="text">#FFFFFF</color>
     <color name="text_dark">#000000</color>

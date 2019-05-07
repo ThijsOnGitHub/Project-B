@@ -233,8 +233,9 @@ class mapManager{
 }
 
 
-public class map_activity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
+public class map_activity extends appHelper implements View.OnTouchListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener  {
     mapManager floor;
+    LayoutHelper layout;
     GestureDetector gestureDetector;
     ScaleGestureDetector scaleGestureDetector;
 
@@ -244,6 +245,22 @@ public class map_activity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
+        
+        AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator), (Button) findViewById(R.id.Button_FloorUp), (Button) findViewById(R.id.Button_FloorDown), (Button) findViewById(R.id.Button_BuildingLeft), (Button) findViewById(R.id.Button_BuildingRight));
+        floor = new mapManager(this, attributes);
+
+        Intent home = new Intent(getBaseContext(), MainActivity.class);
+        Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
+
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
+        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+
+        layout = new LayoutHelper(this);
+        layout.generate_menu(R.id.menu_bar,images,text,myIntents);
+        
         AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
