@@ -1,7 +1,5 @@
 package project.b;
 
-
-
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
@@ -25,7 +23,6 @@ public class MainActivity extends appHelper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         layout = new LayoutHelper(this);
 
         myDatabase = new DatabaseHelper(this);

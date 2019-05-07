@@ -26,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".About_activity"></activity>
+        <activity android:name=".askAQuestion_activity"></activity>
         <activity android:name=".contact_activity" />
         <activity android:name=".opendays_activity" />
         <activity android:name=".map_activity" />
@@ -38,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
