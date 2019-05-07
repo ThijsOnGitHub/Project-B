@@ -86,21 +86,36 @@
                     android:inputType="textAutoCorrect|textMultiLine|textAutoComplete"
                     android:textAlignment="textStart"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_Subject_ContactForm" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_E-mail_ContactForm" />
 
                 <Button
                     android:id="@+id/button_confirmContactForm"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="100dp"
                     android:onClick="confirmContactForm"
                     android:text="Send Question"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText_TextField_ContactForm" />
+
+                <EditText
+                    android:id="@+id/editText_E-mail_ContactForm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:ems="10"
+                    android:hint="E-mail"
+                    android:inputType="textEmailAddress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_Subject_ContactForm" />
 
             </android.support.constraint.ConstraintLayout>
 
