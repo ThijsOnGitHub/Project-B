@@ -1,6 +1,7 @@
 package project.b;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
@@ -245,9 +246,7 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
         setContentView(R.layout.activity_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
-        
-        AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator), (Button) findViewById(R.id.Button_FloorUp), (Button) findViewById(R.id.Button_FloorDown), (Button) findViewById(R.id.Button_BuildingLeft), (Button) findViewById(R.id.Button_BuildingRight));
-        floor = new mapManager(this, attributes);
+
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
