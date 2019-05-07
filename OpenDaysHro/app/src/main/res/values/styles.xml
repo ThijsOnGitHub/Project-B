@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
 
         <!-- Status bar color -->
-        <item name="android:colorPrimaryDark">#CC0033</item>
+        <item name="android:colorPrimaryDark">@color/hro_red</item>
 
         <!-- Standard -->
         <item name="colorPrimary">@color/colorPrimary</item>
