@@ -24,7 +24,7 @@ public class About_activity extends appHelper {
         layout = new LayoutHelper(this);
 
 
-        layout.generate_page_about_page(R.drawable.beginning_by_ryky,"CMI",lorem,R.id.page_container);
+        layout.generate_page_about_page(R.drawable.blaak,"CMI",lorem,R.id.page_container);
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
@@ -32,7 +32,7 @@ public class About_activity extends appHelper {
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);

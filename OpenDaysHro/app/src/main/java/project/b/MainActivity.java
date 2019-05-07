@@ -13,7 +13,10 @@ public class MainActivity extends appHelper {
 
     int numOfListItems;
 
-    int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
+    int[] drawables = new int[]{R.drawable.blaak, R.drawable.centraal_station,R.drawable.gebouw_cmi,R.drawable.gebouw_museumpark_hoogbouw,
+                                    R.drawable.haven_rotterdam_containers, R.drawable.haven_rotterdam_schip, R.drawable.lerende_student,
+                                    R.drawable.overview_rotterdam_1, R.drawable.overview_rotterdam_2, R.drawable.overview_rotterdam_3,
+                                    R.drawable.overview_rotterdam_erasmusbrug, R.drawable.werkende_studenten};
 
 
 
@@ -45,7 +48,7 @@ public class MainActivity extends appHelper {
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);

@@ -125,7 +125,7 @@ public class appHelper extends AppCompatActivity {
 
             LinearLayout info_button = new LinearLayout(this.context);
             info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
-                info_button.setBackground(getDrawable(R.drawable.calendar_icon));
+                info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
 
 
             ((RelativeLayout) listItem_description_layout ).addView((TextView) listItem_description);
