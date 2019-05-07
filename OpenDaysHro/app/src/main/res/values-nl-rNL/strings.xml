@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hogeschool Rotterdam</string>
-    <string name="ScreenNotAvailable">Dit scherm is niet beschikbaar op uw Device</string>
+    <string name="ScreenNotAvailable">Dit scherm is niet beschikbaar op uw apparaat</string>
+    <string name="email_not_valid">Het e-mailaddres is niet geldig</string>
+    <string name="fields_empty">The velden zijn leeg</string>
 </resources>
