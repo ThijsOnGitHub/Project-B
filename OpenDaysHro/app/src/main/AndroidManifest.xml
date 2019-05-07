@@ -7,6 +7,8 @@
     setting user permissions and setting the supported screens
     -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <supports-screens
         android:largeScreens="true"
@@ -23,6 +25,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".About_activity"></activity>
         <activity android:name=".askAQuestion_activity"></activity>
         <activity android:name=".contact_activity" />
         <activity android:name=".opendays_activity" />

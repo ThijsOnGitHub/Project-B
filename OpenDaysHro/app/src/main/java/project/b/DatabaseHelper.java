@@ -15,10 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 15;
-    private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
+import java.util.ArrayList;
 
+public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final int DB_DATABASE_HROOPENDAY_VERSION = 22;
+    private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
     private static final String DB_TABLE_OPENDAY = "openday";
     private static final String DB_TABLE_OPENDAY_ID = "id";
     private static final String DB_TABLE_OPENDAY_DATE = "date";
@@ -93,7 +94,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
+    public Boolean emptyDatabase() {
+        Boolean empty = true;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_OPENDAY, null);
+        if (cur != null && cur.moveToFirst()) {
+            empty = (cur.getInt (0) == 0);
+        }
 
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_INSTITUTE, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_STUDY, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_LOCATION, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_IMAGE, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        if (empty == true) {
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_ACTIVITY, null);
+            if (cur != null && cur.moveToFirst()) {
+                empty = (cur.getInt (0) == 0);
+            }
+        }
+
+        cur.close();
+        db.close();
     // GET CONTENT
     public ArrayList<String> getLocationInformation(String description) {
         ArrayList<String> result = new ArrayList<>();
@@ -269,7 +314,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(DB_TABLE_OPENDAY, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
-    } // OPENDAY
+    }
     public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -282,7 +327,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(DB_TABLE_INSTITUTE, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
-    } // INSTITUTE
+    }
     public Boolean createStudy(String institute_fullname, String name_dutch, String name_english, String type, String generalinformation_dutch, String generalinformation_english) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -303,7 +348,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DB_TABLE_ACTIVITY_OPENDAYDATE, openday_date);
-        contentValues.put(DB_TABLE_ACTIVITY_STUDYNAME, study_name);
+        contentValues.put(DB_TABLE_ACTIVITY_STUDYNAME_DUTCH, study_name_dutch);
         contentValues.put(DB_TABLE_ACTIVITY_STARTTIME, starttime);
         contentValues.put(DB_TABLE_ACTIVITY_ENDTIME, endtime);
         contentValues.put(DB_TABLE_ACTIVITY_CLASSROOM, classroom);
@@ -313,7 +358,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(DB_TABLE_ACTIVITY, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
-    } // ACTIVITY
+    }
     public Boolean createLocation(String street, String city, String institute_fullname, String zipcode, String phonenumber, String image_description) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -328,7 +373,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(DB_TABLE_LOCATION, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
-    } // LOCATION
+    }
     public Boolean createImage(String filename, String context, String description, String floornumber) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -500,7 +545,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return mArrayList;
     }
-
+    // INSERT DATA INTO THE DATABASE
     // SELECT Queries
     private Cursor viewAllOpendays(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -574,7 +619,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
-
     // ARGUMENTS (WHERE ... = ? AND ... = ? ......)
     private String ArgumentHandler(List<String> arguments) {
         String query = "";
