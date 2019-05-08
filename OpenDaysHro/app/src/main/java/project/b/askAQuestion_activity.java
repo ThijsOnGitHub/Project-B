@@ -58,7 +58,7 @@ public class askAQuestion_activity extends AppCompatActivity {
             if(isEmailValid(email)) {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/html");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"thijsgeurts1@gmail.com"}); // recipients
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"0967161@hr.nl"}); // recipients
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contact Form Openday: " + subject);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, textField + "\n\nThis email was send by " + name+" with the opendag app.\nPleas anwser on: "+email);
                 startActivity(emailIntent);
