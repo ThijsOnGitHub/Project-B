@@ -254,7 +254,7 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout = new LayoutHelper(this);
