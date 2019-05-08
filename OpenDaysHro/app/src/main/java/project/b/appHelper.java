@@ -458,8 +458,8 @@ public class appHelper extends AppCompatActivity {
             int margin_vertical; if ( menu_part_height < button_width ) { margin_vertical = 0; } else { margin_vertical = (int) ( (float) ( (float) menu_part_height - (float) button_width ) / (float) 2 );  }
 
 
-            int image_size_height = (menu_part_height / 2);
-            int image_size_width = image_size_height - (menu_part_height / 10);
+            int image_size_height = (menu_part_height / 2)  - (menu_part_height / 5);
+            int image_size_width = image_size_height;
 
 
             for (int i = 0; i < List_with_images.length; i++){
