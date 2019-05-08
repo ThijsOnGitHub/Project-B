@@ -87,7 +87,7 @@ public class contact_activity extends appHelper {
 
     public void clickCall(View v){
         //https://developer.android.com/training/basics/intents/sending.html#java
-        Uri number = Uri.parse("tel:31623657150");
+        Uri number = Uri.parse("tel:010794 4400");
         Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
         startActivity(callIntent);
     }
