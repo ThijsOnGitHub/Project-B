@@ -5,85 +5,83 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
-import android.util.AndroidRuntimeException;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_DATABASE_HROOPENDAY_VERSION = 23;
-    private static final String DB_DATABASE_HROOPENDAY = "hro_openday.db";
-
-    private static final String DB_TABLE_OPENDAY = "openday";
-    private static final String DB_TABLE_OPENDAY_ID = "id";
-    private static final String DB_TABLE_OPENDAY_DATE = "date";
-    private static final String DB_TABLE_OPENDAY_STARTTIME = "starttime";
-    private static final String DB_TABLE_OPENDAY_ENDTIME = "endtime";
-    private static final String DB_TABLE_OPENDAY_INSTITUTEFULLNAME = "institute_fullname";
-
-    private static final String DB_TABLE_INSTITUTE = "institute";
-    private static final String DB_TABLE_INSTITUTE_ID = "id";
-    private static final String DB_TABLE_INSTITUTE_FULLNAME = "fullname";
-    private static final String DB_TABLE_INSTITUTE_SHORTNAME = "shortname";
-    private static final String DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH = "generalinformation_english";
-    private static final String DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
-
-    private static final String DB_TABLE_STUDY = "study";
-    private static final String DB_TABLE_STUDY_ID = "id";
-    private static final String DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH = "generalinformation_english";
-    private static final String DB_TABLE_STUDY_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
-    private static final String DB_TABLE_STUDY_INSTITUTEFULLNAME = "institute_fullname";
-    private static final String DB_TABLE_STUDY_NAME_DUTCH = "name_dutch";
-    private static final String DB_TABLE_STUDY_NAME_ENGLISH = "name_english";
-    private static final String DB_TABLE_STUDY_TYPE = "type";
-
-    private static final String DB_TABLE_ACTIVITY = "activity";
-    private static final String DB_TABLE_ACTIVITY_ID = "id";
-    private static final String DB_TABLE_ACTIVITY_OPENDAYDATE = "openday_date";
-    private static final String DB_TABLE_ACTIVITY_STUDYNAME = "study_name";
-    private static final String DB_TABLE_ACTIVITY_STARTTIME = "starttime";
-    private static final String DB_TABLE_ACTIVITY_ENDTIME = "endtime";
-    private static final String DB_TABLE_ACTIVITY_CLASSROOM = "classroom";
-    private static final String DB_TABLE_ACTIVITY_INFORMATION_ENGLISH = "information_english";
-    private static final String DB_TABLE_ACTIVITY_INFORMATION_DUTCH = "information_dutch";
-
-    private static final String DB_TABLE_LOCATION = "location";
-    private static final String DB_TABLE_LOCATION_ID = "id";
-    private static final String DB_TABLE_LOCATION_INSTITUTEFULLNAME = "institute_fullname";
-    private static final String DB_TABLE_LOCATION_STREET = "street";
-    private static final String DB_TABLE_LOCATION_CITY = "city";
-    private static final String DB_TABLE_LOCATION_ZIPCODE = "zipcode";
-    private static final String DB_TABLE_LOCATION_PHONENUMBER = "phonenumber";
-    private static final String DB_TABLE_LOCATION_IMAGEDESCRIPTION = "image_description";
-
-    private static final String DB_TABLE_IMAGE = "image";
-    private static final String DB_TABLE_IMAGE_ID = "id";
-    private static final String DB_TABLE_IMAGE_FILENAME = "filename";
-    private static final String DB_TABLE_IMAGE_CONTEXT = "context";
-    private static final String DB_TABLE_IMAGE_DESCRIPTION = "description";
-    private static final String DB_TABLE_IMAGE_FLOORNUMBER = "floornumber";
+    private static final int HROOPENDAY_VERSION = 24;
+    private static final String HROOPENDAY = "hro_openday.db";
+        private static final String HROOPENDAY_OPENDAY = "openday";
+            private static final String OPENDAY_ID = "id";
+            private static final String OPENDAY_DATE = "date";
+            private static final String OPENDAY_STARTTIME = "starttime";
+            private static final String OPENDAY_ENDTIME = "endtime";
+            private static final String OPENDAY_INSTITUTEFULLNAME = "institute_fullname";
+    
+        private static final String HROOPENDAY_INSTITUTE = "institute";
+            private static final String INSTITUTE_ID = "id";
+            private static final String INSTITUTE_FULLNAME = "fullname";
+            private static final String INSTITUTE_SHORTNAME = "shortname";
+            private static final String INSTITUTE_GENERALINFORMATION_ENGLISH = "generalinformation_english";
+            private static final String INSTITUTE_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
+    
+        private static final String HROOPENDAY_STUDY = "study";
+            private static final String STUDY_ID = "id";
+            private static final String STUDY_GENERALINFORMATION_ENGLISH = "generalinformation_english";
+            private static final String STUDY_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
+            private static final String STUDY_INSTITUTEFULLNAME = "institute_fullname";
+            private static final String STUDY_NAME_DUTCH = "name_dutch";
+            private static final String STUDY_NAME_ENGLISH = "name_english";
+            private static final String STUDY_TYPE = "type";
+    
+        private static final String HROOPENDAY_ACTIVITY = "activity";
+            private static final String ACTIVITY_ID = "id";
+            private static final String ACTIVITY_OPENDAYDATE = "openday_date";
+            private static final String ACTIVITY_STUDYNAME = "study_name";
+            private static final String ACTIVITY_STARTTIME = "starttime";
+            private static final String ACTIVITY_ENDTIME = "endtime";
+            private static final String ACTIVITY_CLASSROOM = "classroom";
+            private static final String ACTIVITY_INFORMATION_ENGLISH = "information_english";
+            private static final String ACTIVITY_INFORMATION_DUTCH = "information_dutch";
+    
+        private static final String HROOPENDAY_LOCATION = "location";
+            private static final String LOCATION_ID = "id";
+            private static final String LOCATION_INSTITUTEFULLNAME = "institute_fullname";
+            private static final String LOCATION_STREET = "street";
+            private static final String LOCATION_CITY = "city";
+            private static final String LOCATION_ZIPCODE = "zipcode";
+            private static final String LOCATION_PHONENUMBER = "phonenumber";
+            private static final String LOCATION_IMAGEDESCRIPTION = "image_description";
+    
+        private static final String HROOPENDAY_IMAGE = "image";
+            private static final String IMAGE_ID = "id";
+            private static final String IMAGE_FILENAME = "filename";
+            private static final String IMAGE_CONTEXT = "context";
+            private static final String IMAGE_DESCRIPTION = "description";
+            private static final String IMAGE_FLOORNUMBER = "floornumber";
+        
+        private static final String HROOPENDAY_APPINFO = "app_info";
+            private static final String APPINFO_ID = "id";
+            private static final String APPINFO_DATAVERSION = "data_version";
+            private static final String APPINFO_APILINK = "api_link";
 
 
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public ArrayList<String> getNamesOfStudiesByInstitute(String institute_fullname, Boolean language) {
         if (language == true) {
-            return getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_STUDY_NAME_DUTCH, true);
+            return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_DUTCH, true);
         } else {
-            return getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_STUDY_NAME_ENGLISH, true);
+            return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_ENGLISH, true);
         }
     }
     public ArrayList<String> getCalenderInfoByInstituteAndDate(String institute_fullname, String inputdate) {
         ArrayList<String> result = new ArrayList<>();
-        String institute_shortname = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_SHORTNAME, true).get(0);
-        String zipcode = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_LOCATION_ZIPCODE, true).get(0);
-        String starttime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_STARTTIME, true).get(0);
-        String endtime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_ENDTIME, true).get(0);
-        String date = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, DB_TABLE_OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), DB_TABLE_OPENDAY_DATE, true).get(0);
+        String institute_shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_SHORTNAME, true).get(0);
+        String zipcode = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), LOCATION_ZIPCODE, true).get(0);
+        String starttime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_STARTTIME, true).get(0);
+        String endtime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_ENDTIME, true).get(0);
+        String date = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_DATE, true).get(0);
 
         result.add(institute_shortname);
         result.add(zipcode);
@@ -98,12 +96,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<String> getLocationInformation(String description) {
         ArrayList<String> result = new ArrayList<>();
 
-        String imagedescription = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_IMAGEDESCRIPTION, true).get(0);
-        String street = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_STREET, true).get(0);
-        String zipcode = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_ZIPCODE, true).get(0);
-        String city = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_CITY, true).get(0);
-        String phonenumber = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_PHONENUMBER, true).get(0);
-        String institute_fullname = getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), DB_TABLE_LOCATION_INSTITUTEFULLNAME, true).get(0);
+        String imagedescription = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_IMAGEDESCRIPTION, true).get(0);
+        String street = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_STREET, true).get(0);
+        String zipcode = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_ZIPCODE, true).get(0);
+        String city = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_CITY, true).get(0);
+        String phonenumber = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_PHONENUMBER, true).get(0);
+        String institute_fullname = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_INSTITUTEFULLNAME, true).get(0);
 
         result.add(imagedescription);
         result.add(street);
@@ -121,25 +119,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String type = "";
         String general_information = "";
 
-        if (getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_INSTITUTEFULLNAME, true).size() > 0) {
-            institute_fullname = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_INSTITUTEFULLNAME, true).get(0);
-            type = general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_TYPE, true).get(0);
+        if (getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).size() > 0) {
+            institute_fullname = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).get(0);
+            type = general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_TYPE, true).get(0);
             if (language == true) {
-                name = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_NAME_DUTCH, true).get(0);
-                general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_GENERALINFORMATION_DUTCH, true).get(0);
+                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_NAME_DUTCH, true).get(0);
+                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_DUTCH, true).get(0);
             } else {
-                name = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_NAME_ENGLISH, true).get(0);
-                general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_DUTCH), Arrays.asList(study_name), DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
+                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_NAME_ENGLISH, true).get(0);
+                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
             }
-        } else if (getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_INSTITUTEFULLNAME, true).size() > 0) {
-            institute_fullname = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_INSTITUTEFULLNAME, true).get(0);
-            type = general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_TYPE, true).get(0);
+        } else if (getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).size() > 0) {
+            institute_fullname = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).get(0);
+            type = general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_TYPE, true).get(0);
             if (language == true) {
-                name = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_NAME_DUTCH, true).get(0);
-                general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_GENERALINFORMATION_DUTCH, true).get(0);
+                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_NAME_DUTCH, true).get(0);
+                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_DUTCH, true).get(0);
             } else {
-                name = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_NAME_ENGLISH, true).get(0);
-                general_information = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_NAME_ENGLISH), Arrays.asList(study_name), DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
+                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_NAME_ENGLISH, true).get(0);
+                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
             }
         }
 
@@ -152,10 +150,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public ArrayList<String> getOpendayByID(String ID) {
         ArrayList<String> result = new ArrayList<>();
-        String institute_fullname = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_INSTITUTEFULLNAME, true).get(0);
-        String date = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_DATE, true).get(0);
-        String startime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_STARTTIME, true).get(0);
-        String endtime = getHandler(DB_TABLE_OPENDAY, Arrays.asList(DB_TABLE_OPENDAY_ID), Arrays.asList(ID), DB_TABLE_OPENDAY_ENDTIME, true).get(0);
+        String institute_fullname = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_INSTITUTEFULLNAME, true).get(0);
+        String date = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_DATE, true).get(0);
+        String startime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_STARTTIME, true).get(0);
+        String endtime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_ENDTIME, true).get(0);
 
         result.add(institute_fullname);
         result.add(date);
@@ -168,18 +166,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> result = new ArrayList<>();
         String studyname = "";
         String information = "";
-        String classroom = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_CLASSROOM, true).get(0);
-        String starttime = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_STARTTIME, true).get(0);
-        String endtime = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_ENDTIME, true).get(0);
-        String openday_date = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_OPENDAYDATE, true).get(0);
+        String classroom = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_CLASSROOM, true).get(0);
+        String starttime = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_STARTTIME, true).get(0);
+        String endtime = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_ENDTIME, true).get(0);
+        String openday_date = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_OPENDAYDATE, true).get(0);
 
         if (language == true) {
             // Dutch
-            information = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_INFORMATION_DUTCH, true).get(0);
-            studyname = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_STUDYNAME, true).get(0);
+            information = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_INFORMATION_DUTCH, true).get(0);
+            studyname = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_STUDYNAME, true).get(0);
         } else {
-            information = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_INFORMATION_ENGLISH, true).get(0);
-            studyname = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_ID), Arrays.asList(id), DB_TABLE_ACTIVITY_STUDYNAME, true).get(0);
+            information = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_INFORMATION_ENGLISH, true).get(0);
+            studyname = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_ID), Arrays.asList(id), ACTIVITY_STUDYNAME, true).get(0);
         }
 
         result.add(studyname);
@@ -192,18 +190,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
     public ArrayList<String> getAllFloorplanByFloornumber(String description, String floornumber) {
-        return getHandler(DB_TABLE_IMAGE, Arrays.asList(DB_TABLE_IMAGE_DESCRIPTION, DB_TABLE_IMAGE_FLOORNUMBER), Arrays.asList(description, floornumber), DB_TABLE_IMAGE_FILENAME, true);
+        return getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_DESCRIPTION, IMAGE_FLOORNUMBER), Arrays.asList(description, floornumber), IMAGE_FILENAME, true);
     }
     public ArrayList<String> getInstituteInformation(String institute_fullname, Boolean language) {
         ArrayList<String> result = new ArrayList<>();
-        String fullname = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_FULLNAME, true).get(0);
-        String shortname = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_SHORTNAME, true).get(0);
+        String fullname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_FULLNAME, true).get(0);
+        String shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_SHORTNAME, true).get(0);
         String information = "";
 
         if (language == true) {
-            information = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH, true).get(0);
+            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_GENERALINFORMATION_DUTCH, true).get(0);
         } else {
-            information = getHandler(DB_TABLE_INSTITUTE, Arrays.asList(DB_TABLE_INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH, true).get(0);
+            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_GENERALINFORMATION_ENGLISH, true).get(0);
         }
 
         result.add(fullname);
@@ -215,24 +213,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // GET LINK
     public ArrayList<String> getAllOpendaysID() {
-        return getHandler(DB_TABLE_OPENDAY, null, null, DB_TABLE_OPENDAY_ID, true);
+        return getHandler(HROOPENDAY_OPENDAY, null, null, OPENDAY_ID, true);
     }
     public ArrayList<String> getAllInstituteFullName() {
-        return getHandler(DB_TABLE_INSTITUTE, null, null, DB_TABLE_INSTITUTE_FULLNAME, true);
+        return getHandler(HROOPENDAY_INSTITUTE, null, null, INSTITUTE_FULLNAME, true);
     }
     public ArrayList<String> getAllLocationsByInstitute(String institute_fullname) {
-        return getHandler(DB_TABLE_LOCATION, Arrays.asList(DB_TABLE_LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_LOCATION_IMAGEDESCRIPTION, true);
+        return getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), LOCATION_IMAGEDESCRIPTION, true);
     }
     public ArrayList<String> getAllFloorplansByLocation(String description) {
-        return getHandler(DB_TABLE_IMAGE, Arrays.asList(DB_TABLE_IMAGE_DESCRIPTION), Arrays.asList(description), DB_TABLE_IMAGE_FILENAME, true);
+        return getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_DESCRIPTION), Arrays.asList(description), IMAGE_FILENAME, true);
     }
     public ArrayList<String> getAllActivitiesIDByInstituteAndDate(String institute_fullname, String openday_date) {
         ArrayList<String> result = new ArrayList<>();
 
-        ArrayList<String> IdByDate = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), DB_TABLE_ACTIVITY_ID, true);
-        ArrayList<String> StudyNameByDate = getHandler(DB_TABLE_ACTIVITY, Arrays.asList(DB_TABLE_ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), DB_TABLE_ACTIVITY_STUDYNAME, false);
-        ArrayList<String> StudyNameEnglishByInstitute = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_STUDY_NAME_ENGLISH, true);
-        ArrayList<String> StudyNameDutchByInstitute = getHandler(DB_TABLE_STUDY, Arrays.asList(DB_TABLE_STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), DB_TABLE_STUDY_NAME_DUTCH, true);
+        ArrayList<String> IdByDate = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_ID, true);
+        ArrayList<String> StudyNameByDate = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_STUDYNAME, false);
+        ArrayList<String> StudyNameEnglishByInstitute = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_ENGLISH, true);
+        ArrayList<String> StudyNameDutchByInstitute = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_DUTCH, true);
         String currentDutch = "";
         String currentEnglish = "";
         String currentDate = "";
@@ -261,12 +259,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_OPENDAY_DATE, date);
-        contentValues.put(DB_TABLE_OPENDAY_STARTTIME, starttime);
-        contentValues.put(DB_TABLE_OPENDAY_ENDTIME, endtime);
-        contentValues.put(DB_TABLE_OPENDAY_INSTITUTEFULLNAME, institute_fullname);
+        contentValues.put(OPENDAY_DATE, date);
+        contentValues.put(OPENDAY_STARTTIME, starttime);
+        contentValues.put(OPENDAY_ENDTIME, endtime);
+        contentValues.put(OPENDAY_INSTITUTEFULLNAME, institute_fullname);
 
-        long result = db.insert(DB_TABLE_OPENDAY, null, contentValues);
+        long result = db.insert(HROOPENDAY_OPENDAY, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // OPENDAY
@@ -274,12 +272,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_INSTITUTE_FULLNAME, fullname);
-        contentValues.put(DB_TABLE_INSTITUTE_SHORTNAME, shortname);
-        contentValues.put(DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
-        contentValues.put(DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
+        contentValues.put(INSTITUTE_FULLNAME, fullname);
+        contentValues.put(INSTITUTE_SHORTNAME, shortname);
+        contentValues.put(INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
+        contentValues.put(INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
 
-        long result = db.insert(DB_TABLE_INSTITUTE, null, contentValues);
+        long result = db.insert(HROOPENDAY_INSTITUTE, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // INSTITUTE
@@ -287,14 +285,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_STUDY_INSTITUTEFULLNAME, institute_fullname);
-        contentValues.put(DB_TABLE_STUDY_NAME_DUTCH, name_dutch);
-        contentValues.put(DB_TABLE_STUDY_NAME_ENGLISH, name_english);
-        contentValues.put(DB_TABLE_STUDY_TYPE, type);
-        contentValues.put(DB_TABLE_STUDY_GENERALINFORMATION_DUTCH, generalinformation_dutch);
-        contentValues.put(DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH, generalinformation_english);
+        contentValues.put(STUDY_INSTITUTEFULLNAME, institute_fullname);
+        contentValues.put(STUDY_NAME_DUTCH, name_dutch);
+        contentValues.put(STUDY_NAME_ENGLISH, name_english);
+        contentValues.put(STUDY_TYPE, type);
+        contentValues.put(STUDY_GENERALINFORMATION_DUTCH, generalinformation_dutch);
+        contentValues.put(STUDY_GENERALINFORMATION_ENGLISH, generalinformation_english);
 
-        long result = db.insert(DB_TABLE_STUDY, null, contentValues);
+        long result = db.insert(HROOPENDAY_STUDY, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // INSTITUTE
@@ -302,15 +300,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_ACTIVITY_OPENDAYDATE, openday_date);
-        contentValues.put(DB_TABLE_ACTIVITY_STUDYNAME, study_name);
-        contentValues.put(DB_TABLE_ACTIVITY_STARTTIME, starttime);
-        contentValues.put(DB_TABLE_ACTIVITY_ENDTIME, endtime);
-        contentValues.put(DB_TABLE_ACTIVITY_CLASSROOM, classroom);
-        contentValues.put(DB_TABLE_ACTIVITY_INFORMATION_ENGLISH, information_english);
-        contentValues.put(DB_TABLE_ACTIVITY_INFORMATION_DUTCH, information_dutch);
+        contentValues.put(ACTIVITY_OPENDAYDATE, openday_date);
+        contentValues.put(ACTIVITY_STUDYNAME, study_name);
+        contentValues.put(ACTIVITY_STARTTIME, starttime);
+        contentValues.put(ACTIVITY_ENDTIME, endtime);
+        contentValues.put(ACTIVITY_CLASSROOM, classroom);
+        contentValues.put(ACTIVITY_INFORMATION_ENGLISH, information_english);
+        contentValues.put(ACTIVITY_INFORMATION_DUTCH, information_dutch);
 
-        long result = db.insert(DB_TABLE_ACTIVITY, null, contentValues);
+        long result = db.insert(HROOPENDAY_ACTIVITY, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // ACTIVITY
@@ -318,14 +316,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_LOCATION_STREET, street);
-        contentValues.put(DB_TABLE_LOCATION_CITY, city);
-        contentValues.put(DB_TABLE_LOCATION_INSTITUTEFULLNAME, institute_fullname);
-        contentValues.put(DB_TABLE_LOCATION_ZIPCODE, zipcode);
-        contentValues.put(DB_TABLE_LOCATION_PHONENUMBER, phonenumber);
-        contentValues.put(DB_TABLE_LOCATION_IMAGEDESCRIPTION, image_description);
+        contentValues.put(LOCATION_STREET, street);
+        contentValues.put(LOCATION_CITY, city);
+        contentValues.put(LOCATION_INSTITUTEFULLNAME, institute_fullname);
+        contentValues.put(LOCATION_ZIPCODE, zipcode);
+        contentValues.put(LOCATION_PHONENUMBER, phonenumber);
+        contentValues.put(LOCATION_IMAGEDESCRIPTION, image_description);
 
-        long result = db.insert(DB_TABLE_LOCATION, null, contentValues);
+        long result = db.insert(HROOPENDAY_LOCATION, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // LOCATION
@@ -333,18 +331,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DB_TABLE_IMAGE_FILENAME, filename);
-        contentValues.put(DB_TABLE_IMAGE_CONTEXT, context);
-        contentValues.put(DB_TABLE_IMAGE_DESCRIPTION, description);
-        contentValues.put(DB_TABLE_IMAGE_FLOORNUMBER, floornumber);
+        contentValues.put(IMAGE_FILENAME, filename);
+        contentValues.put(IMAGE_CONTEXT, context);
+        contentValues.put(IMAGE_DESCRIPTION, description);
+        contentValues.put(IMAGE_FLOORNUMBER, floornumber);
 
-        long result = db.insert(DB_TABLE_IMAGE, null, contentValues);
+        long result = db.insert(HROOPENDAY_IMAGE, null, contentValues);
         db.close();
         return result != -1; // if result == true then the values are inserted
     } // IMAGE
 
     // Database Checks
     public void fillDatabase() {
+        // API CALL......
+
+
+
         // Create CMI
         createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
 
@@ -384,44 +386,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314-C120", "General Information", "Algemene informatie");
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
     }
-    public Boolean emptyDatabase() {
+    public Boolean checkDatabase() {
+        Boolean empty = emptyDatabase();
+        Boolean version = versionDatabase();
+
+        if (empty == true) {
+            return true;
+        } else if (version == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Database Checkers
+    private Boolean emptyDatabase() {
         Boolean empty = true;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_OPENDAY, null);
+        Cursor cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_OPENDAY, null);
         if (cur != null && cur.moveToFirst()) {
             empty = (cur.getInt (0) == 0);
         }
 
         if (empty == true) {
-            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_INSTITUTE, null);
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_INSTITUTE, null);
             if (cur != null && cur.moveToFirst()) {
                 empty = (cur.getInt (0) == 0);
             }
         }
 
         if (empty == true) {
-            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_STUDY, null);
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_STUDY, null);
             if (cur != null && cur.moveToFirst()) {
                 empty = (cur.getInt (0) == 0);
             }
         }
 
         if (empty == true) {
-            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_LOCATION, null);
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_LOCATION, null);
             if (cur != null && cur.moveToFirst()) {
                 empty = (cur.getInt (0) == 0);
             }
         }
 
         if (empty == true) {
-            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_IMAGE, null);
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_IMAGE, null);
             if (cur != null && cur.moveToFirst()) {
                 empty = (cur.getInt (0) == 0);
             }
         }
 
         if (empty == true) {
-            cur = db.rawQuery("SELECT COUNT(*) FROM " + DB_TABLE_ACTIVITY, null);
+            cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_ACTIVITY, null);
             if (cur != null && cur.moveToFirst()) {
                 empty = (cur.getInt (0) == 0);
             }
@@ -432,8 +450,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return empty;
     }
+    private Boolean versionDatabase() {
+        /*
 
-    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Integer online_version; // API
+        Integer local_version; // DATABASE
+
+        Integer highest_id = 0;
+        ArrayList<String> appinfo_id_all = getHandler(HROOPENDAY_APPINFO, null, null, APPINFO_ID, true);
+
+
+
+        if (online_version == local_version) {
+            return false;
+        } else {
+            return true;
+        }
+
+        */
+        return false;
+    }
 
     // GET Handler
     private ArrayList<String> getHandler(String table, List<String> arguments, List<String> values, String returnColumn, Boolean doubleCheck) {
@@ -441,18 +477,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor mCursor = null;
 
         if (arguments == null && values == null) {
-            if (table == DB_TABLE_ACTIVITY) {
+            if (table == HROOPENDAY_ACTIVITY) {
                 mCursor = viewAllActivities(arguments, values);
-            } else if(table == DB_TABLE_OPENDAY) {
+            } else if(table == HROOPENDAY_OPENDAY) {
                 mCursor = viewAllOpendays(arguments, values);
-            } else if(table == DB_TABLE_INSTITUTE) {
+            } else if(table == HROOPENDAY_INSTITUTE) {
                 mCursor = viewAllInstitutes(arguments, values);
-            } else if(table == DB_TABLE_STUDY) {
+            } else if(table == HROOPENDAY_STUDY) {
                 mCursor = viewAllStudies(arguments, values);
-            } else if(table == DB_TABLE_LOCATION) {
+            } else if(table == HROOPENDAY_LOCATION) {
                 mCursor = viewAllLocations(arguments, values);
-            } else if(table == DB_TABLE_IMAGE) {
+            } else if(table == HROOPENDAY_IMAGE) {
                 mCursor = viewAllImages(arguments, values);
+            } else if(table == HROOPENDAY_APPINFO) {
+                mCursor = viewAllAppInfo(arguments, values);
             }
 
             if (mCursor != null) {
@@ -469,17 +507,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
             }
         } else if (arguments.size() == values.size()) {
-            if (table == DB_TABLE_ACTIVITY) {
+            if (table == HROOPENDAY_ACTIVITY) {
                 mCursor = viewAllActivities(arguments, values);
-            } else if(table == DB_TABLE_OPENDAY) {
+            } else if(table == HROOPENDAY_OPENDAY) {
                 mCursor = viewAllOpendays(arguments, values);
-            } else if(table == DB_TABLE_INSTITUTE) {
+            } else if(table == HROOPENDAY_INSTITUTE) {
                 mCursor = viewAllInstitutes(arguments, values);
-            } else if(table == DB_TABLE_STUDY) {
+            } else if(table == HROOPENDAY_STUDY) {
                 mCursor = viewAllStudies(arguments, values);
-            } else if(table == DB_TABLE_LOCATION) {
+            } else if(table == HROOPENDAY_LOCATION) {
                 mCursor = viewAllLocations(arguments, values);
-            } else if(table == DB_TABLE_IMAGE) {
+            } else if(table == HROOPENDAY_IMAGE) {
                 mCursor = viewAllImages(arguments, values);
             }
 
@@ -504,7 +542,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SELECT Queries
     private Cursor viewAllOpendays(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_OPENDAY_ID + ", " + DB_TABLE_OPENDAY_DATE + ", " + DB_TABLE_OPENDAY_STARTTIME + ", " + DB_TABLE_OPENDAY_ENDTIME + ", " + DB_TABLE_OPENDAY_INSTITUTEFULLNAME + " FROM " + DB_TABLE_OPENDAY;
+        String query = "SELECT " + OPENDAY_ID + ", " + OPENDAY_DATE + ", " + OPENDAY_STARTTIME + ", " + OPENDAY_ENDTIME + ", " + OPENDAY_INSTITUTEFULLNAME + " FROM " + HROOPENDAY_OPENDAY;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -516,7 +554,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private Cursor viewAllInstitutes(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_INSTITUTE_ID + ", " + DB_TABLE_INSTITUTE_FULLNAME + ", " + DB_TABLE_INSTITUTE_SHORTNAME + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH + ", " + DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH + " FROM " + DB_TABLE_INSTITUTE;
+        String query = "SELECT " + INSTITUTE_ID + ", " + INSTITUTE_FULLNAME + ", " + INSTITUTE_SHORTNAME + ", " + INSTITUTE_GENERALINFORMATION_ENGLISH + ", " + INSTITUTE_GENERALINFORMATION_DUTCH + " FROM " + HROOPENDAY_INSTITUTE;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -528,7 +566,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private Cursor viewAllActivities(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_ACTIVITY_ID + ", " + DB_TABLE_ACTIVITY_OPENDAYDATE + ", " + DB_TABLE_ACTIVITY_STUDYNAME + ", " + DB_TABLE_ACTIVITY_STARTTIME + ", " + DB_TABLE_ACTIVITY_ENDTIME + ", " + DB_TABLE_ACTIVITY_CLASSROOM + ", " + DB_TABLE_ACTIVITY_INFORMATION_ENGLISH  + ", " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " FROM " + DB_TABLE_ACTIVITY;
+        String query = "SELECT " + ACTIVITY_ID + ", " + ACTIVITY_OPENDAYDATE + ", " + ACTIVITY_STUDYNAME + ", " + ACTIVITY_STARTTIME + ", " + ACTIVITY_ENDTIME + ", " + ACTIVITY_CLASSROOM + ", " + ACTIVITY_INFORMATION_ENGLISH  + ", " + ACTIVITY_INFORMATION_DUTCH + " FROM " + HROOPENDAY_ACTIVITY;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -540,7 +578,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private Cursor viewAllImages(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_IMAGE_ID + ", " + DB_TABLE_IMAGE_FILENAME + ", " + DB_TABLE_IMAGE_CONTEXT + ", " + DB_TABLE_IMAGE_DESCRIPTION + ", " + DB_TABLE_IMAGE_FLOORNUMBER + " FROM " + DB_TABLE_IMAGE;
+        String query = "SELECT " + IMAGE_ID + ", " + IMAGE_FILENAME + ", " + IMAGE_CONTEXT + ", " + IMAGE_DESCRIPTION + ", " + IMAGE_FLOORNUMBER + " FROM " + HROOPENDAY_IMAGE;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -552,7 +590,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private Cursor viewAllLocations(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_LOCATION_ID + ", " + DB_TABLE_LOCATION_STREET + ", " + DB_TABLE_LOCATION_INSTITUTEFULLNAME + ", " + DB_TABLE_LOCATION_CITY + ", " + DB_TABLE_LOCATION_ZIPCODE + ", " + DB_TABLE_LOCATION_PHONENUMBER + ", " + DB_TABLE_LOCATION_IMAGEDESCRIPTION + " FROM " + DB_TABLE_LOCATION;
+        String query = "SELECT " + LOCATION_ID + ", " + LOCATION_STREET + ", " + LOCATION_INSTITUTEFULLNAME + ", " + LOCATION_CITY + ", " + LOCATION_ZIPCODE + ", " + LOCATION_PHONENUMBER + ", " + LOCATION_IMAGEDESCRIPTION + " FROM " + HROOPENDAY_LOCATION;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -564,7 +602,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private Cursor viewAllStudies(List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + DB_TABLE_STUDY_ID + ", " + DB_TABLE_STUDY_INSTITUTEFULLNAME + ", " + DB_TABLE_STUDY_GENERALINFORMATION_DUTCH + ", " + DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH + ", " + DB_TABLE_STUDY_NAME_DUTCH + ", " +DB_TABLE_STUDY_TYPE + ", " + DB_TABLE_STUDY_NAME_ENGLISH + " FROM " + DB_TABLE_STUDY;
+        String query = "SELECT " + STUDY_ID + ", " + STUDY_INSTITUTEFULLNAME + ", " + STUDY_GENERALINFORMATION_DUTCH + ", " + STUDY_GENERALINFORMATION_ENGLISH + ", " + STUDY_NAME_DUTCH + ", " +STUDY_TYPE + ", " + STUDY_NAME_ENGLISH + " FROM " + HROOPENDAY_STUDY;
+        Cursor cursor;
+        if (values != null && arguments != null) {
+            query += ArgumentHandler(arguments);
+            cursor = db.rawQuery(query, values.toArray(new String[0]));
+        } else {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+    private Cursor viewAllAppInfo(List<String> arguments, List<String> values) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + APPINFO_ID + ", " + APPINFO_DATAVERSION + ", " + APPINFO_APILINK + " FROM " + HROOPENDAY_APPINFO;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -595,25 +645,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Standard For SQLite
     public DatabaseHelper(Context context) {
-        super(context, DB_DATABASE_HROOPENDAY, null, DB_DATABASE_HROOPENDAY_VERSION);
+        super(context, HROOPENDAY, null, HROOPENDAY_VERSION);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + DB_TABLE_OPENDAY + "(" + DB_TABLE_OPENDAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_OPENDAY_DATE + " TEXT, " + DB_TABLE_OPENDAY_STARTTIME + " TEXT, " + DB_TABLE_OPENDAY_ENDTIME + " TEXT, " + DB_TABLE_OPENDAY_INSTITUTEFULLNAME + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_INSTITUTE + "(" + DB_TABLE_INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_INSTITUTE_FULLNAME + " TEXT, " + DB_TABLE_INSTITUTE_SHORTNAME + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + DB_TABLE_INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_STUDY + "(" + DB_TABLE_STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_STUDY_INSTITUTEFULLNAME + " TEXT, " + DB_TABLE_STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + DB_TABLE_STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + DB_TABLE_STUDY_NAME_DUTCH + " TEXT, " + DB_TABLE_STUDY_TYPE + " TEXT, " + DB_TABLE_STUDY_NAME_ENGLISH + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_ACTIVITY + "(" + DB_TABLE_ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_ACTIVITY_OPENDAYDATE + " TEXT, " + DB_TABLE_ACTIVITY_STUDYNAME + " TEXT, " + DB_TABLE_ACTIVITY_STARTTIME + " TEXT, " + DB_TABLE_ACTIVITY_ENDTIME + " TEXT, " + DB_TABLE_ACTIVITY_CLASSROOM + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_DUTCH + " TEXT, " + DB_TABLE_ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_LOCATION + "(" + DB_TABLE_LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_LOCATION_STREET + " TEXT, " + DB_TABLE_LOCATION_CITY + " TEXT, " + DB_TABLE_LOCATION_ZIPCODE + " TEXT, " + DB_TABLE_LOCATION_INSTITUTEFULLNAME + " TEXT, " + DB_TABLE_LOCATION_PHONENUMBER + " TEXT, " + DB_TABLE_LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + DB_TABLE_IMAGE + "(" + DB_TABLE_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DB_TABLE_IMAGE_FILENAME + " TEXT, " + DB_TABLE_IMAGE_CONTEXT + " TEXT, " + DB_TABLE_IMAGE_DESCRIPTION + " TEXT, " + DB_TABLE_IMAGE_FLOORNUMBER + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_OPENDAY + "(" + OPENDAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + OPENDAY_DATE + " TEXT, " + OPENDAY_STARTTIME + " TEXT, " + OPENDAY_ENDTIME + " TEXT, " + OPENDAY_INSTITUTEFULLNAME + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_INSTITUTE + "(" + INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + INSTITUTE_FULLNAME + " TEXT, " + INSTITUTE_SHORTNAME + " TEXT, " + INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_STUDY + "(" + STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STUDY_INSTITUTEFULLNAME + " TEXT, " + STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + STUDY_NAME_DUTCH + " TEXT, " + STUDY_TYPE + " TEXT, " + STUDY_NAME_ENGLISH + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_ACTIVITY + "(" + ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ACTIVITY_OPENDAYDATE + " TEXT, " + ACTIVITY_STUDYNAME + " TEXT, " + ACTIVITY_STARTTIME + " TEXT, " + ACTIVITY_ENDTIME + " TEXT, " + ACTIVITY_CLASSROOM + " TEXT, " + ACTIVITY_INFORMATION_DUTCH + " TEXT, " + ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_LOCATION + "(" + LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOCATION_STREET + " TEXT, " + LOCATION_CITY + " TEXT, " + LOCATION_ZIPCODE + " TEXT, " + LOCATION_INSTITUTEFULLNAME + " TEXT, " + LOCATION_PHONENUMBER + " TEXT, " + LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_IMAGE + "(" + IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IMAGE_FILENAME + " TEXT, " + IMAGE_CONTEXT + " TEXT, " + IMAGE_DESCRIPTION + " TEXT, " + IMAGE_FLOORNUMBER + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_APPINFO + "(" + APPINFO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + APPINFO_DATAVERSION + " TEXT, " + APPINFO_APILINK + " TEXT" + ")");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_OPENDAY);
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_INSTITUTE);
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_STUDY);
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_ACTIVITY);
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_LOCATION);
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE_IMAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_OPENDAY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_INSTITUTE);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_STUDY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_ACTIVITY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_LOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_IMAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_APPINFO);
         onCreate(db);
     }
 }

@@ -26,7 +26,7 @@ public class MainActivity extends appHelper {
         layout = new LayoutHelper(this);
 
         myDatabase = new DatabaseHelper(this);
-        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+        if (myDatabase.checkDatabase() == true) myDatabase.fillDatabase();
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
