@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -15,6 +18,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class DrawableManager{
     private static Context context = null;
@@ -120,6 +133,7 @@ class mapManager{
 
         //starting procces
         updateImage();
+        setBuildingSelector();
     }
 
     // ---------------------------------- floor + building changer -----------------------------------------
@@ -191,8 +205,61 @@ class mapManager{
 
     }
 
+    private void setBuildingSelector(){
+        int width= buildingSelector.getLayoutParams().width/buildingsList.length;
+        LinearLayout[] items=new LinearLayout[buildingsList.length];
+
+        for (int i = 0; i < buildingsList.length ; i++) {
+            //https://www.youtube.com/watch?v=s_PfopWcMwI
+            LinearLayout item=new LinearLayout(context);
+            item.setOrientation(LinearLayout.VERTICAL);
+            item.setPadding(15,5,15,5);
+            item.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
+            String buildingStr =buildingsList[i];
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBuilding(buildingStr);
+                    for (int j = 0; j < items.length; j++) {
+                        items[j].setBackgroundColor(context.getResources().getColor(R.color.light_grey));
+                    }
+                    item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
+                }
+            });
+            if (building==buildingStr){
+                item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
+            }
+            int indexOfSplit=buildingStr.split("[0-9]",2)[0].length();
+            String numberBuildingString=buildingStr.substring(0,indexOfSplit);
+            String characterBuildingString=buildingStr.substring(indexOfSplit);
+
+
+
+            TextView characterBuilding=new TextView(context);
+            characterBuilding.setText(characterBuildingString);
+            characterBuilding.setGravity(Gravity.CENTER);
+            characterBuilding.setTextColor(Color.parseColor("#000000"));
+            characterBuilding.setTextSize(19.f);
+
+            TextView numberBuilding=new TextView(context);
+            numberBuilding.setText(numberBuildingString);
+            numberBuilding.setGravity(Gravity.CENTER);
+            numberBuilding.setTextColor(Color.parseColor("#000000"));
+
+            item.addView(characterBuilding);
+            item.addView(numberBuilding);
+
+            items[i]=item;
+
+            buildingSelector.addView(item);
+
+            System.out.println("test");
+        }
+    }
+
     private void updateFloorSecector(){
         floorSelector.removeAllViews();
+
         updateFloorsInBuilding();
         for (int i = 0; i < floorsInBuilding.length; i++) {
             int workFloor=floorsInBuilding[floorsInBuilding.length-i-1];
@@ -201,7 +268,7 @@ class mapManager{
             workBut.setPadding(15,5,15,5);
             workBut.setTextSize(20.0f);
             if (workFloor==floor){
-                workBut.setBackgroundColor(R.color.dark_grey);
+                workBut.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
             }
             workBut.setTextColor(Color.parseColor("#000000"));
             workBut.setOnClickListener(new View.OnClickListener() {
@@ -217,11 +284,11 @@ class mapManager{
 
 
     public String createName(){
-        return building+Integer.toString(floor)+"e";
+        return building+floor+"e";
     }
 
     public String createName(int floor,String building){
-        return building+Integer.toString(floor)+"e";
+        return building+floor+"e";
     }
 
     // ------------------------------- check existence ---------------------------------
