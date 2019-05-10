@@ -116,8 +116,7 @@
                     android:onClick="clickLeft"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.501" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/Button_BuildingRight"
@@ -134,24 +133,41 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.501" />
 
-                <Button
-                    android:id="@+id/button_ZoomOut"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/Doorzichtig"
-                    android:foreground="@drawable/ic_zoom_out_black_24dp"
-                    android:onClick="clickZoomOut"
-                    app:layout_constraintBottom_toBottomOf="@+id/Button_FloorDown"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.292"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/Button_FloorDown"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <Button
+                        android:id="@+id/button_ZoomIn"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Doorzichtig"
+                        android:foreground="@drawable/ic_zoom_in_black_24dp"
+                        android:onClick="clickZoomIn" />
+
+                    <Button
+                        android:id="@+id/button_ZoomOut"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Doorzichtig"
+                        android:foreground="@drawable/ic_zoom_out_black_24dp"
+                        android:onClick="clickZoomOut" />
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/button_ResetZoom"
@@ -172,25 +188,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
-                <Button
-                    android:id="@+id/button_ZoomIn"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/Doorzichtig"
-                    android:foreground="@drawable/ic_zoom_in_black_24dp"
-                    android:onClick="clickZoomIn"
-                    app:layout_constraintBottom_toBottomOf="@+id/Button_FloorDown"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.159"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-
                 <LinearLayout
                     android:id="@+id/linearLayout_floorSelector_Floorplan"
                     android:layout_width="wrap_content"
@@ -201,8 +198,7 @@
                     android:background="@color/light_grey"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/button_ZoomIn"
-                    app:layout_constraintHorizontal_bias="0.36"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0">
