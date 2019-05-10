@@ -4,14 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 class DrawableManager{
@@ -40,12 +42,23 @@ class DrawableManager{
 }
 
 
-class AttributePack{
+class AttributePackForMapManger {
     public Button upBut,downBut,leftBut,rightBut,zoomInBut,zoomOutBut,resetZoomBut;
     ImageView showFloor;
     TextView floorIndicator;
+    LinearLayout floorSel,buildingSel;
 
-    public AttributePack(ImageView showFloorInvoer ,TextView floorIndicatorinvoer,Button upButton,Button downButton,Button leftButton,Button rightButton,Button zoomInButton,Button zoomOutButton,Button resetZoomButton){
+    public AttributePackForMapManger(ImageView showFloorInvoer ,
+                                     TextView floorIndicatorinvoer,
+                                     Button upButton,
+                                     Button downButton,
+                                     Button leftButton,
+                                     Button rightButton,
+                                     Button zoomInButton,
+                                     Button zoomOutButton,
+                                     Button resetZoomButton,
+                                     LinearLayout floorSelector,
+                                     LinearLayout buildingSelector){
         showFloor=showFloorInvoer;
         floorIndicator=floorIndicatorinvoer;
         upBut=upButton;
@@ -55,6 +68,8 @@ class AttributePack{
         zoomInBut=zoomInButton;
         zoomOutBut=zoomOutButton;
         resetZoomBut=resetZoomButton;
+        floorSel=floorSelector;
+        buildingSel=buildingSelector;
     }
 }
 
@@ -73,9 +88,11 @@ class mapManager{
     TextView floorIndicator;
     float scale,startScale,maxscale;
     int movedSpaceX, movedSpaceY;
+    LinearLayout floorSelector,buildingSelector;
+    int[] floorsInBuilding;
 
     //Button upBut,Button downBut,Button leftBut,Button rightBut
-    public mapManager(Context c,AttributePack attributes,String[] buildings){
+    public mapManager(Context c, AttributePackForMapManger attributes, String[] buildings){
         //elements
         showFloor=attributes.showFloor;
         floorIndicator=attributes.floorIndicator;
@@ -86,6 +103,9 @@ class mapManager{
         zoomInButton=attributes.zoomInBut;
         zoomOutButton=attributes.zoomOutBut;
         resetZoomButton=attributes.resetZoomBut;
+        floorSelector=attributes.floorSel;
+        buildingSelector=attributes.buildingSel;
+
 
         //vars
         getPic = new DrawableManager(c);
@@ -102,7 +122,171 @@ class mapManager{
         updateImage();
     }
 
+    // ---------------------------------- floor + building changer -----------------------------------------
 
+    public void setFloor(int newFloor){
+        if(checkFloorExist(newFloor,building)){
+            floor=newFloor;
+            updateImage();
+        }
+    }
+
+    public void setBuilding(String newBuilding){
+        if(checkFloorExist(floor,newBuilding)){
+            building=newBuilding;
+            updateImage();
+        }
+    }
+
+
+    public void changeBuilding(int amount){
+        if (getPic.nameExist(createName(floor,buildingsList[stayBetweenIncl(0,2,buildingNum+amount)]))) {
+            buildingNum = stayBetweenIncl(0, 2, buildingNum + amount);
+            building = buildingsList[buildingNum];
+            updateImage();
+        }
+    }
+
+    public void changeFloor(int amount){
+        if (getPic.nameExist(createName(floor+amount,building))) {
+            floor += amount;
+            updateImage();
+        }
+    }
+
+
+    public void updateImage(){
+        updateFloorSecector();
+        showFloor.setImageResource(0);
+        int id=getPic.getID(createName());
+        showFloor.setImageResource(id);
+        floorIndicator.setText(createName()+"\n");
+        movedSpaceX =0;
+        movedSpaceY =0;
+        scale= startScale;
+        showFloor.setScaleX(scale);
+        showFloor.setScaleY(scale);
+        showFloor.scrollTo(0,0);
+        updateVisabilatyButtons();
+    }
+
+    private void updateFloorsInBuilding(){
+        int minFloor=0;
+        int maxFloor=0;
+        int checkFloor=0;
+        while (checkFloorExist(checkFloor,building)){
+            minFloor=checkFloor;
+            checkFloor-=1;
+        }
+        checkFloor=0;
+        while (checkFloorExist(checkFloor,building)){
+            maxFloor=checkFloor;
+            checkFloor+=1;
+        }
+
+        floorsInBuilding=new int[maxFloor-minFloor+1];
+        for (int i = 0; i < floorsInBuilding.length; i++) {
+            floorsInBuilding[i]=minFloor+i;
+        }
+
+    }
+
+    private void updateFloorSecector(){
+        floorSelector.removeAllViews();
+        updateFloorsInBuilding();
+        for (int i = 0; i < floorsInBuilding.length; i++) {
+            int workFloor=floorsInBuilding[floorsInBuilding.length-i-1];
+            TextView workBut=new TextView(context);
+            workBut.setText(Integer.toString(workFloor));
+            workBut.setPadding(15,5,15,5);
+            workBut.setTextSize(20.0f);
+            if (workFloor==floor){
+                workBut.setBackgroundColor(R.color.dark_grey);
+            }
+            workBut.setTextColor(Color.parseColor("#000000"));
+            workBut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setFloor(workFloor);
+                }
+            });
+            floorSelector.addView(workBut);
+        }
+    }
+
+
+
+    public String createName(){
+        return building+Integer.toString(floor)+"e";
+    }
+
+    public String createName(int floor,String building){
+        return building+Integer.toString(floor)+"e";
+    }
+
+    // ------------------------------- check existence ---------------------------------
+    private boolean checkFloorExistAfterChange(int amountOfFloorHigher, int amountOfBuildingRight){
+        if (buildingNum+amountOfBuildingRight<0 ||buildingNum+amountOfBuildingRight>buildingsList.length-1){
+            return false;
+        }
+        return checkFloorExist(floor+amountOfFloorHigher,buildingsList[buildingNum+amountOfBuildingRight]);
+    }
+
+    private boolean checkFloorExist(int floor,String building){
+        return getPic.nameExist(createName(floor,building));
+    }
+
+
+    // ------------------------------ visabilaty buttons ------------------------------------
+    public void updateVisabilatyButtons(){
+        setVisable(upButton,downButton,leftButton,rightButton,zoomInButton,zoomOutButton,resetZoomButton);
+        if(!checkFloorExistAfterChange(1,0)){
+            setInvisible(upButton);
+        }
+        if(!checkFloorExistAfterChange(-1,0)){
+            setInvisible(downButton);
+        }
+        if(!checkFloorExistAfterChange(0,-1)){
+            setInvisible(leftButton);
+        }
+        if(!checkFloorExistAfterChange(0,1)){
+            setInvisible(rightButton);
+        }
+        if(scale<=startScale){
+            setInvisible(zoomOutButton);
+        }
+        if(scale>=maxscale){
+            setInvisible(zoomInButton);
+        }
+        if(scale<=startScale & movedSpaceX==0 & movedSpaceY==0){
+            setInvisible(resetZoomButton);
+        }
+    }
+
+
+
+    private void setInvisible(Button... buttons){
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setVisable(Button... buttons){
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setVisibility(View.VISIBLE);
+        }
+    }
+
+    private int stayBetweenIncl(int min,int max,int number){
+        if (number<min){
+            return min;
+        }else if (number>max){
+            return max;
+        }
+        return number;
+    }
+
+    //---------------------------------- zoom process -----------------------------------------
     public void moveSpace(int movementOnX,int movementOnY){
         movedSpaceX +=movementOnX;
         movedSpaceY +=movementOnY;
@@ -140,97 +324,6 @@ class mapManager{
         scale*=amount;
         zoomCheck();
     }
-
-    public void changeBuilding(int amount){
-        if (getPic.nameExist(createName(floor,buildingsList[stayBetweenIncl(0,2,buildingNum+amount)]))) {
-            buildingNum = stayBetweenIncl(0, 2, buildingNum + amount);
-            building = buildingsList[buildingNum];
-            updateImage();
-        }
-    }
-
-    public void changeFloor(int amount){
-        if (getPic.nameExist(createName(floor+amount,building))) {
-            floor += amount;
-            updateImage();
-        }
-    }
-
-    public String createName(){
-        return building+Integer.toString(floor)+"e";
-    }
-
-    public String createName(int floor,String building){
-        return building+Integer.toString(floor)+"e";
-    }
-
-
-    public void updateImage(){
-        showFloor.setImageResource(0);
-        int id=getPic.getID(createName());
-        showFloor.setImageResource(id);
-        floorIndicator.setText(createName()+"\n");
-        movedSpaceX =0;
-        movedSpaceY =0;
-        scale= startScale;
-        showFloor.setScaleX(scale);
-        showFloor.setScaleY(scale);
-        showFloor.scrollTo(0,0);
-        updateVisabilatyButtons();
-    }
-
-    public void updateVisabilatyButtons(){
-        setVisable(upButton,downButton,leftButton,rightButton,zoomInButton,zoomOutButton,resetZoomButton);
-        if(!checkFloorExist(1,0)){
-            setInvisible(upButton);
-        }
-        if(!checkFloorExist(-1,0)){
-            setInvisible(downButton);
-        }
-        if(!checkFloorExist(0,-1)){
-            setInvisible(leftButton);
-        }
-        if(!checkFloorExist(0,1)){
-            setInvisible(rightButton);
-        }
-        if(scale<=startScale){
-            setInvisible(zoomOutButton);
-        }
-        if(scale>=maxscale){
-            setInvisible(zoomInButton);
-        }
-        if(scale<=startScale & movedSpaceX==0 & movedSpaceY==0){
-            setInvisible(resetZoomButton);
-        }
-    }
-
-    private boolean checkFloorExist(int amountOfFloorHigher, int amountOfBuildingRight){
-        if (buildingNum+amountOfBuildingRight<0 ||buildingNum+amountOfBuildingRight>buildingsList.length-1){
-            return false;
-        }
-        return getPic.nameExist(createName(floor+amountOfFloorHigher,buildingsList[buildingNum+amountOfBuildingRight]));
-    }
-
-    private void setInvisible(Button... buttons){
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void setVisable(Button... buttons){
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setVisibility(View.VISIBLE);
-        }
-    }
-
-    private int stayBetweenIncl(int min,int max,int number){
-        if (number<min){
-            return min;
-        }else if (number>max){
-            return max;
-        }
-        return number;
-    }
 }
 
 
@@ -248,6 +341,26 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
 
 
+
+        
+        AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
+                (Button) findViewById(R.id.Button_FloorUp),
+                (Button) findViewById(R.id.Button_FloorDown),
+                (Button) findViewById(R.id.Button_BuildingLeft),
+                (Button) findViewById(R.id.Button_BuildingRight),
+                (Button) findViewById(R.id.button_ZoomIn),
+                (Button) findViewById(R.id.button_ZoomOut),
+                (Button)findViewById(R.id.button_ResetZoom),
+                (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
+                (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
+        String[] buildings=new String[]{"h107","wd103","wn99"};
+        floor = new mapManager(this, attributes,buildings);
+        gestureDetector=new GestureDetector(this,this);
+        scaleGestureDetector= new ScaleGestureDetector(this,this);
+        showFloor.setOnTouchListener(this);
+
+
+        /* -------------------------menu--------------------------*/
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
         Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
@@ -259,20 +372,6 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
 
         layout = new LayoutHelper(this);
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
-        
-        AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
-                (Button) findViewById(R.id.Button_FloorUp),
-                (Button) findViewById(R.id.Button_FloorDown),
-                (Button) findViewById(R.id.Button_BuildingLeft),
-                (Button) findViewById(R.id.Button_BuildingRight),
-                (Button) findViewById(R.id.button_ZoomIn),
-                (Button) findViewById(R.id.button_ZoomOut),
-                (Button)findViewById(R.id.button_ResetZoom));
-        String[] buildings=new String[]{"h107","wd103","wn99"};
-        floor = new mapManager(this, attributes,buildings);
-        gestureDetector=new GestureDetector(this,this);
-        scaleGestureDetector= new ScaleGestureDetector(this,this);
-        showFloor.setOnTouchListener(this);
     }
 
 
