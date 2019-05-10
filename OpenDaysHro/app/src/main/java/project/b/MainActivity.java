@@ -3,6 +3,9 @@ package project.b;
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
@@ -28,6 +31,7 @@ public class MainActivity extends appHelper {
         if (layout.db.checkDatabase() == true) {
             layout.db.fillDatabase();
         }
+
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
         String[] desc = {"Thursday\n4 April 2019","Thursday\n11 April 2019", "Thursday\n18 April 2019", "Thursday\n25 April 2019"};

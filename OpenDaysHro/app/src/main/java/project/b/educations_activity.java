@@ -34,13 +34,9 @@ public class educations_activity extends appHelper {
 
 
             // getting a list with names of all studies. (for english use false and for dutch use true). ~Credits: Christian.
-            ArrayList<String> studyNames = layout.db.getNamesOfStudiesByInstitute("1", false);
-
+            String[] text = layout.db.getNamesOfStudiesByInstitute("1");
             int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
-            String[] text = new String[studyNames.size()];
 
-            // creating a string[] from a ArrayList<String>
-            for ( int x = 0; x < studyNames.size(); x++) { text[x] = studyNames.get(x); }
 
             layout.generate_study_program_menu(R.id.page_container, images, text);
         }

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int HROOPENDAY_VERSION = 30;
@@ -67,11 +68,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public ArrayList<String> getNamesOfStudiesByInstitute(String institute_id, Boolean language) {
+    public String[] getNamesOfStudiesByInstitute(String institute_id) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<String> study_info = new ArrayList<>();
         String institute_fullname = "";
-        ArrayList<String> institute = getInstitute(institute_id, language);
+        ArrayList<String> institute = getInstitute(institute_id);
 
         if(institute.size() > 0) {
             institute_fullname = institute.get(0);
@@ -80,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> studies = getStudy_id(institute_fullname);
 
         for (int i = 0; i < studies.size(); i++) {
-            study_info = getStudy(studies.get(i), language);
+            study_info = getStudy(studies.get(i));
             for (int j = 0; j < study_info.size(); j++) {
                 if (!result.contains(study_info.get(2))) {
                     result.add(study_info.get(2));
@@ -88,9 +89,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        return result;
+        String[] result_string = result.toArray(new String[result.size()]);
+        return result_string;
     }
-    public ArrayList<String> getCalenderInfo(String openday_id) {
+    public String[] getCalenderInfo(String openday_id) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<String> location = new ArrayList<>();
         String institute_id = "";
@@ -113,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(institutes.size() > 0) {
             institute_id = institutes.get(0);
         }
-        ArrayList<String> institute = getInstitute(institute_id, false);
+        ArrayList<String> institute = getInstitute(institute_id);
         if(institute.size() > 0) {
             institute_shortname = institute.get(1);
         }
@@ -131,7 +133,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result.add(endtime);
         result.add(date);
 
-        return result;
+        String[] result_string = result.toArray(new String[result.size()]);
+        return result_string;
     }
     public String[] getFloorplansByInstitute(String institute_id) {
         ArrayList<String> result = new ArrayList<>();
@@ -141,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String institute_fullname = "";
         String imagedescription = "";
 
-        ArrayList<String> institute = getInstitute(institute_id, false);
+        ArrayList<String> institute = getInstitute(institute_id);
         if(institute.size() > 0) {
             institute_fullname = institute.get(0);
         }
@@ -173,9 +176,92 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         String[] result_string = result.toArray(new String[result.size()]);
-
         return result_string;
     }
+//    public String[] getUpcomingOpendays() {
+//        ArrayList<String> result = new ArrayList<>();
+//
+//
+//
+//        String[] result_string = result.toArray(new String[result.size()]);
+//        return result_string;
+//    }
+    public String[] getActivityByOpenday(String openday_id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> activity = new ArrayList<>();
+        ArrayList<String> study = new ArrayList<>();
+        ArrayList<String> StudyNameEnglishByInstitute = new ArrayList<>();
+        ArrayList<String> StudyNameDutchByInstitute = new ArrayList<>();
+        ArrayList<String> StudyNameByDate = new ArrayList<>();
+        String institute_fullname = "";
+        String openday_date = "";
+
+        ArrayList<String> openday = getOpenday(openday_id);
+        if (openday.size() > 0) {
+            institute_fullname = openday.get(0);
+            openday_date = openday.get(1);
+        }
+
+        ArrayList<String> IdByDate = getActivity_id(openday_date);
+        if(IdByDate.size() > 0) {
+            for (int i = 0; i < IdByDate.size(); i++) {
+                activity = getActivity(IdByDate.get(i));
+                if(activity.size() > 0) {
+                    StudyNameByDate.add(activity.get(0));
+                }
+            }
+        }
+
+        ArrayList<String> studies = getStudy_id(institute_fullname);
+        if (studies.size() > 0) {
+            for (int i = 0; i < studies.size(); i++) {
+                study = getStudy(studies.get(i));
+                if (study.size() > 0) {
+                    StudyNameEnglishByInstitute.add(study.get(2));
+                }
+            }
+        }
+
+        if (studies.size() > 0) {
+            for (int i = 0; i < studies.size(); i++) {
+                study = getStudy(studies.get(i));
+                if (study.size() > 0) {
+                    StudyNameDutchByInstitute.add(study.get(2));
+                }
+            }
+        }
+
+        String currentDutch = "";
+        String currentEnglish = "";
+        String currentDate = "";
+
+        for (int i = 0; i < StudyNameByDate.size(); i++) {
+            currentDate = StudyNameByDate.get(i);
+            for (int j = 0; j < StudyNameDutchByInstitute.size(); j++) {
+                currentDutch = StudyNameDutchByInstitute.get(j);
+                currentEnglish = StudyNameEnglishByInstitute.get(j);
+
+                if (currentDate.equals(currentDutch)) {
+                    if (!result.contains(IdByDate.get(i))){
+                        result.add(IdByDate.get(i));
+                    }
+                } else if(currentDate.equals(currentEnglish)) {
+                    if (!result.contains(IdByDate.get(i))) {
+                        result.add(IdByDate.get(i));
+                    }
+                }
+            }
+        }
+
+        String[] result_string = result.toArray(new String[result.size()]);
+        return result_string;
+    }
+    public String[] getActivityInfo(String activity_id) {
+        ArrayList<String> result = getActivity(activity_id);
+        String[] result_string = result.toArray(new String[result.size()]);
+        return result_string;
+    }
+
 
     public Boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -338,7 +424,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-    private ArrayList<String> getStudy(String id, Boolean language) {
+    private ArrayList<String> getStudy(String id) {
+        Boolean language = language();
         ArrayList<String> result = new ArrayList<>();
         String institute_fullname = "";
         String name = "";
@@ -379,7 +466,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-    private ArrayList<String> getActivity(String id, Boolean language) {
+    private ArrayList<String> getActivity(String id) {
+        Boolean language = language();
         ArrayList<String> result = new ArrayList<>();
         String studyname = "";
         String information = "";
@@ -407,7 +495,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-    private ArrayList<String> getInstitute(String id, Boolean language) {
+    private ArrayList<String> getInstitute(String id) {
+        Boolean language = language();
         ArrayList<String> result = new ArrayList<>();
         String fullname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_FULLNAME, true).get(0);
         String shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_SHORTNAME, true).get(0);
@@ -473,34 +562,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private ArrayList<String> getInstitute_id(String institute_fullname) {
         return getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
     } // institute_fullname -> institute_id (*)
-    private ArrayList<String> getActivityByOpenday(String institute_fullname, String openday_date) {
-        ArrayList<String> result = new ArrayList<>();
-
-        ArrayList<String> IdByDate = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_ID, true);
-        ArrayList<String> StudyNameByDate = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_STUDYNAME, false);
-        ArrayList<String> StudyNameEnglishByInstitute = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_ENGLISH, true);
-        ArrayList<String> StudyNameDutchByInstitute = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_DUTCH, true);
-        String currentDutch = "";
-        String currentEnglish = "";
-        String currentDate = "";
-
-        for (int i = 0; i < StudyNameByDate.size(); i++) {
-            currentDate = StudyNameByDate.get(i);
-            for (int j = 0; j < StudyNameDutchByInstitute.size(); j++) {
-                currentDutch = StudyNameDutchByInstitute.get(j);
-                currentEnglish = StudyNameEnglishByInstitute.get(j);
-
-                if (currentDate.equals(currentDutch)) {
-                    result.add(IdByDate.get(i));
-                } else if(currentDate.equals(currentEnglish)) {
-                    result.add(IdByDate.get(i));
-                }
-            }
-        }
-
-
-        return result;
-    }
+    private ArrayList<String> getActivity_id(String openday_date) {
+        return getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_ID, true);
+    } // openday_date -> activity_id (*)
 
     // Database Checkers
     private Boolean emptyDatabase() {
@@ -570,6 +634,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         */
         return false;
+    }
+
+    // Language
+    private Boolean language() {
+        if(Locale.getDefault().getLanguage() == "nl") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // GET Handler
