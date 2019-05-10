@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -133,7 +134,6 @@ class mapManager{
 
         //starting procces
         updateImage();
-        setBuildingSelector();
     }
 
     // ---------------------------------- floor + building changer -----------------------------------------
@@ -148,6 +148,11 @@ class mapManager{
     public void setBuilding(String newBuilding){
         if(checkFloorExist(floor,newBuilding)){
             building=newBuilding;
+            for (int i = 0; i < buildingsList.length; i++) {
+                if (building==buildingsList[i]){
+                    buildingNum=i;
+                }
+            }
             updateImage();
         }
     }
@@ -171,6 +176,7 @@ class mapManager{
 
     public void updateImage(){
         updateFloorSecector();
+        updateBuildingSelector();
         showFloor.setImageResource(0);
         int id=getPic.getID(createName());
         showFloor.setImageResource(id);
@@ -205,55 +211,55 @@ class mapManager{
 
     }
 
-    private void setBuildingSelector(){
-        int width= buildingSelector.getLayoutParams().width/buildingsList.length;
-        LinearLayout[] items=new LinearLayout[buildingsList.length];
-
+    private void updateBuildingSelector(){
+        int buildingsAvailable=0;
+        for (int i = 0; i < buildingsList.length;i++) {
+            if(checkFloorExist(floor,buildingsList[i])){
+                buildingsAvailable+=1;
+            };
+        }
+        int width= buildingSelector.getLayoutParams().width/buildingsAvailable;
+        buildingSelector.removeAllViews();
         for (int i = 0; i < buildingsList.length ; i++) {
-            //https://www.youtube.com/watch?v=s_PfopWcMwI
-            LinearLayout item=new LinearLayout(context);
-            item.setOrientation(LinearLayout.VERTICAL);
-            item.setPadding(15,5,15,5);
-            item.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
-            String buildingStr =buildingsList[i];
-            item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setBuilding(buildingStr);
-                    for (int j = 0; j < items.length; j++) {
-                        items[j].setBackgroundColor(context.getResources().getColor(R.color.light_grey));
+            if (checkFloorExist(floor,buildingsList[i])) {
+                //https://www.youtube.com/watch?v=s_PfopWcMwI
+                LinearLayout item = new LinearLayout(context);
+                item.setOrientation(LinearLayout.VERTICAL);
+                item.setPadding(15, 5, 15, 5);
+                item.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
+                String buildingStr = buildingsList[i];
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setBuilding(buildingStr);
                     }
+                });
+                if (building == buildingStr) {
                     item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
+                } else {
+                    item.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
                 }
-            });
-            if (building==buildingStr){
-                item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
+                int indexOfSplit = buildingStr.split("[0-9]", 2)[0].length();
+                String numberBuildingString = buildingStr.substring(0, indexOfSplit);
+                String characterBuildingString = buildingStr.substring(indexOfSplit);
+
+
+                TextView characterBuilding = new TextView(context);
+                characterBuilding.setText(characterBuildingString);
+                characterBuilding.setGravity(Gravity.CENTER);
+                characterBuilding.setTextColor(Color.parseColor("#000000"));
+                characterBuilding.setTextSize(19.f);
+
+                TextView numberBuilding = new TextView(context);
+                numberBuilding.setText(numberBuildingString);
+                numberBuilding.setGravity(Gravity.CENTER);
+                numberBuilding.setTextColor(Color.parseColor("#000000"));
+
+                item.addView(characterBuilding);
+                item.addView(numberBuilding);
+
+                buildingSelector.addView(item);
             }
-            int indexOfSplit=buildingStr.split("[0-9]",2)[0].length();
-            String numberBuildingString=buildingStr.substring(0,indexOfSplit);
-            String characterBuildingString=buildingStr.substring(indexOfSplit);
-
-
-
-            TextView characterBuilding=new TextView(context);
-            characterBuilding.setText(characterBuildingString);
-            characterBuilding.setGravity(Gravity.CENTER);
-            characterBuilding.setTextColor(Color.parseColor("#000000"));
-            characterBuilding.setTextSize(19.f);
-
-            TextView numberBuilding=new TextView(context);
-            numberBuilding.setText(numberBuildingString);
-            numberBuilding.setGravity(Gravity.CENTER);
-            numberBuilding.setTextColor(Color.parseColor("#000000"));
-
-            item.addView(characterBuilding);
-            item.addView(numberBuilding);
-
-            items[i]=item;
-
-            buildingSelector.addView(item);
-
-            System.out.println("test");
         }
     }
 
