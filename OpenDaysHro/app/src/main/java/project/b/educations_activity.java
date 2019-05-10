@@ -32,10 +32,9 @@ public class educations_activity extends appHelper {
         layout = new LayoutHelper(this);
         if (passedName == null) {
 
-            myDatabase = new DatabaseHelper(this);
 
             // getting a list with names of all studies. (for english use false and for dutch use true). ~Credits: Christian.
-            ArrayList<String> studyNames = myDatabase.getNamesOfStudiesByInstitute("Communicatie, Media en Informatietechnologie", false);
+            ArrayList<String> studyNames = layout.db.getNamesOfStudiesByInstitute("1", false);
 
             int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
             String[] text = new String[studyNames.size()];

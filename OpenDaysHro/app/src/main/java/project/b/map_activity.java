@@ -259,7 +259,7 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
 
         layout = new LayoutHelper(this);
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
-        
+
         AttributePack attributes = new AttributePack(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
@@ -268,7 +268,7 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
                 (Button) findViewById(R.id.button_ZoomIn),
                 (Button) findViewById(R.id.button_ZoomOut),
                 (Button)findViewById(R.id.button_ResetZoom));
-        String[] buildings=new String[]{"h107","wd103","wn99"};
+        String[] buildings=  layout.db.getFloorplansByInstitute("1");
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this,this);

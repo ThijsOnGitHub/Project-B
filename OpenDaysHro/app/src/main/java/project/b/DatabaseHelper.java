@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 24;
+    private static final int HROOPENDAY_VERSION = 30;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -59,7 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String IMAGE_FILENAME = "filename";
             private static final String IMAGE_CONTEXT = "context";
             private static final String IMAGE_DESCRIPTION = "description";
-            private static final String IMAGE_FLOORNUMBER = "floornumber";
         
         private static final String HROOPENDAY_APPINFO = "app_info";
             private static final String APPINFO_ID = "id";
@@ -68,20 +67,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public ArrayList<String> getNamesOfStudiesByInstitute(String institute_fullname, Boolean language) {
-        if (language == true) {
-            return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_DUTCH, true);
-        } else {
-            return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_NAME_ENGLISH, true);
-        }
-    }
-    public ArrayList<String> getCalenderInfoByInstituteAndDate(String institute_fullname, String inputdate) {
+    public ArrayList<String> getNamesOfStudiesByInstitute(String institute_id, Boolean language) {
         ArrayList<String> result = new ArrayList<>();
-        String institute_shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_SHORTNAME, true).get(0);
-        String zipcode = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), LOCATION_ZIPCODE, true).get(0);
-        String starttime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_STARTTIME, true).get(0);
-        String endtime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_ENDTIME, true).get(0);
-        String date = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_INSTITUTEFULLNAME, OPENDAY_DATE), Arrays.asList(institute_fullname, inputdate), OPENDAY_DATE, true).get(0);
+        ArrayList<String> study_info = new ArrayList<>();
+        String institute_fullname = "";
+        ArrayList<String> institute = getInstitute(institute_id, language);
+
+        if(institute.size() > 0) {
+            institute_fullname = institute.get(0);
+        }
+
+        ArrayList<String> studies = getStudy_id(institute_fullname);
+
+        for (int i = 0; i < studies.size(); i++) {
+            study_info = getStudy(studies.get(i), language);
+            for (int j = 0; j < study_info.size(); j++) {
+                if (!result.contains(study_info.get(2))) {
+                    result.add(study_info.get(2));
+                }
+            }
+        }
+
+        return result;
+    }
+    public ArrayList<String> getCalenderInfo(String openday_id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> location = new ArrayList<>();
+        String institute_id = "";
+        String institute_fullname = "";
+        String institute_shortname = "";
+        String zipcode = "";
+        String starttime = "";
+        String endtime = "";
+        String date = "";
+
+
+        ArrayList<String> openday = getOpenday(openday_id);
+        if(openday.size() > 0) {
+            institute_fullname = openday.get(0);
+            date = openday.get(1);
+            starttime = openday.get(2);
+            endtime = openday.get(3);
+        }
+        ArrayList<String> institutes = getInstitute_id(institute_fullname);
+        if(institutes.size() > 0) {
+            institute_id = institutes.get(0);
+        }
+        ArrayList<String> institute = getInstitute(institute_id, false);
+        if(institute.size() > 0) {
+            institute_shortname = institute.get(1);
+        }
+        ArrayList<String> location_id = getLocation_id(institute_fullname);
+        if(location_id.size() > 0) {
+            location = getLocation(location_id.get(0));
+            if(location.size() > 0) {
+                zipcode = location.get(2);
+            }
+        }
 
         result.add(institute_shortname);
         result.add(zipcode);
@@ -91,17 +133,200 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
+    public String[] getFloorplansByInstitute(String institute_id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> location = new ArrayList<>();
+        ArrayList<String> images_id = new ArrayList<>();
+        ArrayList<String> image = new ArrayList<>();
+        String institute_fullname = "";
+        String imagedescription = "";
 
+        ArrayList<String> institute = getInstitute(institute_id, false);
+        if(institute.size() > 0) {
+            institute_fullname = institute.get(0);
+        }
+
+        ArrayList<String> locations_id = getLocation_id(institute_fullname);
+        if (locations_id.size() > 0) {
+            for (int i = 0; i < locations_id.size(); i++) {
+                location = getLocation(locations_id.get(i));
+
+                if (location.size() > 0) {
+                    imagedescription = location.get(0);
+                    images_id = getImage_id(imagedescription);
+
+                    if (images_id.size() > 0) {
+                        for (int j = 0; j < images_id.size(); j++) {
+                            image = getImage(images_id.get(j));
+
+                            if (image.size() > 0) {
+                                if (!result.contains(image.get(1))) {
+                                    result.add(image.get(1));
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        String[] result_string = result.toArray(new String[result.size()]);
+
+        return result_string;
+    }
+
+    public Boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OPENDAY_DATE, date);
+        contentValues.put(OPENDAY_STARTTIME, starttime);
+        contentValues.put(OPENDAY_ENDTIME, endtime);
+        contentValues.put(OPENDAY_INSTITUTEFULLNAME, institute_fullname);
+
+        long result = db.insert(HROOPENDAY_OPENDAY, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+    public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(INSTITUTE_FULLNAME, fullname);
+        contentValues.put(INSTITUTE_SHORTNAME, shortname);
+        contentValues.put(INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
+        contentValues.put(INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
+
+        long result = db.insert(HROOPENDAY_INSTITUTE, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+    public Boolean createStudy(String institute_fullname, String name_dutch, String name_english, String type, String generalinformation_dutch, String generalinformation_english) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(STUDY_INSTITUTEFULLNAME, institute_fullname);
+        contentValues.put(STUDY_NAME_DUTCH, name_dutch);
+        contentValues.put(STUDY_NAME_ENGLISH, name_english);
+        contentValues.put(STUDY_TYPE, type);
+        contentValues.put(STUDY_GENERALINFORMATION_DUTCH, generalinformation_dutch);
+        contentValues.put(STUDY_GENERALINFORMATION_ENGLISH, generalinformation_english);
+
+        long result = db.insert(HROOPENDAY_STUDY, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+    public Boolean createActivity(String openday_date, String study_name, String starttime, String endtime, String classroom, String information_english, String information_dutch) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ACTIVITY_OPENDAYDATE, openday_date);
+        contentValues.put(ACTIVITY_STUDYNAME, study_name);
+        contentValues.put(ACTIVITY_STARTTIME, starttime);
+        contentValues.put(ACTIVITY_ENDTIME, endtime);
+        contentValues.put(ACTIVITY_CLASSROOM, classroom);
+        contentValues.put(ACTIVITY_INFORMATION_ENGLISH, information_english);
+        contentValues.put(ACTIVITY_INFORMATION_DUTCH, information_dutch);
+
+        long result = db.insert(HROOPENDAY_ACTIVITY, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+    public Boolean createLocation(String street, String city, String institute_fullname, String zipcode, String phonenumber, String image_description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LOCATION_STREET, street);
+        contentValues.put(LOCATION_CITY, city);
+        contentValues.put(LOCATION_INSTITUTEFULLNAME, institute_fullname);
+        contentValues.put(LOCATION_ZIPCODE, zipcode);
+        contentValues.put(LOCATION_PHONENUMBER, phonenumber);
+        contentValues.put(LOCATION_IMAGEDESCRIPTION, image_description);
+
+        long result = db.insert(HROOPENDAY_LOCATION, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+    public Boolean createImage(String filename, String context, String description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(IMAGE_FILENAME, filename);
+        contentValues.put(IMAGE_CONTEXT, context);
+        contentValues.put(IMAGE_DESCRIPTION, description);
+
+        long result = db.insert(HROOPENDAY_IMAGE, null, contentValues);
+        db.close();
+        return result != -1; // if result == true then the values are inserted
+    }
+
+    public void fillDatabase() {
+        // API CALL......
+
+
+
+        // Create CMI
+        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
+
+        // CMI Studies
+        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Part-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Technisch Informatica", "Computer engineering", "Full-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Creative Media and Game Technologies", "Creative Media and Game Technologies", "Full-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Part-time", "", "");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "", "");
+
+        // CMI locations
+        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
+        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
+        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "3011WN99");
+
+        // Floorplans
+        for (int i = 0; i <= 6; i++) {
+            createImage("h107" + Integer.toString(i) + "e.png", "h107", "3011WN107");
+            createImage("wd103" + Integer.toString(i) + "e.png", "wd103", "3011WN103");
+            if (i <= 5) {
+                createImage("wn99" + Integer.toString(i) + "e.png", "wn99", "3011WN99");
+            }
+        }
+
+
+        // Create openday for CMI
+        createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("09-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+
+        // Create activities for CMI
+        createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "WD.02.002", "Python stuff", "Python dingen");
+        createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314-C120", "General Information", "Algemene informatie");
+        createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
+    }
+    public Boolean checkDatabase() {
+        Boolean empty = emptyDatabase();
+        Boolean version = versionDatabase();
+
+        if (empty == true) {
+            return true;
+        } else if (version == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET CONTENT
-    public ArrayList<String> getLocationInformation(String description) {
+    private ArrayList<String> getLocation(String id) {
         ArrayList<String> result = new ArrayList<>();
 
-        String imagedescription = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_IMAGEDESCRIPTION, true).get(0);
-        String street = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_STREET, true).get(0);
-        String zipcode = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_ZIPCODE, true).get(0);
-        String city = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_CITY, true).get(0);
-        String phonenumber = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_PHONENUMBER, true).get(0);
-        String institute_fullname = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_IMAGEDESCRIPTION), Arrays.asList(description), LOCATION_INSTITUTEFULLNAME, true).get(0);
+        String imagedescription = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_IMAGEDESCRIPTION, true).get(0);
+        String street = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_STREET, true).get(0);
+        String zipcode = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_ZIPCODE, true).get(0);
+        String city = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_CITY, true).get(0);
+        String phonenumber = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_PHONENUMBER, true).get(0);
+        String institute_fullname = getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(id), LOCATION_INSTITUTEFULLNAME, true).get(0);
 
         result.add(imagedescription);
         result.add(street);
@@ -109,60 +334,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result.add(city);
         result.add(phonenumber);
         result.add(institute_fullname);
+        result.add(id);
 
         return result;
     }
-    public ArrayList<String> getStudyInformation(String study_name, Boolean language) {
+    private ArrayList<String> getStudy(String id, Boolean language) {
         ArrayList<String> result = new ArrayList<>();
         String institute_fullname = "";
         String name = "";
         String type = "";
         String general_information = "";
 
-        if (getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).size() > 0) {
-            institute_fullname = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).get(0);
-            type = general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_TYPE, true).get(0);
-            if (language == true) {
-                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_NAME_DUTCH, true).get(0);
-                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_DUTCH, true).get(0);
-            } else {
-                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_NAME_ENGLISH, true).get(0);
-                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
-            }
-        } else if (getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).size() > 0) {
-            institute_fullname = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_INSTITUTEFULLNAME, true).get(0);
-            type = general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_TYPE, true).get(0);
-            if (language == true) {
-                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_NAME_DUTCH, true).get(0);
-                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_DUTCH, true).get(0);
-            } else {
-                name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_NAME_ENGLISH, true).get(0);
-                general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(study_name), STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
-            }
+        institute_fullname = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_INSTITUTEFULLNAME, true).get(0);
+        type = general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_TYPE, true).get(0);
+        if (language == true) {
+            name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_NAME_DUTCH, true).get(0);
+            general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_GENERALINFORMATION_DUTCH, true).get(0);
+        } else {
+            name = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_NAME_ENGLISH, true).get(0);
+            general_information = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_ID), Arrays.asList(id), STUDY_GENERALINFORMATION_ENGLISH, true).get(0);
         }
+
 
         result.add(institute_fullname);
         result.add(type);
         result.add(name);
         result.add(general_information);
+        result.add(id);
 
         return result;
     }
-    public ArrayList<String> getOpendayByID(String ID) {
+    private ArrayList<String> getOpenday(String id) {
         ArrayList<String> result = new ArrayList<>();
-        String institute_fullname = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_INSTITUTEFULLNAME, true).get(0);
-        String date = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_DATE, true).get(0);
-        String startime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_STARTTIME, true).get(0);
-        String endtime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(ID), OPENDAY_ENDTIME, true).get(0);
+        String institute_fullname = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(id), OPENDAY_INSTITUTEFULLNAME, true).get(0);
+        String date = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(id), OPENDAY_DATE, true).get(0);
+        String startime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(id), OPENDAY_STARTTIME, true).get(0);
+        String endtime = getHandler(HROOPENDAY_OPENDAY, Arrays.asList(OPENDAY_ID), Arrays.asList(id), OPENDAY_ENDTIME, true).get(0);
 
         result.add(institute_fullname);
         result.add(date);
         result.add(startime);
         result.add(endtime);
+        result.add(id);
 
         return result;
     }
-    public ArrayList<String> getActivityById(String id, Boolean language) {
+    private ArrayList<String> getActivity(String id, Boolean language) {
         ArrayList<String> result = new ArrayList<>();
         String studyname = "";
         String information = "";
@@ -186,45 +403,77 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result.add(starttime);
         result.add(endtime);
         result.add(openday_date);
+        result.add(id);
 
         return result;
     }
-    public ArrayList<String> getAllFloorplanByFloornumber(String description, String floornumber) {
-        return getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_DESCRIPTION, IMAGE_FLOORNUMBER), Arrays.asList(description, floornumber), IMAGE_FILENAME, true);
-    }
-    public ArrayList<String> getInstituteInformation(String institute_fullname, Boolean language) {
+    private ArrayList<String> getInstitute(String id, Boolean language) {
         ArrayList<String> result = new ArrayList<>();
-        String fullname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_FULLNAME, true).get(0);
-        String shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_SHORTNAME, true).get(0);
+        String fullname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_FULLNAME, true).get(0);
+        String shortname = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_SHORTNAME, true).get(0);
         String information = "";
 
         if (language == true) {
-            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_GENERALINFORMATION_DUTCH, true).get(0);
+            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_GENERALINFORMATION_DUTCH, true).get(0);
         } else {
-            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_GENERALINFORMATION_ENGLISH, true).get(0);
+            information = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(id), INSTITUTE_GENERALINFORMATION_ENGLISH, true).get(0);
         }
 
         result.add(fullname);
         result.add(shortname);
         result.add(information);
+        result.add(id);
+
+        return result;
+    }
+    private ArrayList<String> getImage(String id) {
+        ArrayList<String> result = new ArrayList<>();
+        String filename = getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_ID), Arrays.asList(id), IMAGE_FILENAME, true).get(0);
+        String context = getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_ID), Arrays.asList(id), IMAGE_CONTEXT, true).get(0);
+        String description = getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_ID), Arrays.asList(id), IMAGE_DESCRIPTION, true).get(0);
+
+        result.add(filename);
+        result.add(context);
+        result.add(description);
+        result.add(id);
 
         return result;
     }
 
-    // GET LINK
-    public ArrayList<String> getAllOpendaysID() {
+   // GET All ID
+    private ArrayList<String> getAllOpendays() {
         return getHandler(HROOPENDAY_OPENDAY, null, null, OPENDAY_ID, true);
-    }
-    public ArrayList<String> getAllInstituteFullName() {
-        return getHandler(HROOPENDAY_INSTITUTE, null, null, INSTITUTE_FULLNAME, true);
-    }
-    public ArrayList<String> getAllLocationsByInstitute(String institute_fullname) {
-        return getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), LOCATION_IMAGEDESCRIPTION, true);
-    }
-    public ArrayList<String> getAllFloorplansByLocation(String description) {
-        return getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_DESCRIPTION), Arrays.asList(description), IMAGE_FILENAME, true);
-    }
-    public ArrayList<String> getAllActivitiesIDByInstituteAndDate(String institute_fullname, String openday_date) {
+    }     // -> openday_id    (all)
+    private ArrayList<String> getAllInstitutes() {
+        return getHandler(HROOPENDAY_INSTITUTE, null, null, INSTITUTE_ID, true);
+    }   // -> institute_id  (all)
+    private ArrayList<String> getAllStudies() {
+        return getHandler(HROOPENDAY_STUDY, null, null, STUDY_ID, true);
+    }      // -> study_id      (all)
+    private ArrayList<String> getAllLocations() {
+        return getHandler(HROOPENDAY_LOCATION, null, null, LOCATION_ID, true);
+    }    // -> location_id   (all)
+    private ArrayList<String> getAllImages() {
+        return getHandler(HROOPENDAY_IMAGE, null, null, IMAGE_ID, true);
+    }       // -> image_id      (all)
+    private ArrayList<String> getAllActivities() {
+        return getHandler(HROOPENDAY_ACTIVITY, null, null, ACTIVITY_ID,true);
+    }   // -> activity_id   (all)
+
+    // GET LINKED ID
+    private ArrayList<String> getLocation_id(String institute_fullname) {
+        return getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), LOCATION_ID, true);
+    } // institute_fullname -> location_id (*)
+    private ArrayList<String> getImage_id(String image_description) {
+        return getHandler(HROOPENDAY_IMAGE, Arrays.asList(IMAGE_DESCRIPTION), Arrays.asList(image_description), IMAGE_ID, true);
+    } // image_description -> image_id (*)
+    private ArrayList<String> getStudy_id(String institute_fullname) {
+        return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_ID, true);
+    } // institute_fullname -> study_id (*)
+    private ArrayList<String> getInstitute_id(String institute_fullname) {
+        return getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
+    } // institute_fullname -> institute_id (*)
+    private ArrayList<String> getActivityByOpenday(String institute_fullname, String openday_date) {
         ArrayList<String> result = new ArrayList<>();
 
         ArrayList<String> IdByDate = getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_ID, true);
@@ -252,154 +501,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
-
-
-    // SET DATA
-    public Boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(OPENDAY_DATE, date);
-        contentValues.put(OPENDAY_STARTTIME, starttime);
-        contentValues.put(OPENDAY_ENDTIME, endtime);
-        contentValues.put(OPENDAY_INSTITUTEFULLNAME, institute_fullname);
-
-        long result = db.insert(HROOPENDAY_OPENDAY, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // OPENDAY
-    public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(INSTITUTE_FULLNAME, fullname);
-        contentValues.put(INSTITUTE_SHORTNAME, shortname);
-        contentValues.put(INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
-        contentValues.put(INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
-
-        long result = db.insert(HROOPENDAY_INSTITUTE, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // INSTITUTE
-    public Boolean createStudy(String institute_fullname, String name_dutch, String name_english, String type, String generalinformation_dutch, String generalinformation_english) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(STUDY_INSTITUTEFULLNAME, institute_fullname);
-        contentValues.put(STUDY_NAME_DUTCH, name_dutch);
-        contentValues.put(STUDY_NAME_ENGLISH, name_english);
-        contentValues.put(STUDY_TYPE, type);
-        contentValues.put(STUDY_GENERALINFORMATION_DUTCH, generalinformation_dutch);
-        contentValues.put(STUDY_GENERALINFORMATION_ENGLISH, generalinformation_english);
-
-        long result = db.insert(HROOPENDAY_STUDY, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // INSTITUTE
-    public Boolean createActivity(String openday_date, String study_name, String starttime, String endtime, String classroom, String information_english, String information_dutch) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ACTIVITY_OPENDAYDATE, openday_date);
-        contentValues.put(ACTIVITY_STUDYNAME, study_name);
-        contentValues.put(ACTIVITY_STARTTIME, starttime);
-        contentValues.put(ACTIVITY_ENDTIME, endtime);
-        contentValues.put(ACTIVITY_CLASSROOM, classroom);
-        contentValues.put(ACTIVITY_INFORMATION_ENGLISH, information_english);
-        contentValues.put(ACTIVITY_INFORMATION_DUTCH, information_dutch);
-
-        long result = db.insert(HROOPENDAY_ACTIVITY, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // ACTIVITY
-    public Boolean createLocation(String street, String city, String institute_fullname, String zipcode, String phonenumber, String image_description) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LOCATION_STREET, street);
-        contentValues.put(LOCATION_CITY, city);
-        contentValues.put(LOCATION_INSTITUTEFULLNAME, institute_fullname);
-        contentValues.put(LOCATION_ZIPCODE, zipcode);
-        contentValues.put(LOCATION_PHONENUMBER, phonenumber);
-        contentValues.put(LOCATION_IMAGEDESCRIPTION, image_description);
-
-        long result = db.insert(HROOPENDAY_LOCATION, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // LOCATION
-    public Boolean createImage(String filename, String context, String description, String floornumber) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(IMAGE_FILENAME, filename);
-        contentValues.put(IMAGE_CONTEXT, context);
-        contentValues.put(IMAGE_DESCRIPTION, description);
-        contentValues.put(IMAGE_FLOORNUMBER, floornumber);
-
-        long result = db.insert(HROOPENDAY_IMAGE, null, contentValues);
-        db.close();
-        return result != -1; // if result == true then the values are inserted
-    } // IMAGE
-
-    // Database Checks
-    public void fillDatabase() {
-        // API CALL......
-
-
-
-        // Create CMI
-        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
-
-        // CMI Studies
-        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Part-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Technisch Informatica", "Computer engineering", "Full-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Creative Media and Game Technologies", "Creative Media and Game Technologies", "Full-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Part-time", "", "");
-        createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "", "");
-
-        // CMI locations
-        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
-        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
-        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "3011WN99");
-
-        // CMI Images
-        for (int i = 0; i <= 6; i++) {
-            // Wijnhaven 107 (0-6)
-            createImage("h107"+ Integer.toString(i) +"e.png", "H.0" + Integer.toString(i), "3011WN107", Integer.toString(i));
-            // Wijnhaven 103 (0-6)
-            createImage("wd103"+ Integer.toString(i) +"e.png", "WD.0" + Integer.toString(i), "3011WN103", Integer.toString(i));
-            // Wijnhaven 99 (0-5)
-            if (i < 6) {
-                createImage("wn99"+ Integer.toString(i) +"e.png", "WN.0" + Integer.toString(i), "3011WN99", Integer.toString(i));
-            }
-        }
-
-        // Create openday for CMI
-        createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
-        createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
-        createOpenday("09-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
-
-        // Create activities for CMI
-        createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "WD.02.002", "Python stuff", "Python dingen");
-        createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314-C120", "General Information", "Algemene informatie");
-        createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
-    }
-    public Boolean checkDatabase() {
-        Boolean empty = emptyDatabase();
-        Boolean version = versionDatabase();
-
-        if (empty == true) {
-            return true;
-        } else if (version == true) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Database Checkers
     private Boolean emptyDatabase() {
@@ -474,75 +575,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // GET Handler
     private ArrayList<String> getHandler(String table, List<String> arguments, List<String> values, String returnColumn, Boolean doubleCheck) {
         ArrayList<String> mArrayList = new ArrayList<>();
-        Cursor mCursor = null;
+        Cursor mCursor = viewAll(table, arguments, values);
 
-        if (arguments == null && values == null) {
-            if (table == HROOPENDAY_ACTIVITY) {
-                mCursor = viewAllActivities(arguments, values);
-            } else if(table == HROOPENDAY_OPENDAY) {
-                mCursor = viewAllOpendays(arguments, values);
-            } else if(table == HROOPENDAY_INSTITUTE) {
-                mCursor = viewAllInstitutes(arguments, values);
-            } else if(table == HROOPENDAY_STUDY) {
-                mCursor = viewAllStudies(arguments, values);
-            } else if(table == HROOPENDAY_LOCATION) {
-                mCursor = viewAllLocations(arguments, values);
-            } else if(table == HROOPENDAY_IMAGE) {
-                mCursor = viewAllImages(arguments, values);
-            } else if(table == HROOPENDAY_APPINFO) {
-                mCursor = viewAllAppInfo(arguments, values);
-            }
-
-            if (mCursor != null) {
-                mCursor.moveToFirst();
-                while (!mCursor.isAfterLast()) {
-                    if (doubleCheck == true){
-                        if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
-                            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
-                        }
-                    } else {
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            while (!mCursor.isAfterLast()) {
+                if (doubleCheck == true){
+                    if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
                         mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
                     }
-                    mCursor.moveToNext();
+                } else {
+                    mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
                 }
-            }
-        } else if (arguments.size() == values.size()) {
-            if (table == HROOPENDAY_ACTIVITY) {
-                mCursor = viewAllActivities(arguments, values);
-            } else if(table == HROOPENDAY_OPENDAY) {
-                mCursor = viewAllOpendays(arguments, values);
-            } else if(table == HROOPENDAY_INSTITUTE) {
-                mCursor = viewAllInstitutes(arguments, values);
-            } else if(table == HROOPENDAY_STUDY) {
-                mCursor = viewAllStudies(arguments, values);
-            } else if(table == HROOPENDAY_LOCATION) {
-                mCursor = viewAllLocations(arguments, values);
-            } else if(table == HROOPENDAY_IMAGE) {
-                mCursor = viewAllImages(arguments, values);
-            }
-
-            if (mCursor != null) {
-                mCursor.moveToFirst();
-                while (!mCursor.isAfterLast()) {
-                    if (doubleCheck == true){
-                        if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
-                            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
-                        }
-                    } else {
-                        mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
-                    }
-                    mCursor.moveToNext();
-                }
+                mCursor.moveToNext();
             }
         }
 
         return mArrayList;
     }
-
-    // SELECT Queries
-    private Cursor viewAllOpendays(List<String> arguments, List<String> values) {
+    private Cursor viewAll(String table, List<String> arguments, List<String> values) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + OPENDAY_ID + ", " + OPENDAY_DATE + ", " + OPENDAY_STARTTIME + ", " + OPENDAY_ENDTIME + ", " + OPENDAY_INSTITUTEFULLNAME + " FROM " + HROOPENDAY_OPENDAY;
+        String query = "SELECT * FROM " + table;
         Cursor cursor;
         if (values != null && arguments != null) {
             query += ArgumentHandler(arguments);
@@ -552,80 +605,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
-    private Cursor viewAllInstitutes(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + INSTITUTE_ID + ", " + INSTITUTE_FULLNAME + ", " + INSTITUTE_SHORTNAME + ", " + INSTITUTE_GENERALINFORMATION_ENGLISH + ", " + INSTITUTE_GENERALINFORMATION_DUTCH + " FROM " + HROOPENDAY_INSTITUTE;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    private Cursor viewAllActivities(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + ACTIVITY_ID + ", " + ACTIVITY_OPENDAYDATE + ", " + ACTIVITY_STUDYNAME + ", " + ACTIVITY_STARTTIME + ", " + ACTIVITY_ENDTIME + ", " + ACTIVITY_CLASSROOM + ", " + ACTIVITY_INFORMATION_ENGLISH  + ", " + ACTIVITY_INFORMATION_DUTCH + " FROM " + HROOPENDAY_ACTIVITY;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    private Cursor viewAllImages(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + IMAGE_ID + ", " + IMAGE_FILENAME + ", " + IMAGE_CONTEXT + ", " + IMAGE_DESCRIPTION + ", " + IMAGE_FLOORNUMBER + " FROM " + HROOPENDAY_IMAGE;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    private Cursor viewAllLocations(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + LOCATION_ID + ", " + LOCATION_STREET + ", " + LOCATION_INSTITUTEFULLNAME + ", " + LOCATION_CITY + ", " + LOCATION_ZIPCODE + ", " + LOCATION_PHONENUMBER + ", " + LOCATION_IMAGEDESCRIPTION + " FROM " + HROOPENDAY_LOCATION;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    private Cursor viewAllStudies(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + STUDY_ID + ", " + STUDY_INSTITUTEFULLNAME + ", " + STUDY_GENERALINFORMATION_DUTCH + ", " + STUDY_GENERALINFORMATION_ENGLISH + ", " + STUDY_NAME_DUTCH + ", " +STUDY_TYPE + ", " + STUDY_NAME_ENGLISH + " FROM " + HROOPENDAY_STUDY;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    private Cursor viewAllAppInfo(List<String> arguments, List<String> values) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + APPINFO_ID + ", " + APPINFO_DATAVERSION + ", " + APPINFO_APILINK + " FROM " + HROOPENDAY_APPINFO;
-        Cursor cursor;
-        if (values != null && arguments != null) {
-            query += ArgumentHandler(arguments);
-            cursor = db.rawQuery(query, values.toArray(new String[0]));
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
-    // ARGUMENTS (WHERE ... = ? AND ... = ? ......)
     private String ArgumentHandler(List<String> arguments) {
         String query = "";
 
@@ -654,7 +633,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + HROOPENDAY_STUDY + "(" + STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STUDY_INSTITUTEFULLNAME + " TEXT, " + STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + STUDY_NAME_DUTCH + " TEXT, " + STUDY_TYPE + " TEXT, " + STUDY_NAME_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_ACTIVITY + "(" + ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ACTIVITY_OPENDAYDATE + " TEXT, " + ACTIVITY_STUDYNAME + " TEXT, " + ACTIVITY_STARTTIME + " TEXT, " + ACTIVITY_ENDTIME + " TEXT, " + ACTIVITY_CLASSROOM + " TEXT, " + ACTIVITY_INFORMATION_DUTCH + " TEXT, " + ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_LOCATION + "(" + LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOCATION_STREET + " TEXT, " + LOCATION_CITY + " TEXT, " + LOCATION_ZIPCODE + " TEXT, " + LOCATION_INSTITUTEFULLNAME + " TEXT, " + LOCATION_PHONENUMBER + " TEXT, " + LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + HROOPENDAY_IMAGE + "(" + IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IMAGE_FILENAME + " TEXT, " + IMAGE_CONTEXT + " TEXT, " + IMAGE_DESCRIPTION + " TEXT, " + IMAGE_FLOORNUMBER + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_IMAGE + "(" + IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IMAGE_FILENAME + " TEXT, " + IMAGE_CONTEXT + " TEXT, " + IMAGE_DESCRIPTION + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_APPINFO + "(" + APPINFO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + APPINFO_DATAVERSION + " TEXT, " + APPINFO_APILINK + " TEXT" + ")");
     }
     @Override

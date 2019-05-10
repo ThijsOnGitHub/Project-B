@@ -25,9 +25,9 @@ public class MainActivity extends appHelper {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layout = new LayoutHelper(this);
 
-        myDatabase = new DatabaseHelper(this);
-        if (myDatabase.checkDatabase() == true) myDatabase.fillDatabase();
-
+        if (layout.db.checkDatabase() == true) {
+            layout.db.fillDatabase();
+        }
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
         String[] desc = {"Thursday\n4 April 2019","Thursday\n11 April 2019", "Thursday\n18 April 2019", "Thursday\n25 April 2019"};
