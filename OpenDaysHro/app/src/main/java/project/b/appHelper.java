@@ -768,118 +768,110 @@ public class appHelper extends AppCompatActivity {
             pop.setBackground(getDrawable(R.drawable.popup_background));
 
             int amountOfButtons = 5;
-            int button_margin = (int) ( (float) ( (float) height / 50 ) / (float) 2 );
-            int button_height = (int) ( ( (float) height / (float) amountOfButtons ) - ( (float) button_margin * 2 ) );
+            int top_bar_margin = (int) (float) ( (float) height / (float) 50 );
+            int top_bar_height = (int) ( (float) height / (float) amountOfButtons );
 
-            LinearLayout.LayoutParams button_params = new LinearLayout.LayoutParams(width, button_height);
-                    button_params.setMargins(0,button_margin,0, button_margin);
+            LinearLayout.LayoutParams top_bar_params = new LinearLayout.LayoutParams(width, top_bar_height);
+                top_bar_params.setMargins(0,0,0, top_bar_margin);
 
-            LinearLayout.LayoutParams image_params = new LinearLayout.LayoutParams((width / 3), button_height);
-            LinearLayout.LayoutParams text_params = new LinearLayout.LayoutParams(((width / 3) * 2), button_height);
+            LinearLayout.LayoutParams layout15 = new LinearLayout.LayoutParams((width / 5), top_bar_height);
+            LinearLayout.LayoutParams layout45 = new LinearLayout.LayoutParams(((width / 5) * 4), top_bar_height);
 
-            LinearLayout whatsapp = new LinearLayout(this.context);
-                whatsapp.setBackgroundColor(Color.parseColor("#000000AA"));
-                whatsapp.setOrientation(LinearLayout.HORIZONTAL);
-                whatsapp.setLayoutParams(button_params);
+            LinearLayout.LayoutParams button_params;
+            if ( ( height -  ( top_bar_height + top_bar_margin ) ) >= width ) { button_params = new LinearLayout.LayoutParams( (int) (width / 3), (int) (width / 3)); button_params.setMargins( (int) (width / 12),(int) (width / 12),(int) (width / 12),(int) (width / 12)); }
+            else { button_params = new LinearLayout.LayoutParams(( (int) ( height -  ( top_bar_height + top_bar_margin ) ) / 3 ), (int) ( ( height -  ( top_bar_height + top_bar_margin ) ) / 3 )); button_params.setMargins(( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 )); }
 
-                LinearLayout whatsapp_image = new LinearLayout(this.context);
-                    whatsapp_image.setLayoutParams(image_params);
-                    whatsapp_image.setGravity(Gravity.CENTER);
-                    whatsapp.addView(whatsapp_image);
-                LinearLayout whatsapp_text = new LinearLayout(this.context);
-                    whatsapp_text.setLayoutParams(text_params);
-                    whatsapp_text.setGravity(Gravity.CENTER);
-                    whatsapp.addView(whatsapp_text);
+            LinearLayout top_bar = new LinearLayout(this.context);
+                top_bar.setGravity(Gravity.CENTER);
+                top_bar.setOrientation(LinearLayout.HORIZONTAL);
 
-                whatsapp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                LinearLayout top_bar_text = new LinearLayout(this.context);
+                    top_bar_text.setGravity(Gravity.CENTER);
+                    top_bar_text.setLayoutParams(layout45);
+                    TextView top_bar_text_text = new TextView(this.context);
+                        top_bar_text_text.setText("Share with your friends using:"); top_bar_text_text.setTextSize(16); top_bar_text_text.setTextColor(getResources().getColor(R.color.white));
+                        top_bar_text.addView(top_bar_text_text);
+                    top_bar.addView(top_bar_text);
 
-                    }
-                });
-                pop.addView(whatsapp);
+                LinearLayout close = new LinearLayout(this.context);
+                    close.setGravity(Gravity.CENTER);
+                    close.setLayoutParams(layout15);
+                    TextView close_text = new TextView(this.context);
+                        close_text.setText("X"); close_text.setTextSize(28); close_text.setTextColor(getResources().getColor(R.color.white));
+                        close.addView(close_text);
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+                    top_bar.addView(close);
+                pop.addView(top_bar);
 
-            LinearLayout facebook = new LinearLayout(this.context);
-                facebook.setBackgroundColor(Color.parseColor("#a8a8a8AA"));
-                facebook.setOrientation(LinearLayout.HORIZONTAL);
-                facebook.setLayoutParams(button_params);
 
-                LinearLayout facebook_image = new LinearLayout(this.context);
-                    facebook_image.setLayoutParams(image_params);
-                    whatsapp_image.setGravity(Gravity.CENTER);
-                    facebook.addView(facebook_image);
-                LinearLayout facebook_text = new LinearLayout(this.context);
-                    facebook_text.setLayoutParams(text_params);
-                    facebook_text.setGravity(Gravity.CENTER);
-                    facebook.addView(facebook_text);
+            LinearLayout horizontal1 = new LinearLayout(this.context);
+                horizontal1.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal1.setGravity(Gravity.CENTER);
 
-                facebook.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                LinearLayout twitter = new LinearLayout(this.context);
+                    twitter.setBackground(getDrawable(R.drawable.twitter));
+                    twitter.setOrientation(LinearLayout.HORIZONTAL);
+                    twitter.setLayoutParams(button_params);
 
-                    }
-                });
-                pop.addView(facebook);
+                    twitter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-            LinearLayout twitter = new LinearLayout(this.context);
-                twitter.setBackgroundColor(Color.parseColor("#000000AA"));
-                twitter.setOrientation(LinearLayout.HORIZONTAL);
-                twitter.setLayoutParams(button_params);
+                        }
+                    });
+                    horizontal1.addView(twitter);
 
-                LinearLayout twitter_image = new LinearLayout(this.context);
-                    twitter_image.setLayoutParams(image_params);
-                    twitter_image.setGravity(Gravity.CENTER);
-                    twitter.addView(twitter_image);
-                LinearLayout twitter_text = new LinearLayout(this.context);
-                    twitter_text.setLayoutParams(text_params);
-                    twitter_text.setGravity(Gravity.CENTER);
-                    twitter.addView(twitter_text);
+                LinearLayout facebook = new LinearLayout(this.context);
+                    facebook.setBackground(getDrawable(R.drawable.facebook_logo));
+                    facebook.setOrientation(LinearLayout.HORIZONTAL);
+                    facebook.setLayoutParams(button_params);
 
-                twitter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    facebook.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                    }
-                });
-                pop.addView(twitter);
+                        }
+                    });
+                    horizontal1.addView(facebook);
+                pop.addView(horizontal1);
 
-            LinearLayout email = new LinearLayout(this.context);
-                email.setBackgroundColor(Color.parseColor("#a8a8a8AA"));
-                email.setOrientation(LinearLayout.HORIZONTAL);
-                email.setLayoutParams(button_params);
+            LinearLayout horizontal2 = new LinearLayout(this.context);
+                horizontal2.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal2.setGravity(Gravity.CENTER);
 
-            LinearLayout email_image = new LinearLayout(this.context);
-                email_image.setLayoutParams(image_params);
-                email_image.setGravity(Gravity.CENTER);
-                email.addView(email_image);
-            LinearLayout email_text = new LinearLayout(this.context);
-                email_text.setLayoutParams(text_params);
-                email_text.setGravity(Gravity.CENTER);
-                email.addView(email_text);
+                LinearLayout whatsapp = new LinearLayout(this.context);
+                    whatsapp.setBackground(getDrawable(R.drawable.whatsapp_logo));
+                    whatsapp.setOrientation(LinearLayout.HORIZONTAL);
+                    whatsapp.setLayoutParams(button_params);
 
-                email.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    whatsapp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                    }
-                });
-                pop.addView(email);
+                        }
+                    });
+                    horizontal2.addView(whatsapp);
 
-            LinearLayout close = new LinearLayout(this.context);
-                close.setBackgroundColor(Color.parseColor("#000000AA"));
-                close.setOrientation(LinearLayout.HORIZONTAL);
-                close.setGravity(Gravity.CENTER);
-                close.setLayoutParams(button_params);
-                TextView close_text = new TextView(this.context);
-                    close_text.setText("close");
-                    close.addView(close_text);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-                pop.addView(close);
+
+                LinearLayout email = new LinearLayout(this.context);
+                    email.setBackground(getDrawable(R.drawable.email_logo));
+                    email.setOrientation(LinearLayout.HORIZONTAL);
+                    email.setLayoutParams(button_params);
+
+                    email.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    horizontal2.addView(email);
+                pop.addView(horizontal2);
+
 
         }
 
