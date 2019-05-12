@@ -25,13 +25,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".About_activity"></activity>
-        <activity android:name=".askAQuestion_activity"></activity>
-        <activity android:name=".contact_activity" />
-        <activity android:name=".opendays_activity" />
-        <activity android:name=".map_activity" />
-        <activity android:name=".educations_activity" />
-        <activity android:name=".menu_activity" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +33,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".POPUP_activity"
+            android:theme="@style/AppTheme.POPUP"/>
+
+        <activity android:name=".About_activity" />
+        <activity android:name=".askAQuestion_activity" />
+        <activity android:name=".contact_activity" />
+        <activity android:name=".opendays_activity" />
+        <activity android:name=".map_activity" />
+        <activity android:name=".educations_activity" />
+        <activity android:name=".menu_activity" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -12,6 +12,7 @@ import android.graphics.Outline;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -663,7 +664,10 @@ public class appHelper extends AppCompatActivity {
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent share_intent = new Intent(context, POPUP_activity.class);
+                                share_intent.putExtra("WIDTH", (int) (phone_width * 0.8));
+                                share_intent.putExtra("HEIGHT", (int) (phone_width * 0.8));
+                            startActivity(share_intent);
                         }
                     });
 
