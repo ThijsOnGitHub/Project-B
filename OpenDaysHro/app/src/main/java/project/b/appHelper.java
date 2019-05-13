@@ -859,7 +859,7 @@ public class appHelper extends AppCompatActivity {
 
 
                 LinearLayout email = new LinearLayout(this.context);
-                    email.setBackground(getDrawable(R.drawable.email_logo));
+                    email.setBackground(getDrawable(R.drawable.email_icon));
                     email.setOrientation(LinearLayout.HORIZONTAL);
                     email.setLayoutParams(button_params);
 
