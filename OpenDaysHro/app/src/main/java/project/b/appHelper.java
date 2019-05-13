@@ -8,15 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -663,7 +666,10 @@ public class appHelper extends AppCompatActivity {
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent share_intent = new Intent(context, POPUP_activity.class);
+                                share_intent.putExtra("WIDTH", (int) (phone_width * 0.8));
+                                share_intent.putExtra("HEIGHT", (int) (phone_width * 0.8));
+                            startActivity(share_intent);
                         }
                     });
 
@@ -750,6 +756,123 @@ public class appHelper extends AppCompatActivity {
                     }
                 });
                 main.addView(button_map);
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void popup(int addToThisLayout, int width, int height){
+
+            getWindow().setLayout(width,height);
+
+            LinearLayout pop = (LinearLayout) findViewById(addToThisLayout);
+            pop.setBackground(getDrawable(R.drawable.popup_background));
+
+            int amountOfButtons = 5;
+            int top_bar_margin = (int) (float) ( (float) height / (float) 50 );
+            int top_bar_height = (int) ( (float) height / (float) amountOfButtons );
+
+            LinearLayout.LayoutParams top_bar_params = new LinearLayout.LayoutParams(width, top_bar_height);
+                top_bar_params.setMargins(0,0,0, top_bar_margin);
+
+            LinearLayout.LayoutParams layout15 = new LinearLayout.LayoutParams((width / 5), top_bar_height);
+            LinearLayout.LayoutParams layout45 = new LinearLayout.LayoutParams(((width / 5) * 4), top_bar_height);
+
+            LinearLayout.LayoutParams button_params;
+            if ( ( height -  ( top_bar_height + top_bar_margin ) ) >= width ) { button_params = new LinearLayout.LayoutParams( (int) (width / 3), (int) (width / 3)); button_params.setMargins( (int) (width / 12),(int) (width / 12),(int) (width / 12),(int) (width / 12)); }
+            else { button_params = new LinearLayout.LayoutParams(( (int) ( height -  ( top_bar_height + top_bar_margin ) ) / 3 ), (int) ( ( height -  ( top_bar_height + top_bar_margin ) ) / 3 )); button_params.setMargins(( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 )); }
+
+            LinearLayout top_bar = new LinearLayout(this.context);
+                top_bar.setGravity(Gravity.CENTER);
+                top_bar.setOrientation(LinearLayout.HORIZONTAL);
+
+                LinearLayout top_bar_text = new LinearLayout(this.context);
+                    top_bar_text.setGravity(Gravity.CENTER);
+                    top_bar_text.setLayoutParams(layout45);
+                    TextView top_bar_text_text = new TextView(this.context);
+                        top_bar_text_text.setText("Share with your friends using:"); top_bar_text_text.setTextSize(16); top_bar_text_text.setTextColor(getResources().getColor(R.color.white));
+                        top_bar_text.addView(top_bar_text_text);
+                    top_bar.addView(top_bar_text);
+
+                LinearLayout close = new LinearLayout(this.context);
+                    close.setGravity(Gravity.CENTER);
+                    close.setLayoutParams(layout15);
+                    TextView close_text = new TextView(this.context);
+                        close_text.setText("X"); close_text.setTextSize(28); close_text.setTextColor(getResources().getColor(R.color.white));
+                        close.addView(close_text);
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+                    top_bar.addView(close);
+                pop.addView(top_bar);
+
+
+            LinearLayout horizontal1 = new LinearLayout(this.context);
+                horizontal1.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal1.setGravity(Gravity.CENTER);
+
+                LinearLayout twitter = new LinearLayout(this.context);
+                    twitter.setBackground(getDrawable(R.drawable.twitter));
+                    twitter.setOrientation(LinearLayout.HORIZONTAL);
+                    twitter.setLayoutParams(button_params);
+
+                    twitter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    horizontal1.addView(twitter);
+
+                LinearLayout facebook = new LinearLayout(this.context);
+                    facebook.setBackground(getDrawable(R.drawable.facebook_logo));
+                    facebook.setOrientation(LinearLayout.HORIZONTAL);
+                    facebook.setLayoutParams(button_params);
+
+                    facebook.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    horizontal1.addView(facebook);
+                pop.addView(horizontal1);
+
+            LinearLayout horizontal2 = new LinearLayout(this.context);
+                horizontal2.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal2.setGravity(Gravity.CENTER);
+
+                LinearLayout whatsapp = new LinearLayout(this.context);
+                    whatsapp.setBackground(getDrawable(R.drawable.whatsapp_logo));
+                    whatsapp.setOrientation(LinearLayout.HORIZONTAL);
+                    whatsapp.setLayoutParams(button_params);
+
+                    whatsapp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    horizontal2.addView(whatsapp);
+
+
+                LinearLayout email = new LinearLayout(this.context);
+                    email.setBackground(getDrawable(R.drawable.email_logo));
+                    email.setOrientation(LinearLayout.HORIZONTAL);
+                    email.setLayoutParams(button_params);
+
+                    email.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    horizontal2.addView(email);
+                pop.addView(horizontal2);
+
+
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
