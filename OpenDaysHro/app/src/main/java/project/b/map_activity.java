@@ -223,40 +223,45 @@ class mapManager{
         for (int i = 0; i < buildingsList.length ; i++) {
             if (checkFloorExist(floor,buildingsList[i])) {
                 //https://www.youtube.com/watch?v=s_PfopWcMwI
+                
                 LinearLayout item = new LinearLayout(context);
-                item.setOrientation(LinearLayout.VERTICAL);
-                item.setPadding(15, 5, 15, 5);
-                item.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
-                String buildingStr = buildingsList[i];
-                item.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setBuilding(buildingStr);
+                    item.setOrientation(LinearLayout.VERTICAL);
+                    item.setPadding(15, 5, 15, 5);
+                    item.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    String buildingStr = buildingsList[i];
+
+                    item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setBuilding(buildingStr);
+                        }
+                    });
+                    if (building == buildingStr) {
+                        item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
+                    } else {
+                        item.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
                     }
-                });
-                if (building == buildingStr) {
-                    item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
-                } else {
-                    item.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
-                }
-                int indexOfSplit = buildingStr.split("[0-9]", 2)[0].length();
-                String numberBuildingString = buildingStr.substring(0, indexOfSplit);
-                String characterBuildingString = buildingStr.substring(indexOfSplit);
 
 
-                TextView characterBuilding = new TextView(context);
-                characterBuilding.setText(characterBuildingString);
-                characterBuilding.setGravity(Gravity.CENTER);
-                characterBuilding.setTextColor(Color.parseColor("#000000"));
-                characterBuilding.setTextSize(19.f);
+                    int indexOfSplit = buildingStr.split("[0-9]", 2)[0].length();
+                    String numberBuildingString = buildingStr.substring(0, indexOfSplit);
+                    String characterBuildingString = buildingStr.substring(indexOfSplit);
 
-                TextView numberBuilding = new TextView(context);
-                numberBuilding.setText(numberBuildingString);
-                numberBuilding.setGravity(Gravity.CENTER);
-                numberBuilding.setTextColor(Color.parseColor("#000000"));
 
-                item.addView(characterBuilding);
-                item.addView(numberBuilding);
+                    TextView characterBuilding = new TextView(context);
+                        characterBuilding.setText(characterBuildingString);
+                        characterBuilding.setGravity(Gravity.CENTER);
+                        characterBuilding.setTextColor(Color.parseColor("#000000"));
+                        characterBuilding.setTextSize(19.f);
+                        item.addView(characterBuilding);
+
+                    TextView numberBuilding = new TextView(context);
+                        numberBuilding.setText(numberBuildingString);
+                        numberBuilding.setGravity(Gravity.CENTER);
+                        numberBuilding.setTextColor(Color.parseColor("#000000"));
+                        item.addView(numberBuilding);
+
+
 
                 buildingSelector.addView(item);
             }
