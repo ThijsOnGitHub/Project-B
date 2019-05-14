@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Hogeschool Rotterdam</string>
     <string name="ScreenNotAvailable">This Screen is not anvailable on your Device</string>
+    <string name="facebook_app_id">666</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email_not_valid">The e-mailaddres is not valid</string>
     <string name="fields_empty">The field are empty</string>

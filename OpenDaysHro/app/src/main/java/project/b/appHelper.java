@@ -36,6 +36,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -834,7 +839,11 @@ public class appHelper extends AppCompatActivity {
                     facebook.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            //https://stackoverflow.com/questions/5023602/facebook-share-link-can-you-customize-the-message-body-text
+                            String fb_url = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.hogeschoolrotterdam.nl%2F&quote=Hi!%20Check%20out%20our%20open%20day!";
+                            Intent facebookintent = new Intent(Intent.ACTION_VIEW);
+                            facebookintent.setData(Uri.parse(fb_url));
+                            startActivity(facebookintent);
                         }
                     });
                     horizontal1.addView(facebook);
@@ -852,7 +861,11 @@ public class appHelper extends AppCompatActivity {
                     whatsapp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent whatsappintent = new Intent(Intent.ACTION_SEND);
+                            whatsappintent.setType("text/plain");
+                            whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT,"Check out our new app!");
+                            whatsappintent.setPackage("com.whatsapp");
+                            startActivity(whatsappintent);
                         }
                     });
                     horizontal2.addView(whatsapp);
