@@ -1,67 +1,19 @@
 package project.b;
 
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
+
+
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.content.pm.ActivityInfo;
+import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends appHelper {
 
+    DatabaseHelper myDatabase;
+    LayoutHelper layout;
 
+    int numOfListItems;
 
     int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
-
-    int imageCounter = 0;
-    LinearLayout mainImage;
-    TextView text1;
-    TextView text2;
-
-
-
-    // https://stackoverflow.com/questions/3204852/android-add-a-textview-to-linear-layout-programmatically
-
-    public void addToLayout(String object, String... args){
-        switch (object){
-            case "ListItem":
-                LinearLayout myLLayout = new LinearLayout(this);
-                RelativeLayout myRLayoutLarge = new RelativeLayout(this);
-                RelativeLayout myRLayoutSmall = new RelativeLayout(this);
-                TextView myTextview = new TextView(this);
-                Button myButton = new Button(this);
-
-                myTextview.setText(args[0]); myTextview.setGravity(Gravity.CENTER);
-                myButton.setText(args[1]);
-                myLLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                myButton.setBackgroundColor(getResources().getColor(R.color.hro_red)); myButton.setTextColor(getResources().getColor(R.color.text));
-                LinearLayout.LayoutParams mainLLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
-                mainLLayout.setMargins(0,50,0,0);
-
-                myLLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-                myLLayout.setLayoutParams(mainLLayout);
-                myRLayoutLarge.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
-                myRLayoutSmall.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,2));
-                myTextview.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-                myButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-
-                ((RelativeLayout)myRLayoutLarge).addView((TextView)myTextview);
-                ((RelativeLayout)myRLayoutSmall).addView((Button)myButton);
-                ((LinearLayout)myLLayout).addView((RelativeLayout)myRLayoutLarge);
-                ((LinearLayout)myLLayout).addView((RelativeLayout)myRLayoutSmall);
-
-                LinearLayout main = (LinearLayout)findViewById(R.id.hallo_wereld); ((LinearLayout)main).addView((LinearLayout)myLLayout);
-        }
-    }
-
-
-
 
 
 
@@ -71,40 +23,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mainImage = (LinearLayout)findViewById(R.id.mainImage);
+        layout = new LayoutHelper(this);
 
-        text1 = (TextView)findViewById(R.id.text1); text1.setText("<"); text1.setTextSize(40); text1.setTextColor(getResources().getColor(R.color.white));
-        text2 = (TextView)findViewById(R.id.text2); text2.setText(">"); text2.setTextSize(40); text2.setTextColor(getResources().getColor(R.color.white));
+        myDatabase = new DatabaseHelper(this);
+        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
 
+        layout.Image_with_Buttons(R.id.page_container,drawables);
 
-        int numOfListItems = 5;
+        String[] desc = {"Thursday\n4 April 2019","Thursday\n11 April 2019", "Thursday\n18 April 2019", "Thursday\n25 April 2019"};
+        String[] loc = {"Wijnhaven 107", "Wijnhaven 107", "Wijnhaven 108", "Wijnhaven 107"};
+        String[] time = {"8:00-10:00", "9:00-18:00", "8:00-16:00", "7:00-15:00"};
+        numOfListItems = desc.length;
 
-        for(int i = 0; i < numOfListItems; i++) {
-            addToLayout("ListItem", "Informatica\n04/04/2019\nWijnhaven 107", "Options");
+        for (int i = 0; i < numOfListItems; i++) {
+            layout.ListItem_openday(desc[i], loc[i], time[i], R.id.page_container);
         }
-    }
 
+        Intent home = new Intent(getBaseContext(), MainActivity.class);
+        Intent educations = new Intent(getBaseContext(), educations_activity.class);
+        Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
+        Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
+        Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
-    public void onClick(View v){
-        switch (v.getId()){
+        layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 
-            case R.id.leftButton:
-                imageCounter = imageCounter-1;
-                if (imageCounter < 0){
-                    imageCounter = drawables.length - 1;
-                }
-                mainImage.setBackground(getDrawable(drawables[imageCounter]));
-                break;
-
-            case R.id.rightButton:
-                imageCounter = imageCounter + 1;
-                if(imageCounter > drawables.length - 1){
-                    imageCounter = 0;
-                }
-                mainImage.setBackground(getDrawable(drawables[imageCounter]));
-                break;
-        }
     }
 
 }

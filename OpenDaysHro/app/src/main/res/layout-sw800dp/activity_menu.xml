@@ -164,22 +164,41 @@
             android:onClick="swapPages">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_marginTop="10dp"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Open\nDays"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="15sp"
-                    android:autoSizeMaxTextSize="25sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:gravity="center"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="1.1">
+
+                    <ImageView
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:src="@drawable/calendar_icon"
+                        android:gravity="center"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.4">
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Open Days"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="15sp"
+                        android:autoSizeMaxTextSize="25sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:gravity="bottom"/>
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 

@@ -23,7 +23,6 @@
             <fragment
                 android:id="@+id/fragment33"
                 android:name="project.b.topBar_fragment"
-                android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -45,79 +44,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:id="@+id/page-container"
-                    android:layout_margin="10dp">
+                    android:id="@+id/page-container">
 
                     <!--
                         Code here!!!
                     -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:orientation="horizontal"
-                        android:id="@+id/mainImage"
-                        android:background="@drawable/beginning_by_ryky">
-
-
-                        <LinearLayout
-                            android:id="@+id/leftButton"
-                            android:orientation="vertical"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:onClick="onClick"
-                            android:gravity="center"
-                            >
-
-                            <TextView
-                                android:id="@+id/text1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="4"
-                            >
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/rightButton"
-                            android:orientation="vertical"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:onClick="onClick"
-                            android:gravity="center"
-                            >
-
-                            <TextView
-                                android:id="@+id/text2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/hallo_wereld"
-                        >
-
-                    </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -129,17 +60,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.75"
+            android:id="@+id/menu_bar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <fragment
-                android:id="@+id/fragment13"
-                android:name="project.b.menu_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </RelativeLayout>
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </LinearLayout>
 
