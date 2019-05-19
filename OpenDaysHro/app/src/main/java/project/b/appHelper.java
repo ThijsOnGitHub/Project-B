@@ -895,7 +895,7 @@ public class appHelper extends AppCompatActivity {
                                     emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
                                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
                                     emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
-                                    emailIntent.setPackage("com.google.android.gm");
+                                    emailIntent.setPackage("com.microsoft.office.outlook");
                                     startActivity(emailIntent);
                             } catch (Exception e){
                                 try {
@@ -904,7 +904,7 @@ public class appHelper extends AppCompatActivity {
                                         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
                                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
                                         emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
-                                        emailIntent.setPackage("com.microsoft.office.outlook");
+                                        emailIntent.setPackage("com.google.android.gm");
                                         startActivity(emailIntent);
                                 } catch (Exception f){
                                     // in case outlook and gmail are not installed you can select another app.
