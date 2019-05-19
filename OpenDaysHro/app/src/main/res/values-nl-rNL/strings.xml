@@ -3,5 +3,9 @@
     <string name="app_name">Hogeschool Rotterdam</string>
     <string name="ScreenNotAvailable">Dit scherm is niet beschikbaar op uw apparaat</string>
     <string name="email_not_valid">Het e-mailaddres is niet geldig</string>
-    <string name="fields_empty">The velden zijn leeg</string>
+    <string name="fields_empty">Deze velden zijn nog niet ingevuld:</string>
+    <string name="name">naam</string>
+    <string name="subject">onderwerp</string>
+    <string name="question">vraag</string>
+    <string name="Question">Vraag</string>
 </resources>
