@@ -223,7 +223,7 @@ class mapManager{
         for (int i = 0; i < buildingsList.length ; i++) {
             if (checkFloorExist(floor,buildingsList[i])) {
                 //https://www.youtube.com/watch?v=s_PfopWcMwI
-                
+
                 LinearLayout item = new LinearLayout(context);
                     item.setOrientation(LinearLayout.VERTICAL);
                     item.setPadding(15, 5, 15, 5);
@@ -275,19 +275,19 @@ class mapManager{
         for (int i = 0; i < floorsInBuilding.length; i++) {
             int workFloor=floorsInBuilding[floorsInBuilding.length-i-1];
             TextView workBut=new TextView(context);
-            workBut.setText(Integer.toString(workFloor));
-            workBut.setPadding(15,5,15,5);
-            workBut.setTextSize(20.0f);
-            if (workFloor==floor){
-                workBut.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
-            }
-            workBut.setTextColor(Color.parseColor("#000000"));
-            workBut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setFloor(workFloor);
+                workBut.setText(Integer.toString(workFloor));
+                workBut.setPadding(15,5,15,5);
+                workBut.setTextSize(20.0f);
+                if (workFloor==floor){
+                    workBut.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
                 }
-            });
+                workBut.setTextColor(Color.parseColor("#000000"));
+                workBut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setFloor(workFloor);
+                    }
+                });
             floorSelector.addView(workBut);
         }
     }
@@ -330,6 +330,7 @@ class mapManager{
         if(!checkFloorExistAfterChange(0,1)){
             setInvisible(rightButton);
         }
+
         if(scale<=startScale){
             setInvisible(zoomOutButton);
         }
@@ -381,7 +382,7 @@ class mapManager{
 
 
     private void zoomCheck(){
-        if(!(scale<=startScale & scale>=maxscale)) {
+        if(scale>=startScale && scale<=maxscale) {
             showFloor.setScaleX(scale);
             showFloor.setScaleY(scale);
         }else if (scale<=startScale){
@@ -405,7 +406,7 @@ class mapManager{
 }
 
 
-public class map_activity extends appHelper implements View.OnTouchListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener  {
+public class map_activity extends appHelper implements GestureDetector.OnGestureListener, View.OnTouchListener {
     mapManager floor;
     LayoutHelper layout;
     GestureDetector gestureDetector;
@@ -434,7 +435,7 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
         String[] buildings=new String[]{"h107","wd103","wn99"};
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
-        scaleGestureDetector= new ScaleGestureDetector(this,this);
+        scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
         showFloor.setOnTouchListener(this);
 
 
@@ -483,13 +484,28 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        // Let the ScaleGestureDetector inspect all events
+        scaleGestureDetector.onTouchEvent(ev);
+        return true;
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v.getId()==R.id.ImageView_showFloor){
+        if (v.getId()==R.id.ImageView_showFloor && event.getPointerCount()==1){
             gestureDetector.onTouchEvent(event);
-            scaleGestureDetector.onTouchEvent(event);
             return true;
         }
         return false;
+    }
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            floor.scaleTimes(detector.getScaleFactor());
+            return true;
+        }
     }
 
     @Override
@@ -543,20 +559,5 @@ public class map_activity extends appHelper implements View.OnTouchListener, Ges
     }
 
 
-    @Override
-    public boolean onScale(ScaleGestureDetector detector) {
-        System.out.println(detector.getScaleFactor());
-        floor.scaleTimes(detector.getScaleFactor());
-        return true;
-    }
 
-    @Override
-    public boolean onScaleBegin(ScaleGestureDetector detector) {
-        return true;
-    }
-
-    @Override
-    public void onScaleEnd(ScaleGestureDetector detector) {
-
-    }
 }
