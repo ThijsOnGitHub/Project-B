@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
@@ -14,9 +15,10 @@ import java.util.regex.Pattern;
 import static java.net.Proxy.Type.HTTP;
 
 
-public class askAQuestion_activity extends AppCompatActivity {
+public class askAQuestion_activity extends appHelper {
     EditText nameView,subjectView,textFieldView,emailView;
     int resumeCounter=0;
+    LayoutHelper layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,12 @@ public class askAQuestion_activity extends AppCompatActivity {
         subjectView=findViewById(R.id.editText_Subject_ContactForm);
         textFieldView=findViewById(R.id.editText_TextField_ContactForm);
         emailView=findViewById(R.id.editText_E_mail_ContactForm);
+
+        layout= new LayoutHelper(this);
+        
     }
+
+
 
 
     @Override
@@ -66,7 +73,23 @@ public class askAQuestion_activity extends AppCompatActivity {
                 Toast.makeText(this,R.string.email_not_valid,Toast.LENGTH_LONG).show();
             }
         }else{
-            Toast.makeText(this,R.string.fields_empty,Toast.LENGTH_LONG).show();
+            String finalText=getString(R.string.fields_empty)+" ";
+            if (name.length()==0){
+                finalText+=getText(R.string.name)+", ";
+            }
+            if (email.length() == 0) {
+                finalText+=getString(R.string.email)+", ";
+            }
+            if (email.length()==0){
+                finalText+=getString(R.string.subject)+", ";
+            }
+
+            if (textField.length() == 0) {
+                finalText+=getString(R.string.question)+", ";
+            }
+
+            finalText=finalText.substring(0,finalText.length()-2);
+            Toast.makeText(this,finalText,Toast.LENGTH_LONG).show();
         }
     }
 }
