@@ -894,6 +894,8 @@ public class appHelper extends AppCompatActivity {
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int margin_vertical_big = (int) ( (float) phone_height / (float) 50 );
+            int margin_vertical_small = (int) ( ( (float) phone_height / (float) 50 ) / 2 );
 
             LinearLayout header = new LinearLayout(this.context);
                 header.setOrientation(LinearLayout.HORIZONTAL);
@@ -906,16 +908,17 @@ public class appHelper extends AppCompatActivity {
             int longest_title = 0;
             for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
 
-            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 4 ); int button_horizontal_margin = (int) (button_size / 8);
+            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3 ); int button_horizontal_margin = (int) (button_size / 5);
             int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
-            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin,0);
+            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, margin_vertical_small );
 
             for (int i = 0; i < 2; i++) {
-
 
                 LinearLayout text_layout = new LinearLayout(context);
                     text_layout.setGravity(Gravity.CENTER);
                     LinearLayout.LayoutParams text_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        if ( i == 0 ) { text_layout_params.setMargins( 0, margin_vertical_big, 0, margin_vertical_big ); }
+                        else { text_layout_params.setMargins( 0, margin_vertical_small, 0, margin_vertical_big ); }
                     text_layout.setLayoutParams(text_layout_params);
                     TextView btn_txt = new TextView(this.context);
                         btn_txt.setText(title[i]); btn_txt.setTextSize(textSize);
@@ -923,6 +926,7 @@ public class appHelper extends AppCompatActivity {
                     main.addView(text_layout);
 
                 LinearLayout btn_layout = new LinearLayout(context);
+                    btn_layout.setGravity(Gravity.CENTER);
                     btn_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                     LinearLayout button1 = new LinearLayout(context);
                         button1.setLayoutParams(button_lp); btn_layout.addView(button1);
@@ -968,8 +972,8 @@ public class appHelper extends AppCompatActivity {
                     button2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String istagramName = "hogeschoolrotterdam";
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/_u/" + istagramName)));
+                            String instagramName = "hogeschoolrotterdam";
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/_u/" + instagramName)));
                         }
                     });
                     button3.setBackground(getDrawable(social_media_images[2]));
