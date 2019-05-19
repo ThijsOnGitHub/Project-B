@@ -890,5 +890,105 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void contact_page(int image, int[] contact_images, int[] social_media_images){
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+
+            LinearLayout header = new LinearLayout(this.context);
+                header.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                    header.setLayoutParams(header_lp);
+                header.setBackground(getDrawable(image));
+                main.addView(header);
+
+            String[] title = {"Contact", "Social Media"};
+            int longest_title = 0;
+            for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
+
+            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 4 ); int button_horizontal_margin = (int) (button_size / 8);
+            int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
+            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin,0);
+
+            for (int i = 0; i < 2; i++) {
+
+
+                LinearLayout text_layout = new LinearLayout(context);
+                    text_layout.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams text_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    text_layout.setLayoutParams(text_layout_params);
+                    TextView btn_txt = new TextView(this.context);
+                        btn_txt.setText(title[i]); btn_txt.setTextSize(textSize);
+                        text_layout.addView(btn_txt);
+                    main.addView(text_layout);
+
+                LinearLayout btn_layout = new LinearLayout(context);
+                    btn_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    LinearLayout button1 = new LinearLayout(context);
+                        button1.setLayoutParams(button_lp); btn_layout.addView(button1);
+                    LinearLayout button2 = new LinearLayout(context);
+                        button2.setLayoutParams(button_lp); btn_layout.addView(button2);
+                    LinearLayout button3 = new LinearLayout(context);
+                        button3.setLayoutParams(button_lp); btn_layout.addView(button3);
+                    main.addView(btn_layout);
+
+                if ( title[i] == "Contact" ) {
+                    button1.setBackground(getDrawable(contact_images[0]));
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.hogeschoolrotterdam.nl/")));
+                        }
+                    });
+                    button2.setBackground(getDrawable(contact_images[1]));
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(context, askAQuestion_activity.class));
+                        }
+                    });
+                    button3.setBackground(getDrawable(contact_images[2]));
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:010794 4400")));
+                        }
+                    });
+                } else if (title[i] == "Social Media") {
+                    button1.setBackground(getDrawable(social_media_images[0]));
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //https://stackoverflow.com/questions/34564211/open-facebook-page-in-facebook-app-if-installed-on-android/34564284
+                            Intent facebook = new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.facebook.com/hogeschoolrotterdam/"));
+                            startActivity(facebook);
+                        }
+                    });
+                    button2.setBackground(getDrawable(social_media_images[1]));
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String istagramName = "hogeschoolrotterdam";
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/_u/" + istagramName)));
+                        }
+                    });
+                    button3.setBackground(getDrawable(social_media_images[2]));
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //https://stackoverflow.com/questions/15497261/open-instagram-user-profile
+                            String twitterUsername="hsrotterdam";
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name="+twitterUsername)));
+
+                            } catch (Exception e) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/"+twitterUsername)));
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
     }
 }
