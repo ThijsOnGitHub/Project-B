@@ -782,6 +782,8 @@ public class appHelper extends AppCompatActivity {
             LinearLayout.LayoutParams layout15 = new LinearLayout.LayoutParams((width / 5), top_bar_height);
             LinearLayout.LayoutParams layout45 = new LinearLayout.LayoutParams(((width / 5) * 4), top_bar_height);
 
+            System.out.println( ( (width / 5) * 4) );
+
             LinearLayout.LayoutParams button_params;
             if ( ( height -  ( top_bar_height + top_bar_margin ) ) >= width ) { button_params = new LinearLayout.LayoutParams( (int) (width / 3), (int) (width / 3)); button_params.setMargins( (int) (width / 12),(int) (width / 12),(int) (width / 12),(int) (width / 12)); }
             else { button_params = new LinearLayout.LayoutParams(( (int) ( height -  ( top_bar_height + top_bar_margin ) ) / 3 ), (int) ( ( height -  ( top_bar_height + top_bar_margin ) ) / 3 )); button_params.setMargins(( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 )); }
@@ -794,7 +796,7 @@ public class appHelper extends AppCompatActivity {
                     top_bar_text.setGravity(Gravity.CENTER);
                     top_bar_text.setLayoutParams(layout45);
                     TextView top_bar_text_text = new TextView(this.context);
-                        top_bar_text_text.setText("Share with your friends using:"); top_bar_text_text.setTextSize(16); top_bar_text_text.setTextColor(getResources().getColor(R.color.white));
+                        top_bar_text_text.setText("Share with your friends using:"); top_bar_text_text.setTextSize((int) ((float) ( ( (float) 14 )  * (float) ((float) 688 / (float) ((width / 5) * 4) ) / (float) metrics.density) * (float) 2.625) ); top_bar_text_text.setTextColor(getResources().getColor(R.color.white));
                         top_bar_text.addView(top_bar_text_text);
                     top_bar.addView(top_bar_text);
 
@@ -802,7 +804,7 @@ public class appHelper extends AppCompatActivity {
                     close.setGravity(Gravity.CENTER);
                     close.setLayoutParams(layout15);
                     TextView close_text = new TextView(this.context);
-                        close_text.setText("X"); close_text.setTextSize(28); close_text.setTextColor(getResources().getColor(R.color.white));
+                        close_text.setText("X"); close_text.setTextSize( (int) ((float) ( (float) 28  * (float) ((float) 1080 / (float) phone_width) / (float) metrics.density) * (float) 2.625) ); close_text.setTextColor(getResources().getColor(R.color.white));
                         close.addView(close_text);
                     close.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -908,9 +910,9 @@ public class appHelper extends AppCompatActivity {
             int longest_title = 0;
             for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
 
-            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3 ); int button_horizontal_margin = (int) (button_size / 5);
+            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3.5 ); int button_horizontal_margin = (int) (button_size / 5);
             int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
-            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, margin_vertical_small );
+            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, 0 );
 
             for (int i = 0; i < 2; i++) {
 
@@ -927,7 +929,8 @@ public class appHelper extends AppCompatActivity {
 
                 LinearLayout btn_layout = new LinearLayout(context);
                     btn_layout.setGravity(Gravity.CENTER);
-                    btn_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    LinearLayout.LayoutParams btn_layout_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            btn_layout_lp.setMargins( 0, 0, 0, margin_vertical_small );
                     LinearLayout button1 = new LinearLayout(context);
                         button1.setLayoutParams(button_lp); btn_layout.addView(button1);
                     LinearLayout button2 = new LinearLayout(context);
