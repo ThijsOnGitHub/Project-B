@@ -828,7 +828,13 @@ public class appHelper extends AppCompatActivity {
                     twitter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            try {
+                                Intent twitterintent = new Intent(Intent.ACTION_SEND);
+                                    twitterintent.setType("text/plain");
+                                    twitterintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    twitterintent.setPackage("com.twitter.android");
+                                    startActivity(twitterintent);
+                            } catch (Exception e) { Toast.makeText(context, "Twitter is not installed!", Toast.LENGTH_LONG).show();}
                         }
                     });
                     horizontal1.addView(twitter);
@@ -863,11 +869,13 @@ public class appHelper extends AppCompatActivity {
                     whatsapp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent whatsappintent = new Intent(Intent.ACTION_SEND);
-                            whatsappintent.setType("text/plain");
-                            whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT,"Check out our new app!");
-                            whatsappintent.setPackage("com.whatsapp");
-                            startActivity(whatsappintent);
+                            try {
+                                Intent whatsappintent = new Intent(Intent.ACTION_SEND);
+                                    whatsappintent.setType("text/plain");
+                                    whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    whatsappintent.setPackage("com.whatsapp");
+                                    startActivity(whatsappintent);
+                            } catch (Exception e) { Toast.makeText(context, "Whatsapp is not installed!", Toast.LENGTH_LONG).show();}
                         }
                     });
                     horizontal2.addView(whatsapp);
@@ -881,7 +889,33 @@ public class appHelper extends AppCompatActivity {
                     email.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            try {
+                                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                    emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                    emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                    emailIntent.setPackage("com.google.android.gm");
+                                    startActivity(emailIntent);
+                            } catch (Exception e){
+                                try {
+                                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                        emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        emailIntent.setPackage("com.microsoft.office.outlook");
+                                        startActivity(emailIntent);
+                                } catch (Exception f){
+                                    // in case outlook and gmail are not installed you can select another app.
+                                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                    emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        startActivity(emailIntent);
+                                }
+                            }
                         }
                     });
                     horizontal2.addView(email);
