@@ -370,8 +370,8 @@ class mapManager{
         movedSpaceX +=movementOnX;
         movedSpaceY +=movementOnY;
 
-        int extraSpaceX=Math.round(((scale-1.5f)/0.5f)*177);
-        int extraSpaceY=Math.round(((scale-1.5f)/0.5f)*135);
+        int extraSpaceX=Math.round((((scale-0.5f)*showFloor.getMeasuredWidth())-showFloor.getMeasuredWidth())/2);
+        int extraSpaceY=Math.round((((scale-0.5f)*showFloor.getMeasuredHeight())-showFloor.getMeasuredHeight())/2);
 
         movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,movedSpaceX);
         movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,movedSpaceY);
@@ -540,8 +540,8 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         float differenceY=e2.getY()-e1.getY();
         System.out.println(differenceX);
         System.out.println(differenceY);
-        if(velocityX>3.0f ||velocityY>3.0f) {
-            if (Math.abs(differenceX) > Math.abs(differenceY)) {
+        if((velocityX>3.0f ||velocityY>3.0f)&&!(floor.scale>floor.startScale)) {
+            if ((Math.abs(differenceX) > Math.abs(differenceY))) {
                 if (differenceX < 0) {
                     floor.changeFloor(-1);
                 } else {
