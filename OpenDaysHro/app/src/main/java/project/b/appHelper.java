@@ -877,5 +877,22 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        private int calcHeightFromDesign(float elementHeight){
+            float designHeight= 1080.f;
+            return (int)((elementHeight*phone_height)*designHeight);
+        }
+
+        private int calcWithFromDesign(float elementWidth){
+            float designWidth= 1920.f;
+            return (int)((elementWidth*phone_width)*designWidth);
+        }
+
+        private int calcTextSize(float default_text_size,float text_length,float elementWidth){
+            return (int) ( (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 );
+        }
+
+        public void generateAskQuestionPage(LinearLayout layout){
+
+        }
     }
 }
