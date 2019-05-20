@@ -14,12 +14,13 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.75"
-            tools:ignore="Suspicious0dp"
-            android:id="@+id/header"
-            android:background="@color/hro_red">
+            android:background="@color/hro_red"
+            tools:ignore="Suspicious0dp">
+
             <fragment
                 android:id="@+id/fragment33"
                 android:name="project.b.topBar_fragment"
@@ -36,88 +37,91 @@
             android:layout_weight="6.75"
             tools:ignore="Suspicious0dp">
 
-            <android.support.constraint.ConstraintLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
-                <EditText
-                    android:id="@+id/editText_Name_ContactForm"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="Name"
-                    android:ems="10"
-                    android:hint="Name"
-                    android:inputType="textPersonName"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.43"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.050000012" />
-
-                <EditText
-                    android:id="@+id/editText_Subject_ContactForm"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:ems="10"
-                    android:hint="Subject"
-                    android:inputType="textShortMessage|textAutoCorrect|textAutoComplete"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_Name_ContactForm" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/editText_TextField_ContactForm"
-                    android:layout_width="0dp"
-                    android:layout_height="207dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="@string/Question"
-                    android:inputType="textAutoCorrect|textMultiLine|textAutoComplete"
-                    android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_E-mail_ContactForm" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/button_confirmContactForm"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="100dp"
-                    android:onClick="confirmContactForm"
-                    android:text="Send Question"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_TextField_ContactForm" />
+                        <EditText
+                            android:id="@+id/editText_Name_ContactForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="Name"
+                            android:ems="10"
+                            android:hint="Name"
+                            android:inputType="textPersonName" />
+                    </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editText_E-mail_ContactForm"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:ems="10"
-                    android:hint="E-mail"
-                    android:inputType="textEmailAddress"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_Subject_ContactForm" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
 
-            </android.support.constraint.ConstraintLayout>
+                        <EditText
+                            android:id="@+id/editText_Subject_ContactForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Subject"
+                            android:inputType="textShortMessage|textAutoCorrect|textAutoComplete" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/editText_E-mail_ContactForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="E-mail"
+                            android:inputType="textEmailAddress" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/editText_TextField_ContactForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="238dp"
+                            android:ems="10"
+                            android:gravity="start|top"
+                            android:hint="@string/Question"
+                            android:inputType="textAutoCorrect|textMultiLine|textAutoComplete"
+                            android:textAlignment="textStart" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/button_confirmContactForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="confirmContactForm"
+                        android:text="Send Question" />
+
+                </LinearLayout>
+            </ScrollView>
 
         </RelativeLayout>
 
@@ -128,7 +132,9 @@
             android:layout_weight="0.75"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" >
+
+        </RelativeLayout>
 
     </LinearLayout>
 
