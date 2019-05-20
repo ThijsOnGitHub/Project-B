@@ -1,46 +1,21 @@
 package project.b;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Outline;
-import android.net.Uri;
-import android.os.Build;
 import android.provider.CalendarContract;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.text.InputType;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.TimeZone;
-
-import static java.security.AccessController.getContext;
 
 /*
 
@@ -888,9 +863,82 @@ public class appHelper extends AppCompatActivity {
             return (int)((elementWidth*phone_width)*designWidth);
         }
 
-        private int calcTextSize(float default_text_size,float text_length,float elementWidth){
+        private int calcTextSizeInt(float default_text_size,float text_length,float elementWidth){
             return (int) ( (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 );
         }
 
+        private float calcTextSizeFloat(float default_text_size,float text_length,float elementWidth){
+            return  (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 ;
+        }
+
+        private class QuestionItemReturn {
+            LinearLayout linearLayout;
+            EditText editText;
+
+            public QuestionItemReturn(LinearLayout linearLayoutInv, EditText editTextInv){
+                    linearLayout=linearLayoutInv;
+                    editText=editTextInv;
+            }
+        }
+        private QuestionItemReturn questionItem(String name, float textSize, int totalWidth, int InputType){
+            LinearLayout group = new LinearLayout(context);
+                LinearLayout.LayoutParams layoutParamsLayout=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParamsLayout.setMargins(0,0,0,20);
+                group.setLayoutParams(layoutParamsLayout);
+                group.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView title=new TextView(context);
+                    LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/3 ,ViewGroup.LayoutParams.MATCH_PARENT);
+                    title.setLayoutParams(layoutParamsTitle);
+                group.addView(title);
+
+                EditText editText=new EditText(context);
+                    LinearLayout.LayoutParams layoutParamsEditText= new LinearLayout.LayoutParams(totalWidth/3*2, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    editText.setLayoutParams(layoutParamsEditText);
+                    editText.setInputType(InputType);
+                    editText.setTag(name);
+                group.addView(editText);
+
+            return new QuestionItemReturn(group,editText);
+        }
+
+        private int calcMaxTextLength(String... strings){
+            int Chars=0;
+                for ( int counter = 0; counter < strings.length; counter++ ) {
+            if ( strings[counter].length() > Chars ) { Chars = strings[counter].length(); }
+        }
+        return Chars;
+        }
+
+        public EditText[] generateAskQuestionPage(LinearLayout layout){
+            LinearLayout linearLayout=new LinearLayout(context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                int margin=20;
+                layoutParams.setMargins(margin,margin,margin,margin);
+
+                int newWidth=phone_width-margin*2;
+
+
+                float textSize= calcTextSizeFloat(500000,calcMaxTextLength(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)),newWidth);
+
+                EditText[] inputFields=new EditText[4];
+                QuestionItemReturn name = questionItem(getString(R.string.name),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+                    linearLayout.addView(name.linearLayout);
+                    inputFields[0]=name.editText;
+
+                QuestionItemReturn subject = questionItem(getString(R.string.subject),textSize,newWidth,InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                    linearLayout.addView(subject.linearLayout);
+                    inputFields[1]=subject.editText;
+
+                QuestionItemReturn email= questionItem(getString(R.string.email),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+                    linearLayout.addView(email.linearLayout);
+                    inputFields[2]=email.editText;
+
+                QuestionItemReturn question =questionItem(getString(R.string.question),textSize,newWidth,InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    linearLayout.addView(question.linearLayout);
+                    inputFields[3]=question.editText;
+
+            Button
+        }
     }
 }

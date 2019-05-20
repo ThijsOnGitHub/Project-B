@@ -31,6 +31,8 @@ public class askAQuestion_activity extends appHelper {
 
         layout = new LayoutHelper(this);
 
+        layout.generateAskQuestionPage(findViewById(R.id.page_container));
+
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
         Intent about_cmi = new Intent(getBaseContext(), About_activity.class);
