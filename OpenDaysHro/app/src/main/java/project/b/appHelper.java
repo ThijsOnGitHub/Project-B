@@ -876,15 +876,15 @@ public class appHelper extends AppCompatActivity {
             return  (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 ;
         }
 
-        private class QuestionItemReturn {
-            LinearLayout linearLayout;
-            EditText editText;
-
-            public QuestionItemReturn(LinearLayout linearLayoutInv, EditText editTextInv){
-                    linearLayout=linearLayoutInv;
-                    editText=editTextInv;
+        private int calcMaxTextLength(String... strings){
+            int Chars=0;
+            for ( int counter = 0; counter < strings.length; counter++ ) {
+                if ( strings[counter].length() > Chars ) { Chars = strings[counter].length(); }
             }
+            return Chars;
         }
+
+
 //---------------------------------------function for sending email -----------------------------------------------------------
         //https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
         public boolean isEmailValid(String email) {
@@ -935,7 +935,18 @@ public class appHelper extends AppCompatActivity {
         }
 
 //-------------------------------------- end function for sending e-mail --------------------------------------------------------
-        private QuestionItemReturn questionItem(String name, float textSize, int totalWidth, int InputType){
+
+        private class QuestionItemReturn {
+            LinearLayout linearLayout;
+            EditText editText;
+
+            public QuestionItemReturn(LinearLayout linearLayoutInv, EditText editTextInv){
+                linearLayout=linearLayoutInv;
+                editText=editTextInv;
+            }
+        }
+
+        private QuestionItemReturn questionItem(String name, float textSize, int totalWidth, int inputType,boolean theQuestion){
             LinearLayout group = new LinearLayout(context);
                 LinearLayout.LayoutParams layoutParamsLayout=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParamsLayout.setMargins(0,0,0,20);
@@ -945,9 +956,9 @@ public class appHelper extends AppCompatActivity {
                 group.setGravity(Gravity.TOP);
 
                 TextView title=new TextView(context);
-                    LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.WRAP_CONTENT);
                     title.setLayoutParams(layoutParamsTitle);
-                    title.setGravity(Gravity.CENTER|Gravity.RIGHT);
+                    title.setGravity(Gravity.RIGHT|Gravity.TOP);
                     title.setText(name+":");
                     title.setTextSize(textSize);
                 group.addView(title);
@@ -955,7 +966,8 @@ public class appHelper extends AppCompatActivity {
                 EditText editText=new EditText(context);
                     LinearLayout.LayoutParams layoutParamsEditText= new LinearLayout.LayoutParams(totalWidth/4*3, ViewGroup.LayoutParams.WRAP_CONTENT);
                     editText.setLayoutParams(layoutParamsEditText);
-                    editText.setInputType(InputType);
+                    editText.setGravity(Gravity.TOP);
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT|inputType);
                     editText.setTag(name);
                     editText.setHint(name);
                 group.addView(editText);
@@ -963,13 +975,6 @@ public class appHelper extends AppCompatActivity {
             return new QuestionItemReturn(group,editText);
         }
 
-        private int calcMaxTextLength(String... strings){
-            int Chars=0;
-                for ( int counter = 0; counter < strings.length; counter++ ) {
-            if ( strings[counter].length() > Chars ) { Chars = strings[counter].length(); }
-        }
-        return Chars;
-        }
 
         public void generateAskQuestionPage(LinearLayout layout){
             LinearLayout linearLayout=new LinearLayout(context);
@@ -986,19 +991,19 @@ public class appHelper extends AppCompatActivity {
 
                 EditText[] inputFields=new EditText[4];
 
-                QuestionItemReturn name = questionItem(getString(R.string.name),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+                QuestionItemReturn name = questionItem(getString(R.string.name),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_PERSON_NAME,false);
                     linearLayout.addView(name.linearLayout);
                     inputFields[0]=name.editText;
 
-                QuestionItemReturn subject = questionItem(getString(R.string.subject),textSize,newWidth,InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                QuestionItemReturn subject = questionItem(getString(R.string.subject),textSize,newWidth,InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE|InputType.TYPE_TEXT_FLAG_AUTO_CORRECT,false);
                     linearLayout.addView(subject.linearLayout);
                     inputFields[1]=subject.editText;
 
-                QuestionItemReturn email= questionItem(getString(R.string.email),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+                QuestionItemReturn email= questionItem(getString(R.string.email),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,false);
                     linearLayout.addView(email.linearLayout);
                     inputFields[2]=email.editText;
 
-                QuestionItemReturn question =questionItem(getString(R.string.question),textSize,newWidth,InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                QuestionItemReturn question =questionItem(getString(R.string.question),textSize,newWidth,InputType.TYPE_TEXT_FLAG_MULTI_LINE,true);
                     linearLayout.addView(question.linearLayout);
                     inputFields[3]=question.editText;
 
@@ -1018,5 +1023,6 @@ public class appHelper extends AppCompatActivity {
                 linearLayout.addView(confirm);
             layout.addView(linearLayout);
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
