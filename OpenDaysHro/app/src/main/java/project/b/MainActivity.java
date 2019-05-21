@@ -3,18 +3,18 @@ package project.b;
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     int numOfListItems;
 
-    int[] drawables = new int[]{R.drawable.blaak, R.drawable.centraal_station,R.drawable.gebouw_cmi,R.drawable.gebouw_museumpark_hoogbouw,
-                                    R.drawable.haven_rotterdam_containers, R.drawable.haven_rotterdam_schip, R.drawable.lerende_student,
-                                    R.drawable.overview_rotterdam_1, R.drawable.overview_rotterdam_2, R.drawable.overview_rotterdam_3,
-                                    R.drawable.overview_rotterdam_erasmusbrug, R.drawable.werkende_studenten};
+    int[] drawables = new int[]{R.drawable.gebouw_cmi,R.drawable.lerende_student,
+                                    R.drawable.werkende_studenten,R.drawable.wijnhaven};
 
 
 
@@ -25,8 +25,9 @@ public class MainActivity extends appHelper {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layout = new LayoutHelper(this);
 
-        myDatabase = new DatabaseHelper(this);
-        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+        if (layout.db.checkDatabase() == true) {
+            layout.db.fillDatabase();
+        }
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
