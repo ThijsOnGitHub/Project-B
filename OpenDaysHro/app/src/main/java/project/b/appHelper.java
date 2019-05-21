@@ -8,15 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -32,6 +35,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -665,7 +673,10 @@ public class appHelper extends AppCompatActivity {
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent share_intent = new Intent(context, POPUP_activity.class);
+                                share_intent.putExtra("WIDTH", (int) (phone_width * 0.8));
+                                share_intent.putExtra("HEIGHT", (int) (phone_width * 0.8));
+                            startActivity(share_intent);
                         }
                     });
 
@@ -755,6 +766,272 @@ public class appHelper extends AppCompatActivity {
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void popup(int addToThisLayout, int width, int height){
+
+            getWindow().setLayout(width,height);
+
+            LinearLayout pop = (LinearLayout) findViewById(addToThisLayout);
+            pop.setBackground(getDrawable(R.drawable.popup_background));
+
+            int amountOfButtons = 5;
+            int top_bar_margin = (int) (float) ( (float) height / (float) 50 );
+            int top_bar_height = (int) ( (float) height / (float) amountOfButtons );
+
+            LinearLayout.LayoutParams top_bar_params = new LinearLayout.LayoutParams(width, top_bar_height);
+                top_bar_params.setMargins(0,0,0, top_bar_margin);
+
+            LinearLayout.LayoutParams layout15 = new LinearLayout.LayoutParams((width / 5), top_bar_height);
+            LinearLayout.LayoutParams layout45 = new LinearLayout.LayoutParams(((width / 5) * 4), top_bar_height);
+
+            System.out.println( ( (width / 5) * 4) );
+
+            LinearLayout.LayoutParams button_params;
+            if ( ( height -  ( top_bar_height + top_bar_margin ) ) >= width ) { button_params = new LinearLayout.LayoutParams( (int) (width / 3), (int) (width / 3)); button_params.setMargins( (int) (width / 12),(int) (width / 12),(int) (width / 12),(int) (width / 12)); }
+            else { button_params = new LinearLayout.LayoutParams(( (int) ( height -  ( top_bar_height + top_bar_margin ) ) / 3 ), (int) ( ( height -  ( top_bar_height + top_bar_margin ) ) / 3 )); button_params.setMargins(( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 ),( ( height -  ( top_bar_height + top_bar_margin ) ) / 12 )); }
+
+            LinearLayout top_bar = new LinearLayout(this.context);
+                top_bar.setGravity(Gravity.CENTER);
+                top_bar.setOrientation(LinearLayout.HORIZONTAL);
+
+                LinearLayout top_bar_text = new LinearLayout(this.context);
+                    top_bar_text.setGravity(Gravity.CENTER);
+                    top_bar_text.setLayoutParams(layout45);
+                    TextView top_bar_text_text = new TextView(this.context);
+                        top_bar_text_text.setText("Share with your friends using:"); top_bar_text_text.setTextSize((int) ((float) ( ( (float) 14 )  * (float) ((float) 688 / (float) ((width / 5) * 4) ) / (float) metrics.density) * (float) 2.625) ); top_bar_text_text.setTextColor(getResources().getColor(R.color.white));
+                        top_bar_text.addView(top_bar_text_text);
+                    top_bar.addView(top_bar_text);
+
+                LinearLayout close = new LinearLayout(this.context);
+                    close.setGravity(Gravity.CENTER);
+                    close.setLayoutParams(layout15);
+                    TextView close_text = new TextView(this.context);
+                        close_text.setText("X"); close_text.setTextSize( (int) ((float) ( (float) 28  * (float) ((float) 1080 / (float) phone_width) / (float) metrics.density) * (float) 2.625) ); close_text.setTextColor(getResources().getColor(R.color.white));
+                        close.addView(close_text);
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+                    top_bar.addView(close);
+                pop.addView(top_bar);
+
+
+            LinearLayout horizontal1 = new LinearLayout(this.context);
+                horizontal1.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal1.setGravity(Gravity.CENTER);
+
+                LinearLayout twitter = new LinearLayout(this.context);
+                    twitter.setBackground(getDrawable(R.drawable.twitter));
+                    twitter.setOrientation(LinearLayout.HORIZONTAL);
+                    twitter.setLayoutParams(button_params);
+
+                    twitter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                Intent twitterintent = new Intent(Intent.ACTION_SEND);
+                                    twitterintent.setType("text/plain");
+                                    twitterintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    twitterintent.setPackage("com.twitter.android");
+                                    startActivity(twitterintent);
+                            } catch (Exception e) { Toast.makeText(context, "Twitter is not installed!", Toast.LENGTH_LONG).show();}
+                        }
+                    });
+                    horizontal1.addView(twitter);
+
+                LinearLayout facebook = new LinearLayout(this.context);
+                    facebook.setBackground(getDrawable(R.drawable.facebook_logo));
+                    facebook.setOrientation(LinearLayout.HORIZONTAL);
+                    facebook.setLayoutParams(button_params);
+
+                    facebook.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //https://stackoverflow.com/questions/5023602/facebook-share-link-can-you-customize-the-message-body-text
+                            String fb_url = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.hogeschoolrotterdam.nl%2F&quote=Hi!%20Check%20out%20our%20open%20day!";
+                            Intent facebookintent = new Intent(Intent.ACTION_VIEW);
+                            facebookintent.setData(Uri.parse(fb_url));
+                            startActivity(facebookintent);
+                        }
+                    });
+                    horizontal1.addView(facebook);
+                pop.addView(horizontal1);
+
+            LinearLayout horizontal2 = new LinearLayout(this.context);
+                horizontal2.setOrientation(LinearLayout.HORIZONTAL);
+                horizontal2.setGravity(Gravity.CENTER);
+
+                LinearLayout whatsapp = new LinearLayout(this.context);
+                    whatsapp.setBackground(getDrawable(R.drawable.whatsapp_logo));
+                    whatsapp.setOrientation(LinearLayout.HORIZONTAL);
+                    whatsapp.setLayoutParams(button_params);
+
+                    whatsapp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                Intent whatsappintent = new Intent(Intent.ACTION_SEND);
+                                    whatsappintent.setType("text/plain");
+                                    whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    whatsappintent.setPackage("com.whatsapp");
+                                    startActivity(whatsappintent);
+                            } catch (Exception e) { Toast.makeText(context, "Whatsapp is not installed!", Toast.LENGTH_LONG).show();}
+                        }
+                    });
+                    horizontal2.addView(whatsapp);
+
+
+                LinearLayout email = new LinearLayout(this.context);
+                    email.setBackground(getDrawable(R.drawable.email_logo));
+                    email.setOrientation(LinearLayout.HORIZONTAL);
+                    email.setLayoutParams(button_params);
+
+                    email.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                    emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                    emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                    emailIntent.setPackage("com.microsoft.office.outlook");
+                                    startActivity(emailIntent);
+                            } catch (Exception e){
+                                try {
+                                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                        emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        emailIntent.setPackage("com.google.android.gm");
+                                        startActivity(emailIntent);
+                                } catch (Exception f){
+                                    // in case outlook and gmail are not installed you can select another app.
+                                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                    emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
+                                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        startActivity(emailIntent);
+                                }
+                            }
+                        }
+                    });
+                    horizontal2.addView(email);
+                pop.addView(horizontal2);
+
+
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void contact_page(int image, int[] contact_images, int[] social_media_images){
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int margin_vertical_big = (int) ( (float) phone_height / (float) 50 );
+            int margin_vertical_small = (int) ( ( (float) phone_height / (float) 50 ) / 2 );
+
+            LinearLayout header = new LinearLayout(this.context);
+                header.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                    header.setLayoutParams(header_lp);
+                header.setBackground(getDrawable(image));
+                main.addView(header);
+
+            String[] title = {"Contact", "Social Media"};
+            int longest_title = 0;
+            for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
+
+            int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3.5 ); int button_horizontal_margin = (int) (button_size / 5);
+            int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
+            LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, 0 );
+
+            for (int i = 0; i < 2; i++) {
+
+                LinearLayout text_layout = new LinearLayout(context);
+                    text_layout.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams text_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        if ( i == 0 ) { text_layout_params.setMargins( 0, margin_vertical_big, 0, margin_vertical_big ); }
+                        else { text_layout_params.setMargins( 0, margin_vertical_small, 0, margin_vertical_big ); }
+                    text_layout.setLayoutParams(text_layout_params);
+                    TextView btn_txt = new TextView(this.context);
+                        btn_txt.setText(title[i]); btn_txt.setTextSize(textSize);
+                        text_layout.addView(btn_txt);
+                    main.addView(text_layout);
+
+                LinearLayout btn_layout = new LinearLayout(context);
+                    btn_layout.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams btn_layout_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            btn_layout_lp.setMargins( 0, 0, 0, margin_vertical_small );
+                    LinearLayout button1 = new LinearLayout(context);
+                        button1.setLayoutParams(button_lp); btn_layout.addView(button1);
+                    LinearLayout button2 = new LinearLayout(context);
+                        button2.setLayoutParams(button_lp); btn_layout.addView(button2);
+                    LinearLayout button3 = new LinearLayout(context);
+                        button3.setLayoutParams(button_lp); btn_layout.addView(button3);
+                    main.addView(btn_layout);
+
+                if ( title[i] == "Contact" ) {
+                    button1.setBackground(getDrawable(contact_images[0]));
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.hogeschoolrotterdam.nl/")));
+                        }
+                    });
+                    button2.setBackground(getDrawable(contact_images[1]));
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(context, askAQuestion_activity.class));
+                        }
+                    });
+                    button3.setBackground(getDrawable(contact_images[2]));
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:010794 4400")));
+                        }
+                    });
+                } else if (title[i] == "Social Media") {
+                    button1.setBackground(getDrawable(social_media_images[0]));
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //https://stackoverflow.com/questions/34564211/open-facebook-page-in-facebook-app-if-installed-on-android/34564284
+                            Intent facebook = new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.facebook.com/hogeschoolrotterdam/"));
+                            startActivity(facebook);
+                        }
+                    });
+                    button2.setBackground(getDrawable(social_media_images[1]));
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String instagramName = "hogeschoolrotterdam";
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/_u/" + instagramName)));
+                        }
+                    });
+                    button3.setBackground(getDrawable(social_media_images[2]));
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //https://stackoverflow.com/questions/15497261/open-instagram-user-profile
+                            String twitterUsername="hsrotterdam";
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name="+twitterUsername)));
+
+                            } catch (Exception e) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/"+twitterUsername)));
+                            }
+                        }
+                    });
+                }
+            }
+        }
 
     }
 }
