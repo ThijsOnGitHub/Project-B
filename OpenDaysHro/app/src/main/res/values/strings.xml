@@ -11,4 +11,5 @@
     <string name="subject">subject</string>
     <string name="question">question</string>
     <string name="Question">Question</string>
+    <string name="Send_question">Send question</string>
 </resources>
