@@ -3,10 +3,12 @@ package project.b;
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     int numOfListItems;
@@ -23,8 +25,9 @@ public class MainActivity extends appHelper {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layout = new LayoutHelper(this);
 
-        myDatabase = new DatabaseHelper(this);
-        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+        if (layout.db.checkDatabase() == true) {
+            layout.db.fillDatabase();
+        }
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
