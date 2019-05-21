@@ -2,6 +2,7 @@ package project.b;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -833,7 +834,7 @@ public class appHelper extends AppCompatActivity {
                             //https://stackoverflow.com/questions/5023602/facebook-share-link-can-you-customize-the-message-body-text
                             String fb_url = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.hogeschoolrotterdam.nl%2F&quote=Hi!%20Check%20out%20our%20open%20day!";
                             Intent facebookintent = new Intent(Intent.ACTION_VIEW);
-                            facebookintent.setData(Uri.parse(fb_url));
+                            facebookintent.setData(  Uri.parse(fb_url));
                             startActivity(facebookintent);
                         }
                     });
