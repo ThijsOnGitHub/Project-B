@@ -5,13 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 
-import java.text.ParseException;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 33;
+    private static final int HROOPENDAY_VERSION = 36;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -75,27 +72,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String APPINFO_APILINK = "api_link";
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // GET DATA
 
     public String[] getUpcomingOpendays() {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<String> opendays_id = getAllOpendays();
         ArrayList<String> openday = new ArrayList<>();
+        ArrayList<String> current_openday = new ArrayList<>();
 
+        Date current_openday_date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         if (opendays_id.size() > 0) {
             for (int i = 0; i < opendays_id.size(); i++) {
                 openday = getOpenday(opendays_id.get(i));
                 if (openday.size() > 0) {
-                    Date date1 = new Date();
+                    Date date_now = new Date();
                     String date = openday.get(1) + " " + openday.get(3);
-                    Date date2 = dateFormat.parse(date, new ParsePosition(0));
+                    Date date_openday = dateFormat.parse(date, new ParsePosition(0));
 
-                    if (date1.compareTo(date2) <= 0) {
-                        result.add(opendays_id.get(i));
+                    if (date_now.compareTo(date_openday) <= 0) {
+                        // add to result
+                        Integer index = 0;
+                        if (result.size() > 0) {
+                            for (int j = 0; j < result.size(); j++) {
+                                current_openday_date = dateFormat.parse(getOpenday(result.get(j)).get(1) + " " + getOpenday(result.get(j)).get(3), new ParsePosition(0));
+
+                                if (date_openday.compareTo(current_openday_date) > 0) {
+                                    index++;
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                        result.add(index, opendays_id.get(i));
                     }
                 }
-
             }
         }
 
@@ -103,54 +115,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result_string;
     }
         public String[] getOpendayInfo(String openday_id) {
-        ArrayList<String> result = getOpenday(openday_id);
-        String[] result_string = result.toArray(new String[result.size()]);
-        return result_string;
-    }
+            ArrayList<String> result = getOpenday(openday_id);
+            String[] result_string = result.toArray(new String[result.size()]);
+            return result_string;
+        }
         public String[] getCalenderInfo(String openday_id) {
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<String> location = new ArrayList<>();
-        String institute_id = "";
-        String institute_fullname = "";
-        String institute_shortname = "";
-        String zipcode = "";
-        String starttime = "";
-        String endtime = "";
-        String date = "";
+            ArrayList<String> result = new ArrayList<>();
+            ArrayList<String> location = new ArrayList<>();
+            String institute_id = "";
+            String institute_fullname = "";
+            String institute_shortname = "";
+            String zipcode = "";
+            String starttime = "";
+            String endtime = "";
+            String date = "";
 
 
-        ArrayList<String> openday = getOpenday(openday_id);
-        if(openday.size() > 0) {
-            institute_fullname = openday.get(0);
-            date = openday.get(1);
-            starttime = openday.get(2);
-            endtime = openday.get(3);
-        }
-        ArrayList<String> institutes = getInstitute_id(institute_fullname);
-        if(institutes.size() > 0) {
-            institute_id = institutes.get(0);
-        }
-        ArrayList<String> institute = getInstitute(institute_id);
-        if(institute.size() > 0) {
-            institute_shortname = institute.get(1);
-        }
-        ArrayList<String> location_id = getLocation_id(institute_fullname);
-        if(location_id.size() > 0) {
-            location = getLocation(location_id.get(0));
-            if(location.size() > 0) {
-                zipcode = location.get(2);
+            ArrayList<String> openday = getOpenday(openday_id);
+            if(openday.size() > 0) {
+                institute_fullname = openday.get(0);
+                date = openday.get(1);
+                starttime = openday.get(2);
+                endtime = openday.get(3);
             }
+            ArrayList<String> institutes = getInstitute_id(institute_fullname);
+            if(institutes.size() > 0) {
+                institute_id = institutes.get(0);
+            }
+            ArrayList<String> institute = getInstitute(institute_id);
+            if(institute.size() > 0) {
+                institute_shortname = institute.get(1);
+            }
+            ArrayList<String> location_id = getLocation_id(institute_fullname);
+            if(location_id.size() > 0) {
+                location = getLocation(location_id.get(0));
+                if(location.size() > 0) {
+                    zipcode = location.get(2);
+                }
+            }
+
+            result.add(institute_shortname);
+            result.add(zipcode);
+            result.add(starttime);
+            result.add(endtime);
+            result.add(date);
+
+            String[] result_string = result.toArray(new String[result.size()]);
+            return result_string;
         }
-
-        result.add(institute_shortname);
-        result.add(zipcode);
-        result.add(starttime);
-        result.add(endtime);
-        result.add(date);
-
-        String[] result_string = result.toArray(new String[result.size()]);
-        return result_string;
-    }
 
     public String[] getActivitiesByOpenday(String openday_id) {
         ArrayList<String> result = new ArrayList<>();
@@ -223,10 +235,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result_string;
     }
         public String[] getActivityInfo(String activity_id) {
-        ArrayList<String> result = getActivity(activity_id);
-        String[] result_string = result.toArray(new String[result.size()]);
-        return result_string;
-    }
+            ArrayList<String> result = getActivity(activity_id);
+            String[] result_string = result.toArray(new String[result.size()]);
+            return result_string;
+        }
 
     public String[] getStudiesByInstitute(String institute_id) {
         ArrayList<String> result = new ArrayList<>();
@@ -246,11 +258,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String[] result_string = result.toArray(new String[result.size()]);
         return result_string;
-    } // not done
+    }
         public String[] getStudyInfo(String study_id) {
-        ArrayList<String> result = getStudy(study_id);
-        String[] result_string = result.toArray(new String[result.size()]);
-        return result_string;
+            ArrayList<String> result = getStudy(study_id);
+            String[] result_string = result.toArray(new String[result.size()]);
+            return result_string;
         }
         public String[] getNamesOfStudiesByInstitute(String institute_id) {
             ArrayList<String> result = new ArrayList<>();
@@ -297,9 +309,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result_string;
     }
         public String[] getLocationInfo(String location_id) {
-        ArrayList<String> result = getLocation(location_id);
-        String[] result_string = result.toArray(new String[result.size()]);
-        return result_string;
+            ArrayList<String> result = getLocation(location_id);
+            String[] result_string = result.toArray(new String[result.size()]);
+            return result_string;
         }
 
     public String[] getImagesByLocation(String location_id, Boolean floorplan) {
@@ -381,6 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
     //////////////////////////////////////////////////////////////////////////
+    // INSERT
 
     public Boolean createOpenday(String date, String starttime, String endtime, String institute_fullname) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -468,6 +481,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //////////////////////////////////////////////////////////////////////////
+    // CHECKS
 
     public void fillDatabase() {
         // API CALL......
@@ -498,8 +512,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Create openday for CMI
         createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
-        createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
         createOpenday("09-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("21-05-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("15-08-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
 
         // Create activities for CMI
         createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "WD.02.002", "Python stuff", "Python dingen");

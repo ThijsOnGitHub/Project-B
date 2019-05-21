@@ -9,7 +9,6 @@ import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     int numOfListItems;

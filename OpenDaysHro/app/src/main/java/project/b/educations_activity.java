@@ -17,7 +17,6 @@ import static java.security.AccessController.getContext;
 
 public class educations_activity extends appHelper {
 
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
     String passedName;
 
