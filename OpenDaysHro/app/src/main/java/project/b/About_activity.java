@@ -7,8 +7,6 @@ import android.content.pm.ActivityInfo;
 import android.content.Intent;
 
 public class About_activity extends appHelper {
-
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sapien in augue rutrum hendrerit aliquet quis dolor. Etiam augue sapien, euismod eu ex in, consequat fringilla nisl. Maecenas lacinia nulla non nulla dictum, a ornare lorem dignissim. Ut sit amet mollis purus, ac egestas lectus. Proin varius, sapien nec dignissim facilisis, justo tortor tempor est, a cursus est nunc tristique velit. Ut dignissim laoreet tellus at tempus. Fusce vitae suscipit eros. Proin lacinia mauris euismod purus commodo euismod. In hac habitasse platea dictumst. Cras sem turpis, suscipit sed nunc nec, feugiat facilisis eros.\n" +

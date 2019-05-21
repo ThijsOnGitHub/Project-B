@@ -74,6 +74,7 @@ public class appHelper extends AppCompatActivity {
 
     public class LayoutHelper {
         Context context; DisplayMetrics metrics; int imageCounter; int phone_width; int phone_height; int default_margin;
+        DatabaseHelper db;
 
         int menuColor = R.color.dark_grey;
 
@@ -85,6 +86,7 @@ public class appHelper extends AppCompatActivity {
             this.phone_width = metrics.widthPixels;
             this.phone_height = metrics.heightPixels;
             this.default_margin = (int) ( (float) 2.4 * (float)( (float) phone_width / (float) 100) );
+            this.db = new DatabaseHelper(context);
         }
 
 
