@@ -149,6 +149,73 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        public void workshop_menu( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+
+            int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
+            int info_layout_width = phone_width / 6;
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+
+            LinearLayout LinearLayout_main = new LinearLayout(this.context);
+            LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout_main.isClickable();
+            LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
+            LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
+            LinearLayout_main_layoutParams.setMargins(0,0,0,0);
+            LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+
+            RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
+            listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+
+            RelativeLayout listItem_loc = new RelativeLayout(this.context);
+            listItem_loc.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,5));
+
+            RelativeLayout info_layout = new RelativeLayout(this.context);
+            info_layout.setGravity(Gravity.CENTER);
+            info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
+
+            TextView listItem_description = new TextView(this.context);
+            listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+            listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+
+            TextView listItem_Time = new TextView(this.context);
+            listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+            listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+
+            LinearLayout info_button = new LinearLayout(this.context);
+            info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
+            info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
+
+
+            ((RelativeLayout) listItem_description_layout ).addView((TextView) listItem_description);
+            ((LinearLayout)LinearLayout_main).addView((RelativeLayout)listItem_description_layout);
+            ((RelativeLayout) listItem_loc).addView(listItem_Time);
+            ((LinearLayout)LinearLayout_main).addView((RelativeLayout)listItem_loc);
+            ((RelativeLayout) info_layout).addView(info_button);
+            ((LinearLayout)LinearLayout_main).addView((RelativeLayout)info_layout);
+
+
+            final String[] infoToPass = {ListItem_Description, ListItem_Location, ListItem_Time, "page1"};
+            LinearLayout_main.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent gotoOpenDay_activity = new Intent(context, opendays_activity.class);
+                    gotoOpenDay_activity.putExtra("INFO", infoToPass);
+                    gotoOpenDay_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(gotoOpenDay_activity);
+                }
+            });
+
+
+            LinearLayout main = (LinearLayout)findViewById( addToThisLayout );
+            ((LinearLayout)main).addView((LinearLayout)LinearLayout_main);
+
+            if (this.menuColor == R.color.light_grey) { this.menuColor = R.color.dark_grey; } else { this.menuColor = R.color.light_grey; }
+
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
