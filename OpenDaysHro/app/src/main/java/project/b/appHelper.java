@@ -1,35 +1,16 @@
 package project.b;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Outline;
-import android.net.Uri;
-import android.os.Build;
 import android.provider.CalendarContract;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.text.InputType;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,9 +23,9 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.util.Calendar;
-import java.util.TimeZone;
-
-import static java.security.AccessController.getContext;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
 
@@ -884,7 +865,7 @@ public class appHelper extends AppCompatActivity {
 
 
                 LinearLayout email = new LinearLayout(this.context);
-                    email.setBackground(getDrawable(R.drawable.email_logo));
+                    email.setBackground(getDrawable(R.drawable.email_icon));
                     email.setOrientation(LinearLayout.HORIZONTAL);
                     email.setLayoutParams(button_params);
 
@@ -1032,6 +1013,172 @@ public class appHelper extends AppCompatActivity {
                 }
             }
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private int calcHeightFromDesign(float elementHeight){
+            float designHeight= 1080.f;
+            return (int)((elementHeight*phone_height)*designHeight);
+        }
 
+        private int calcWithFromDesign(float elementWidth){
+            float designWidth= 1920.f;
+            return (int)((elementWidth*phone_width)*designWidth);
+        }
+
+        private int calcTextSizeInt(float default_text_size,float text_length,float elementWidth){
+            return (int) ( (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 );
+        }
+
+        private float calcTextSizeFloat(float default_text_size,float text_length,float elementWidth){
+            return  (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 ;
+        }
+
+        private int calcMaxTextLength(String... strings){
+            int Chars=0;
+            for ( int counter = 0; counter < strings.length; counter++ ) {
+                if ( strings[counter].length() > Chars ) { Chars = strings[counter].length(); }
+            }
+            return Chars;
+        }
+
+
+//---------------------------------------function for sending email -----------------------------------------------------------
+        //https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
+        public boolean isEmailValid(String email) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[a-z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            return matcher.matches();
+        }
+
+
+
+        public void confirmContactForm(EditText nameView,EditText subjectView,EditText emailView,EditText textFieldView){
+            String name = nameView.getText().toString();
+            String subject = subjectView.getText().toString();
+            String email=emailView.getText().toString().toLowerCase();
+            String textField = textFieldView.getText().toString();
+            if(name.length()>0 && subject.length()>0&&textField.length()>0) {
+                //https://developer.android.com/training/basics/intents/sending.html#java
+                if(isEmailValid(email)) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    emailIntent.setType("text/html");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"0967161@hr.nl"}); // recipients
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contact Form Openday: " + subject);
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, textField + "\n\nThis email was send by " + name+" with the opendag app.\nPleas anwser on: "+email);
+                    startActivity(emailIntent);
+                }else{
+                    Toast.makeText(context,R.string.email_not_valid,Toast.LENGTH_LONG).show();
+                }
+            }else{
+                String finalText=getString(R.string.fields_empty)+" ";
+                if (name.length()==0){
+                    finalText+=getText(R.string.name)+", ";
+                }
+                if (email.length() == 0) {
+                    finalText+=getString(R.string.email)+", ";
+                }
+                if (email.length()==0){
+                    finalText+=getString(R.string.subject)+", ";
+                }
+
+                if (textField.length() == 0) {
+                    finalText+=getString(R.string.question)+", ";
+                }
+
+                finalText=finalText.substring(0,finalText.length()-2);
+                Toast.makeText(context,finalText,Toast.LENGTH_LONG).show();
+            }
+        }
+
+//-------------------------------------- end function for sending e-mail --------------------------------------------------------
+
+        private class QuestionItemReturn {
+            LinearLayout linearLayout;
+            EditText editText;
+
+            public QuestionItemReturn(LinearLayout linearLayoutInv, EditText editTextInv){
+                linearLayout=linearLayoutInv;
+                editText=editTextInv;
+            }
+        }
+
+        private QuestionItemReturn questionItem(String name, float textSize, int totalWidth, int inputType,boolean theQuestion){
+            LinearLayout group = new LinearLayout(context);
+                LinearLayout.LayoutParams layoutParamsLayout=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParamsLayout.setMargins(0,0,0,20);
+                group.setLayoutParams(layoutParamsLayout);
+                group.setOrientation(LinearLayout.HORIZONTAL);
+                group.setLayoutParams(layoutParamsLayout);
+                group.setGravity(Gravity.TOP);
+
+                TextView title=new TextView(context);
+                    LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    title.setLayoutParams(layoutParamsTitle);
+                    title.setGravity(Gravity.RIGHT|Gravity.TOP);
+                    title.setText(name+":");
+                    title.setTextSize(textSize);
+                group.addView(title);
+
+                EditText editText=new EditText(context);
+                    LinearLayout.LayoutParams layoutParamsEditText= new LinearLayout.LayoutParams(totalWidth/4*3, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    editText.setLayoutParams(layoutParamsEditText);
+                    editText.setGravity(Gravity.TOP);
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT|inputType);
+                    editText.setTag(name);
+                    editText.setHint(name);
+                group.addView(editText);
+
+            return new QuestionItemReturn(group,editText);
+        }
+
+
+        public void generateAskQuestionPage(LinearLayout layout){
+            LinearLayout linearLayout=new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                int margin=40;
+                layoutParams.setMargins(margin,margin,margin,margin);
+                linearLayout.setLayoutParams(layoutParams);
+
+                int newWidth=phone_width-margin*2;
+
+
+                float textSize= calcTextSizeFloat(25,calcMaxTextLength(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)),newWidth);
+
+                EditText[] inputFields=new EditText[4];
+
+                QuestionItemReturn name = questionItem(getString(R.string.name),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_PERSON_NAME,false);
+                    linearLayout.addView(name.linearLayout);
+                    inputFields[0]=name.editText;
+
+                QuestionItemReturn subject = questionItem(getString(R.string.subject),textSize,newWidth,InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE|InputType.TYPE_TEXT_FLAG_AUTO_CORRECT,false);
+                    linearLayout.addView(subject.linearLayout);
+                    inputFields[1]=subject.editText;
+
+                QuestionItemReturn email= questionItem(getString(R.string.email),textSize,newWidth,InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,false);
+                    linearLayout.addView(email.linearLayout);
+                    inputFields[2]=email.editText;
+
+                QuestionItemReturn question =questionItem(getString(R.string.question),textSize,newWidth,InputType.TYPE_TEXT_FLAG_MULTI_LINE,true);
+                    linearLayout.addView(question.linearLayout);
+                    inputFields[3]=question.editText;
+
+                Button confirm = new Button(context);
+                    confirm.setText(getText(R.string.Send_question));
+                    LinearLayout.LayoutParams layoutParams1=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    confirm.setLayoutParams(layoutParams1);
+                    float buttonTextSize= calcTextSizeFloat(25,getString(R.string.Send_question).length(),newWidth);
+                    confirm.setTextSize(buttonTextSize);
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            System.out.println("heloo");
+                            confirmContactForm(inputFields[0],inputFields[1],inputFields[2],inputFields[3]);
+                        }
+                    });
+                linearLayout.addView(confirm);
+            layout.addView(linearLayout);
+        }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 }
