@@ -499,7 +499,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Part-time", "", "");
         createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "", "");
-
         // CMI locations
         createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
         createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
