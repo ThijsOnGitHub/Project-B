@@ -51,18 +51,27 @@ public class opendays_activity extends appHelper {
                 Calendar_event_description, Calendar_event_location, Calendar_event_year, Calendar_event_month, Calendar_event_day,
                 Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min);
 
+        String page;
+
+        try { passedInfo = getIntent().getStringArrayExtra("INFO"); page = passedInfo[3]; }
+        catch (Exception e) { page = "page0"; }
+
         passedInfo = getIntent().getStringArrayExtra("INFO");
-        try {
-            Description = passedInfo[0];
-            Location = passedInfo[1];
-            Time = passedInfo[2];
+        Description = passedInfo[0];
+        Location = passedInfo[1];
+        Time = passedInfo[2];
+
+        if ( page == "page0") {
+            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
+            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
+            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
         }
-        catch (Exception e){ Description = ""; Location = ""; Time = ""; System.out.println(e); }
+        else{
 
-        layout.workshop("General Information\n" + Description,"H2.002", Time,R.id.page_container);
-        layout.workshop("General Information\n" + Description,"H2.002", Time,R.id.page_container);
-        layout.workshop("General Information\n" + Description,"H2.002", Time,R.id.page_container);
-
+            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
+            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
+            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
+        }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
