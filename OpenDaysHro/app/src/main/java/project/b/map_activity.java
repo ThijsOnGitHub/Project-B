@@ -442,7 +442,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                 (Button)findViewById(R.id.button_ResetZoom),
                 (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
                 (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
-        String[] buildings=  new String[]{"h107","wd103","wn99"};
+        String[] buildings=  layout.db.getFloorplansByInstitute("1");
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );

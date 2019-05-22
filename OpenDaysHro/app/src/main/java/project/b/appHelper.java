@@ -45,6 +45,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -299,7 +301,7 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_study_program_menu(int addToThisLayout, int[] List_with_images, String[] List_with_text){
+        public void generate_study_program_menu(int addToThisLayout, int[] List_with_images, String[] List_with_id){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -309,6 +311,23 @@ public class appHelper extends AppCompatActivity {
 
             int max_ammount_of_buttons_in_a_row = 2;
 
+            ArrayList<String> study_names = new ArrayList<>();
+            ArrayList<String> study_ids = new ArrayList<>();
+
+            String studyname = "";
+            String studyid = "";
+            for (int i = 0; i < List_with_id.length; i++) {
+                studyname = this.db.getStudyInfo(List_with_id[i])[2];
+                studyid = this.db.getStudyInfo(List_with_id[i])[4];
+                if (!study_names.contains(studyname)) {
+                    study_ids.add(studyid);
+                    study_names.add(studyname);
+                }
+            }
+
+
+            String[] List_with_text = study_names.toArray(new String[study_names.size()]);
+            List_with_id = study_ids.toArray(new String[study_ids.size()]);
 
             calc calculator = (x, y, z) -> (int) ( ( (float) x / (float) y) * (float) z);
 
@@ -380,13 +399,13 @@ public class appHelper extends AppCompatActivity {
                             Button.addView(button_image);
                             Button.addView(button_text);
 
-                        String this_button_text = List_with_text[i];
+                        final String this_button_id = List_with_id[i];
                         Button.isClickable();
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("NAME", this_button_text);
+                                    gotoPage.putExtra("ID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
                             }
@@ -456,22 +475,15 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_page_study_programs(int Image, String Text, int addViewTo){
+        public void generate_page_study_programs(int Image, String ID, int addViewTo){
             // The text now is static. In the future this will be fetched from the db. The string Text is for the title which will be passed on with the intent.
 
-            String content = "(Computer Science) Fulltime study:\n" +
-                    "\n" +
-                    "(This course is also available as a part-time course)\n" +
-                    "\n" +
-                    "We will train you into becoming a software engineer. You’ll be able to work on software with a variety of purposes. You’ll become capable of analyzing, designing and implementing complex IT-systems.\n" +
-                    "\n" +
-                    "Software can be found al around us. You are the specialist in making big and complex software information which work quickly, efficiently and safely. For example, you could think of developing a functional app, but you could also think of analyzing large quantities of data form social media. When developing these systems, you will come to know various programming languages. For instance, you will be programming using python and Java/C# during your first year. Starting from your second year, you will be able to choose which language you wish to use. Besides the programming and developing of various applications you will also learn to cooperate with various people on a project.\n" +
-                    "\n" +
-                    "After completing the course, you will be widely employable within the discipline. From functions such as data engineer, software developer and software engineer you’ll also be able to grow even further.\n" +
-                    "\n" +
-                    "Are you interested in new technological developments? Are you curious? A little quirky and someone who doesn’t give up easily? Then this course is for you!";
+            String[] study = this.db.getStudyInfo(ID);
 
-            String[] contentList = new String[]{Text,content};
+            String study_name = study[2];
+            String study_information = study[3];
+
+            String[] contentList = new String[]{study_name,study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );

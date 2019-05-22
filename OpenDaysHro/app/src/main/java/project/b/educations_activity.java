@@ -18,7 +18,7 @@ import static java.security.AccessController.getContext;
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
-    String passedName;
+    String passedID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,21 +26,21 @@ public class educations_activity extends appHelper {
         setContentView(R.layout.activity_educations);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        try { passedName = getIntent().getStringExtra("NAME"); } catch (Exception e){ System.out.println(e); passedName = null; }
+        try { passedID = getIntent().getStringExtra("ID"); } catch (Exception e){ System.out.println(e); passedID = null; }
 
         layout = new LayoutHelper(this);
-        if (passedName == null) {
+        if (passedID == null) {
 
 
-            // getting a list with names of all studies. (for english use false and for dutch use true). ~Credits: Christian.
-            String[] text = layout.db.getNamesOfStudiesByInstitute("1");
+            // getting a list with id's of all studies. ~Credits: Christian.
+            String[] id_all = layout.db.getStudiesByInstitute("1");
             int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
 
 
-            layout.generate_study_program_menu(R.id.page_container, images, text);
+            layout.generate_study_program_menu(R.id.page_container, images, id_all);
         }
         else {
-            layout.generate_page_study_programs(R.drawable.blaak,passedName,R.id.page_container);
+            layout.generate_page_study_programs(R.drawable.blaak,passedID,R.id.page_container);
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
