@@ -1,0 +1,16 @@
+<svg id="Groep_38" data-name="Groep 38" xmlns="http://www.w3.org/2000/svg" width="861" height="1219" viewBox="0 0 861 1219">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #c03;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="Rechthoek_21" data-name="Rechthoek 21" class="cls-1" width="861" height="1218"/>
+  <path id="Vorm_2" data-name="Vorm 2" class="cls-2" d="M257,6327l554,104,307-58v137H257V6327Z" transform="translate(-257 -5291)"/>
+</svg>

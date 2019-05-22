@@ -7,8 +7,6 @@ import android.content.pm.ActivityInfo;
 import android.content.Intent;
 
 public class About_activity extends appHelper {
-
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a sapien in augue rutrum hendrerit aliquet quis dolor. Etiam augue sapien, euismod eu ex in, consequat fringilla nisl. Maecenas lacinia nulla non nulla dictum, a ornare lorem dignissim. Ut sit amet mollis purus, ac egestas lectus. Proin varius, sapien nec dignissim facilisis, justo tortor tempor est, a cursus est nunc tristique velit. Ut dignissim laoreet tellus at tempus. Fusce vitae suscipit eros. Proin lacinia mauris euismod purus commodo euismod. In hac habitasse platea dictumst. Cras sem turpis, suscipit sed nunc nec, feugiat facilisis eros.\n" +
@@ -24,7 +22,7 @@ public class About_activity extends appHelper {
         layout = new LayoutHelper(this);
 
 
-        layout.generate_page_about_page(R.drawable.beginning_by_ryky,"CMI",lorem,R.id.page_container);
+        layout.generate_page_about_page(R.drawable.blaak,"CMI",lorem,R.id.page_container);
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
@@ -32,7 +30,7 @@ public class About_activity extends appHelper {
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);

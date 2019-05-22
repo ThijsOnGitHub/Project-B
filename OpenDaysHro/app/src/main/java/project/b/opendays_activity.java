@@ -32,9 +32,9 @@ public class opendays_activity extends appHelper {
 
         layout = new LayoutHelper(this);
 
-        int header_image = R.drawable.beginning_by_ryky;
+        int header_image = R.drawable.blaak;
         int add_to_calendar_image = R.drawable.calendar_icon;
-        int share_image = R.drawable.ic_chat_white_24dp;
+        int share_image = R.drawable.twotone_share_24px;
 
         String Calendar_event_title = "HRO Open day";
         String Calendar_event_description = "CMI";
@@ -70,7 +70,7 @@ public class opendays_activity extends appHelper {
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_grey_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);

@@ -1,19 +1,20 @@
 package project.b;
 
-
-
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
-    DatabaseHelper myDatabase;
     LayoutHelper layout;
 
     int numOfListItems;
 
-    int[] drawables = new int[]{R.drawable.beginning_by_ryky,R.drawable.best_friends_by_ryky,R.drawable.bffs_by_synderen,R.drawable.beginning_of_love_by_ryky,R.drawable.better_day_by_ryky,R.drawable.beyond_by_auroralion};
+    int[] drawables = new int[]{R.drawable.gebouw_cmi,R.drawable.lerende_student,
+                                    R.drawable.werkende_studenten,R.drawable.wijnhaven};
 
 
 
@@ -22,11 +23,11 @@ public class MainActivity extends appHelper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         layout = new LayoutHelper(this);
 
-        myDatabase = new DatabaseHelper(this);
-        if (myDatabase.emptyDatabase() == true) myDatabase.fillDatabase();
+        if (layout.db.checkDatabase() == true) {
+            layout.db.fillDatabase();
+        }
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
@@ -45,7 +46,7 @@ public class MainActivity extends appHelper {
         Intent contact = new Intent(getBaseContext(), contact_activity.class);
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
-        int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
+        int[] images = new int[]{R.drawable.ic_home_grey_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"home","Study programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
