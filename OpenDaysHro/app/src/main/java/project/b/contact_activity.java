@@ -2,12 +2,7 @@ package project.b;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import java.net.URI;
 
 public class contact_activity extends appHelper {
     LayoutHelper layout;

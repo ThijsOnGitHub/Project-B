@@ -1,11 +1,7 @@
 package project.b;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 public class menu_activity extends appHelper {
     @Override

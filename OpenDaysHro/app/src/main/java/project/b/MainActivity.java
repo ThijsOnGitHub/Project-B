@@ -3,9 +3,6 @@ package project.b;
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
-import android.util.Log;
-
-import java.util.Locale;
 
 public class MainActivity extends appHelper {
 
