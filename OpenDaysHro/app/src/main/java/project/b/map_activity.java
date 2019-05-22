@@ -427,11 +427,6 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         setContentView(R.layout.activity_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
-
-
-
-
-        
         AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
@@ -447,6 +442,21 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
         showFloor.setOnTouchListener(this);
+
+        try{
+            String buildingString=getIntent().getExtras().getString("building").toLowerCase();
+            String buildingCode=null;
+            for (int i = 0; i < floor.buildingsList.length; i++) {
+                if(floor.buildingsList[i].contains(buildingString)){
+                    buildingCode=floor.buildingsList[i];
+                }
+            }
+            int floorInt = getIntent().getExtras().getInt("floor");
+            floor.setFloor(floorInt);
+            floor.setBuilding(buildingCode);
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
 
         /* -------------------------menu--------------------------*/
