@@ -1,63 +1,24 @@
 package project.b;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Outline;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.CalendarContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.CalendarContract;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.TimeZone;
-
-import static java.security.AccessController.getContext;
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
-
-import java.util.Calendar;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -452,13 +413,13 @@ public class appHelper extends AppCompatActivity {
                         Button.addView(button_image);
                         Button.addView(button_text);
 
-                        String this_button_text = List_with_text[i];
+                        final String this_button_id = List_with_id[i];
                         Button.isClickable();
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("NAME", this_button_text);
+                                    gotoPage.putExtra("ID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
                             }
