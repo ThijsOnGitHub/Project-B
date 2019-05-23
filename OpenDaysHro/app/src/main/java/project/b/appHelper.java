@@ -274,7 +274,7 @@ public class appHelper extends AppCompatActivity {
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Location = new TextView(this.context);
-                listItem_Location.setText(ListItem_Location); listItem_description.setGravity(Gravity.CENTER);
+                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER);
                 listItem_Location.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                 listItem_Location.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
                 listItem_Location.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +289,7 @@ public class appHelper extends AppCompatActivity {
                 });
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_description.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
 
