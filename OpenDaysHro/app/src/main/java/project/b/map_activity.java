@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -70,8 +71,10 @@ class AttributePackForMapManger {
     ImageView showFloor;
     TextView floorIndicator;
     LinearLayout floorSel,buildingSel;
+    FrameLayout mapContainer;
 
     public AttributePackForMapManger(ImageView showFloorInvoer ,
+                                     FrameLayout mapContainer,
                                      TextView floorIndicatorinvoer,
                                      Button upButton,
                                      Button downButton,
@@ -83,6 +86,7 @@ class AttributePackForMapManger {
                                      LinearLayout floorSelector,
                                      LinearLayout buildingSelector){
         showFloor=showFloorInvoer;
+        this.mapContainer=mapContainer;
         floorIndicator=floorIndicatorinvoer;
         upBut=upButton;
         downBut=downButton;
@@ -113,11 +117,13 @@ class mapManager{
     int movedSpaceX, movedSpaceY;
     LinearLayout floorSelector,buildingSelector;
     int[] floorsInBuilding;
+    FrameLayout mapContainer;
 
     //Button upBut,Button downBut,Button leftBut,Button rightBut
     public mapManager(Context c, AttributePackForMapManger attributes, String[] buildings){
         //elements
         showFloor=attributes.showFloor;
+        this.mapContainer=attributes.mapContainer;
         floorIndicator=attributes.floorIndicator;
         upButton=attributes.upBut;
         downButton=attributes.downBut;
@@ -193,9 +199,9 @@ class mapManager{
         movedSpaceX =0;
         movedSpaceY =0;
         scale= startScale;
-        showFloor.setScaleX(scale);
-        showFloor.setScaleY(scale);
-        showFloor.scrollTo(0,0);
+        mapContainer.setScaleX(scale);
+        mapContainer.setScaleY(scale);
+        mapContainer.scrollTo(0,0);
         updateVisabilatyButtons();
     }
 
@@ -385,15 +391,15 @@ class mapManager{
         movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,movedSpaceX);
         movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,movedSpaceY);
 
-        showFloor.scrollTo(movedSpaceX, movedSpaceY);
+        mapContainer.scrollTo(movedSpaceX, movedSpaceY);
         updateVisabilatyButtons();
     }
 
 
     private void zoomCheck(){
         if(scale>=startScale && scale<=maxscale) {
-            showFloor.setScaleX(scale);
-            showFloor.setScaleY(scale);
+            mapContainer.setScaleX(scale);
+            mapContainer.setScaleY(scale);
         }else if (scale<=startScale){
             scale=startScale;
         }else{
@@ -420,6 +426,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
     LayoutHelper layout;
     GestureDetector gestureDetector;
     ScaleGestureDetector scaleGestureDetector;
+    FrameLayout mapContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -427,7 +434,10 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         setContentView(R.layout.activity_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ImageView showFloor = findViewById(R.id.ImageView_showFloor);
-        AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
+        mapContainer=findViewById(R.id.mapContainer);
+        AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor,
+                mapContainer,
+                (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
                 (Button) findViewById(R.id.Button_BuildingLeft),
@@ -441,7 +451,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
-        showFloor.setOnTouchListener(this);
+        mapContainer.setOnTouchListener(this);
 
         try{
             String buildingString=getIntent().getExtras().getString("building").toLowerCase();
@@ -512,7 +522,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v.getId()==R.id.ImageView_showFloor && event.getPointerCount()==1){
+        if (v.getId()==mapContainer.getId() && event.getPointerCount()==1){
             gestureDetector.onTouchEvent(event);
             return true;
         }
