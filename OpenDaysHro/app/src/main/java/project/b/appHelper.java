@@ -280,10 +280,8 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < List_with_id.length; i++) {
                 studyname = this.db.getStudyInfo(List_with_id[i])[2];
                 studyid = this.db.getStudyInfo(List_with_id[i])[4];
-                if (!study_names.contains(studyname)) {
-                    study_ids.add(studyid);
-                    study_names.add(studyname);
-                }
+                study_ids.add(studyid);
+                study_names.add(studyname);
             }
 
 
