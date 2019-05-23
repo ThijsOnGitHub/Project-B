@@ -141,7 +141,7 @@ class mapManager{
         context=c;
         buildingsList=buildings;
         building=buildingsList[0];
-        startScale=1.5f;
+        startScale=1.0f;
         maxscale=8.0f;
 
 
@@ -382,6 +382,7 @@ class mapManager{
 
     //---------------------------------- zoom process -----------------------------------------
     public void moveSpace(int movementOnX,int movementOnY){
+        /*
         movedSpaceX +=movementOnX;
         movedSpaceY +=movementOnY;
 
@@ -390,8 +391,8 @@ class mapManager{
 
         movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,movedSpaceX);
         movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,movedSpaceY);
-
-        mapContainer.scrollTo(movedSpaceX, movedSpaceY);
+*/
+        mapContainer.scrollBy(movementOnX, movementOnY);
         updateVisabilatyButtons();
     }
 
