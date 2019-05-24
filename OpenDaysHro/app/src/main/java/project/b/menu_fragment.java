@@ -30,7 +30,7 @@ public class menu_activity extends appHelper {
 
         Intent[] myIntents = new Intent[]{swapToHome,swapToEducation,about_cmi,swapToContact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.ic_location_city_white_24dp,R.drawable.ic_map_white_24dp,R.drawable.ic_chat_white_24dp};
-        String[] text = new String[]{"home","educations","About CMI","Contact"};
+        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.page_container,images,text,myIntents);
     }

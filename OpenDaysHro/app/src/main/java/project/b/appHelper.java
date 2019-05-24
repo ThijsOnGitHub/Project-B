@@ -388,7 +388,7 @@ public class appHelper extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("ID", this_button_id);
+                                    gotoPage.putExtra("StudyID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
                             }
@@ -441,7 +441,7 @@ public class appHelper extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("ID", this_button_id);
+                                    gotoPage.putExtra("StudyID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
                             }

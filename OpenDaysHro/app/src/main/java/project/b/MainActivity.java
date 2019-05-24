@@ -44,7 +44,7 @@ public class MainActivity extends appHelper {
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_grey_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
-        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 
