@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 46;
+    private static final int HROOPENDAY_VERSION = 48;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String INSTITUTE_SHORTNAME = "shortname";
             private static final String INSTITUTE_GENERALINFORMATION_ENGLISH = "generalinformation_english";
             private static final String INSTITUTE_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
+            private static final String INSTITUTE_PHONENUMBER = "phonenumber";
     
         private static final String HROOPENDAY_STUDY = "study";
             private static final String STUDY_ID = "id";
@@ -58,7 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String LOCATION_STREET = "street";
             private static final String LOCATION_CITY = "city";
             private static final String LOCATION_ZIPCODE = "zipcode";
-            private static final String LOCATION_PHONENUMBER = "phonenumber";
             private static final String LOCATION_IMAGEDESCRIPTION = "image_description";
     
         private static final String HROOPENDAY_IMAGE = "image";
@@ -300,18 +300,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return stringListType(result);
     }
     public String[] getLocationInfo(String location_id) {
-            ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
 
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_IMAGEDESCRIPTION, true)[0]);
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_STREET, true)[0]);
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_ZIPCODE, true)[0]);
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_CITY, true)[0]);
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_PHONENUMBER, true)[0]);
-            result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_INSTITUTEFULLNAME, true)[0]);
-            result.add(location_id);
+        result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_IMAGEDESCRIPTION, true)[0]);
+        result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_STREET, true)[0]);
+        result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_ZIPCODE, true)[0]);
+        result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_CITY, true)[0]);
+        result.add(getHandler(HROOPENDAY_LOCATION, Arrays.asList(LOCATION_ID), Arrays.asList(location_id), LOCATION_INSTITUTEFULLNAME, true)[0]);
+        result.add(location_id);
 
-            return stringListType(result);
-        }
+        return stringListType(result);
+    }
 
     public String[] getImagesByLocation(String location_id, Boolean floorplan) {
         ArrayList<String> result = new ArrayList<>();
@@ -396,6 +395,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             result.add(getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(institute_id), INSTITUTE_GENERALINFORMATION_ENGLISH, true)[0]);
         }
         result.add(institute_id);
+        result.add(getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID),Arrays.asList(institute_id), INSTITUTE_PHONENUMBER, true)[0]);
 
         return stringListType(result);
     }
@@ -416,7 +416,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return result != -1; // if result == true then the values are inserted
     }
-    public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch) {
+    public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch, String phonenumber) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -424,6 +424,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(INSTITUTE_SHORTNAME, shortname);
         contentValues.put(INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
         contentValues.put(INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
+        contentValues.put(INSTITUTE_PHONENUMBER, phonenumber);
 
         long result = db.insert(HROOPENDAY_INSTITUTE, null, contentValues);
         db.close();
@@ -461,7 +462,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return result != -1; // if result == true then the values are inserted
     }
-    public Boolean createLocation(String street, String city, String institute_fullname, String zipcode, String phonenumber, String image_description) {
+    public Boolean createLocation(String street, String city, String institute_fullname, String zipcode, String image_description) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -469,7 +470,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(LOCATION_CITY, city);
         contentValues.put(LOCATION_INSTITUTEFULLNAME, institute_fullname);
         contentValues.put(LOCATION_ZIPCODE, zipcode);
-        contentValues.put(LOCATION_PHONENUMBER, phonenumber);
         contentValues.put(LOCATION_IMAGEDESCRIPTION, image_description);
 
         long result = db.insert(HROOPENDAY_LOCATION, null, contentValues);
@@ -509,7 +509,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createAppinfo("projectb.caslayoort.nl/api", "0");
 
         // Create CMI
-        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.");
+        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.", "0107944000");
 
         // CMI Studies
         createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time / Part-time", "informatica info dutch", "informatica info english", "calendar_icon");
@@ -518,9 +518,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time / Part-time", "Communicatie info dutch", "Communicatie info english", "ic_home_white_24dp");
         createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "CMD info dutch", "CMD info english", "ic_chat_white_24dp");
         // CMI locations
-        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN107");
-        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "0107944000", "3011WN103");
-        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","0107944000", "3011WN99");
+        createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "3011WN107");
+        createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "3011WN103");
+        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","3011WN99");
 
         // Floorplans
         createImage("h107", "floorplan", "3011WN107");
@@ -753,10 +753,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + HROOPENDAY_OPENDAY + "(" + OPENDAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + OPENDAY_DATE + " TEXT, " + OPENDAY_STARTTIME + " TEXT, " + OPENDAY_ENDTIME + " TEXT, " + OPENDAY_INSTITUTEFULLNAME + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + HROOPENDAY_INSTITUTE + "(" + INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + INSTITUTE_FULLNAME + " TEXT, " + INSTITUTE_SHORTNAME + " TEXT, " + INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_INSTITUTE + "(" + INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + INSTITUTE_FULLNAME + " TEXT, " + INSTITUTE_SHORTNAME + " TEXT, " + INSTITUTE_PHONENUMBER + " TEXT, " + INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_STUDY + "(" + STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STUDY_INSTITUTEFULLNAME + " TEXT, " + STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + STUDY_NAME_DUTCH + " TEXT, " + STUDY_TYPE + " TEXT, " + STUDY_ICON + " TEXT, " + STUDY_NAME_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_ACTIVITY + "(" + ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ACTIVITY_OPENDAYDATE + " TEXT, " + ACTIVITY_STUDYNAME + " TEXT, " + ACTIVITY_STARTTIME + " TEXT, " + ACTIVITY_ENDTIME + " TEXT, " + ACTIVITY_CLASSROOM + " TEXT, " + ACTIVITY_INFORMATION_DUTCH + " TEXT, " + ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + HROOPENDAY_LOCATION + "(" + LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOCATION_STREET + " TEXT, " + LOCATION_CITY + " TEXT, " + LOCATION_ZIPCODE + " TEXT, " + LOCATION_INSTITUTEFULLNAME + " TEXT, " + LOCATION_PHONENUMBER + " TEXT, " + LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_LOCATION + "(" + LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOCATION_STREET + " TEXT, " + LOCATION_CITY + " TEXT, " + LOCATION_ZIPCODE + " TEXT, " + LOCATION_INSTITUTEFULLNAME + " TEXT, " + LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_IMAGE + "(" + IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IMAGE_FILENAME + " TEXT, " + IMAGE_CONTEXT + " TEXT, " + IMAGE_DESCRIPTION + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_APPINFO + "(" + APPINFO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + APPINFO_DATAVERSION + " TEXT, " + APPINFO_APILINK + " TEXT" + ")");
     }

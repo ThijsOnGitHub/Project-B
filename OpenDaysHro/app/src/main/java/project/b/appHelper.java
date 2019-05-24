@@ -1009,7 +1009,7 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void contact_page(int image, int[] contact_images, int[] social_media_images, String institute_id){
-            String callnumber = this.db.getLocationInfo(this.db.getLocationsByInstitute(institute_id)[0])[4];
+            String callnumber = this.db.getInstituteInfo(institute_id)[4];
 
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
 
