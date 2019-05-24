@@ -28,13 +28,9 @@ public class MainActivity extends appHelper {
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
-        String[] desc = {"Thursday\n4 April 2019","Thursday\n11 April 2019", "Thursday\n18 April 2019", "Thursday\n25 April 2019"};
-        String[] loc = {"Wijnhaven 107", "Wijnhaven 107", "Wijnhaven 108", "Wijnhaven 107"};
-        String[] time = {"8:00-10:00", "9:00-18:00", "8:00-16:00", "7:00-15:00"};
-        numOfListItems = desc.length;
-
-        for (int i = 0; i < numOfListItems; i++) {
-            layout.ListItem_openday(desc[i], loc[i], time[i], R.id.page_container);
+        String[] opendays_ids = layout.db.getUpcomingOpendays();
+        for (int i = 0; i < opendays_ids.length; i++) {
+            layout.ListItem_openday(opendays_ids[i], R.id.page_container);
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);

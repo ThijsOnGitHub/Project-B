@@ -78,7 +78,17 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void ListItem_openday( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+        public void ListItem_openday(final String openday_id, int addToThisLayout) {
+
+            String[] openday = this.db.getOpendayInfo(openday_id);
+            String institute_shortname = this.db.getInstituteInfo(this.db.getInstitute_id(openday[0])[0])[1];
+            String starttime = openday[2];
+            String endtime = openday[3];
+            starttime = starttime.substring(0, starttime.length() - 3);
+            endtime = endtime.substring(0, endtime.length() -3);
+
+            String ListItem_Time = starttime + "-" + endtime;
+            String ListItem_Description = institute_shortname + "\n" + openday[1];
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
@@ -123,12 +133,11 @@ public class appHelper extends AppCompatActivity {
                 ((LinearLayout)LinearLayout_main).addView((RelativeLayout)info_layout);
 
 
-            final String[] infoToPass = {ListItem_Description, ListItem_Location, ListItem_Time};
             LinearLayout_main.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent gotoOpenDay_activity = new Intent(context, opendays_activity.class);
-                    gotoOpenDay_activity.putExtra("INFO", infoToPass);
+                    gotoOpenDay_activity.putExtra("INFO", new String[]{openday_id, ""});
                     gotoOpenDay_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(gotoOpenDay_activity);
                 }
@@ -145,11 +154,15 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void workshop_menu( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+        public void workshop_menu(final String study_id, final String openday_id , int addToThisLayout) {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
             int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+
+            String ListItem_Description = this.db.getStudyInfo(study_id)[2];
+            String[] all_workshops = this.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
+            String workshops = "Workshops: " + String.valueOf(all_workshops.length);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
             LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -174,7 +187,7 @@ public class appHelper extends AppCompatActivity {
             listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-            listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+            listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
             listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
@@ -190,12 +203,11 @@ public class appHelper extends AppCompatActivity {
             ((LinearLayout)LinearLayout_main).addView((RelativeLayout)info_layout);
 
 
-            final String[] infoToPass = {ListItem_Description, ListItem_Location, ListItem_Time, "page1"};
             LinearLayout_main.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent gotoOpenDay_activity = new Intent(context, opendays_activity.class);
-                    gotoOpenDay_activity.putExtra("INFO", infoToPass);
+                    gotoOpenDay_activity.putExtra("INFO", new String[]{openday_id, study_id});
                     gotoOpenDay_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(gotoOpenDay_activity);
                 }

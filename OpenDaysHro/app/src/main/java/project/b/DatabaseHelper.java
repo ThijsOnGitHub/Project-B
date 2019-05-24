@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 48;
+    private static final int HROOPENDAY_VERSION = 51;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -191,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             for (int i = 0; i < IdByDate.length; i++) {
                 activity = getActivityInfo(IdByDate[i]);
                 if(activity.length > 0) {
-                    StudyNameByDate.add(activity[0]);
+                    StudyNameByDate.add(activity[1]);
                 }
             }
         }
@@ -237,6 +237,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
+        return stringListType(result);
+    }
+    public String[] getActivitiesByStudyAndOpenday(String openday_id, String study_id) {
+        ArrayList<String> result = new ArrayList<>();
+        String[] activities = getActivitiesByOpenday(openday_id);
+        String[] studyid = new String[]{};
+        String result_add = "";
+
+        for (int i = 0; i < activities.length; i++) {
+            String[] activity = getActivityInfo(activities[i]);
+
+            studyid = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(activity[1]), STUDY_ID, true);
+            if (studyid.length > 0) {
+                if (studyid[0].equals(study_id)) {
+                    result.add(activities[i]);
+                }
+            } else {
+                study_id = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(activity[1]), STUDY_ID, true)[0];
+                if (studyid.length > 0) {
+                    if (studyid[0].equals(study_id)) {
+                        result.add(activities[i]);
+                    }
+                }
+            }
+
+        }
+
+        return stringListType(result);
+    }
+    public String[] getStudiesWithActivitiesByOpenday(String openday_id) {
+        ArrayList<String> result = new ArrayList<>();
+        String[] activities = getActivitiesByOpenday(openday_id);
+        String[] activity = new String[]{};
+        String[] studyid = new String[]{};
+        String result_add = "";
+        for (int i = 0; i < activities.length; i++) {
+            activity = getActivityInfo(activities[i]);
+
+            studyid = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_DUTCH), Arrays.asList(activity[1]), STUDY_ID, true);
+            if (studyid.length > 0) {
+                result_add = studyid[0];
+                if (!result.contains(result_add)) {
+                    result.add(result_add);
+                }
+            } else {
+                result_add = getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_NAME_ENGLISH), Arrays.asList(activity[1]), STUDY_ID, true)[0];
+                if (!result.contains(result_add)){
+                    result.add(result_add);
+                }
+            }
+        }
         return stringListType(result);
     }
     public String[] getActivityInfo(String activity_id) {
@@ -399,6 +450,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return stringListType(result);
     }
+    public String[] getInstitute_id(String institute_fullname) {
+        return getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
+    }
 
     //////////////////////////////////////////////////////////////////////////
     // INSERT
@@ -535,8 +589,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createOpenday("15-08-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
 
         // Create activities for CMI
-        createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "WD.02.002", "Python stuff", "Python dingen");
-        createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314-C120", "General Information", "Algemene informatie");
+        createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "H.04.318", "Python stuff", "Python dingen");
+        createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314", "General Information", "Algemene informatie");
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
     }
     public Boolean checkDatabase() {
@@ -575,9 +629,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     private String[] getStudy_id(String institute_fullname) {
         return getHandler(HROOPENDAY_STUDY, Arrays.asList(STUDY_INSTITUTEFULLNAME), Arrays.asList(institute_fullname), STUDY_ID, true);
-    }
-    private String[] getInstitute_id(String institute_fullname) {
-        return getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
     }
     private String[] getActivity_id(String openday_date) {
         return getHandler(HROOPENDAY_ACTIVITY, Arrays.asList(ACTIVITY_OPENDAYDATE), Arrays.asList(openday_date), ACTIVITY_ID, true);
@@ -652,7 +703,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     link = getAppinfo(appinfo_id[i])[1];
                 }
             }
-
             link += "/version";
 
             if (online_version == local_version) {

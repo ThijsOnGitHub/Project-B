@@ -3,6 +3,7 @@ package project.b;
 import android.os.Bundle;
 import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.util.EventLogTags;
 
 public class opendays_activity extends appHelper {
 
@@ -10,9 +11,7 @@ public class opendays_activity extends appHelper {
 
     String[] passedInfo;
 
-    String Description;
-    String Location;
-    String Time;
+    String openday_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,26 +40,34 @@ public class opendays_activity extends appHelper {
                 Calendar_event_description, Calendar_event_location, Calendar_event_year, Calendar_event_month, Calendar_event_day,
                 Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min);
 
-        String page;
+        String study_id;
 
-        try { passedInfo = getIntent().getStringArrayExtra("INFO"); page = passedInfo[3]; }
-        catch (Exception e) { page = "page0"; }
+        try { passedInfo = getIntent().getStringArrayExtra("INFO"); study_id = passedInfo[1]; }
+        catch (Exception e) { study_id = ""; }
 
         passedInfo = getIntent().getStringArrayExtra("INFO");
-        Description = passedInfo[0];
-        Location = passedInfo[1];
-        Time = passedInfo[2];
+        openday_id = passedInfo[0];
 
-        if ( page == "page0") {
-            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
-            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
-            layout.workshop_menu(Description, "H2.002", Time, R.id.page_container);
+        String[] openday = layout.db.getOpendayInfo(openday_id);
+
+        if ( study_id.equals("")) {
+            // Studies
+            String[] studies = layout.db.getStudiesWithActivitiesByOpenday(openday_id);
+
+            for (int i = 0; i < studies.length; i++) {
+                layout.workshop_menu(studies[i], openday_id, R.id.page_container);
+            }
         }
         else{
+//            get workshops from study id + openday id
+//            layout.workshop("Python workshop", "H2.002", "06:00-08:00", R.id.page_container);
+            String[] activities = layout.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
 
-            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "H2.002", Time, R.id.page_container);
+            for (int i = 0; i < activities.length; i++) {
+                String[] activity = layout.db.getActivityInfo(activities[i]);
+
+                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), R.id.page_container);
+            }
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
