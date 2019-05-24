@@ -408,7 +408,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
 
 
-        
+
         AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
@@ -419,6 +419,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                 (Button)findViewById(R.id.button_ResetZoom),
                 (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
                 (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
+        layout = new LayoutHelper(this);
         String[] buildings=  layout.db.getFloorplansByInstitute("1");
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
@@ -436,7 +437,6 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
         String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
 
-        layout = new LayoutHelper(this);
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }
 
