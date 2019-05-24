@@ -1008,7 +1008,9 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void contact_page(int image, int[] contact_images, int[] social_media_images){
+        public void contact_page(int image, int[] contact_images, int[] social_media_images, String institute_id){
+            String callnumber = this.db.getLocationInfo(this.db.getLocationsByInstitute(institute_id)[0])[4];
+
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
@@ -1074,7 +1076,7 @@ public class appHelper extends AppCompatActivity {
                     button3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:010794 4400")));
+                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + callnumber)));
                         }
                     });
                 } else if (title[i] == "Social Media") {

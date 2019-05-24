@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 public class contact_activity extends appHelper {
     LayoutHelper layout;
+    String passedInstituteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,6 +15,18 @@ public class contact_activity extends appHelper {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         layout = new LayoutHelper(this);
+
+        try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null;}
+
+        if (passedInstituteID == null) {
+            String[] institutes = layout.db.getInstitutes();
+            for (int i = 0; i < institutes.length; i++) {
+                String[] institute_info = layout.db.getInstituteInfo(institutes[i]);
+                if (institute_info[1].equals("CMI")) {
+                    passedInstituteID = institute_info[3];
+                }
+            }
+        }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
@@ -28,6 +41,6 @@ public class contact_activity extends appHelper {
         int[] social_images = new int[]{ R.drawable.facebook_logo, R.drawable.instagram, R.drawable.twitter };
 
         layout.generate_menu(R.id.menu_bar, images, text, myIntents);
-        layout.contact_page(R.drawable.blaak, contact_images, social_images);
+        layout.contact_page(R.drawable.blaak, contact_images, social_images, passedInstituteID);
     }
 }
