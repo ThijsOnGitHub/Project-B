@@ -23,10 +23,7 @@ public class educations_activity extends appHelper {
 
             // getting a list with id's of all studies. ~Credits: Christian.
             String[] id_all = layout.db.getStudiesByInstitute("1");
-            int[] images = new int[]{R.drawable.calendar_icon, R.drawable.ic_location_city_white_24dp, R.drawable.ic_map_white_24dp, R.drawable.ic_home_white_24dp, R.drawable.ic_chat_white_24dp};
-
-
-            layout.generate_study_program_menu(R.id.page_container, images, id_all);
+            layout.generate_study_program_menu(R.id.page_container, id_all);
         }
         else {
             layout.generate_page_study_programs(R.drawable.blaak,passedID,R.id.page_container);

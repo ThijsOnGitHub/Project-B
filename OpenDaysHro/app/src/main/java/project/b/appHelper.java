@@ -2,6 +2,7 @@ package project.b;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
@@ -262,7 +263,7 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_study_program_menu(int addToThisLayout, int[] List_with_images, String[] List_with_id){
+        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -272,21 +273,44 @@ public class appHelper extends AppCompatActivity {
 
             int max_ammount_of_buttons_in_a_row = 2;
 
+
+            // Get studies <--
             ArrayList<String> study_names = new ArrayList<>();
             ArrayList<String> study_ids = new ArrayList<>();
+            ArrayList<String> study_icons = new ArrayList<>();
 
             String studyname = "";
             String studyid = "";
+            String icon = "";
             for (int i = 0; i < List_with_id.length; i++) {
                 studyname = this.db.getStudyInfo(List_with_id[i])[2];
                 studyid = this.db.getStudyInfo(List_with_id[i])[4];
+                icon = this.db.getStudyInfo(List_with_id[i])[5];
                 study_ids.add(studyid);
                 study_names.add(studyname);
+                study_icons.add(icon);
             }
 
 
             String[] List_with_text = study_names.toArray(new String[study_names.size()]);
             List_with_id = study_ids.toArray(new String[study_ids.size()]);
+            // Get studies -->
+
+            // Get icons -->
+            // https://stackoverflow.com/questions/16369814/how-to-access-the-drawable-resources-by-name-in-android
+            ArrayList<Integer> icons = new ArrayList<>();
+            Resources resources = this.context.getResources();
+
+            for (int i = 0; i < study_icons.size(); i++) {
+                icon = study_icons.get(i);
+                icons.add(resources.getIdentifier(icon, "drawable", this.context.getPackageName()));
+            }
+
+            Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
+
+
+
+            // Get icons <--
 
             calc calculator = (x, y, z) -> (int) ( ( (float) x / (float) y) * (float) z);
 
