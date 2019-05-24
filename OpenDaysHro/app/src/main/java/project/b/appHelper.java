@@ -772,7 +772,11 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_about_page(int Image, String Title, String Text, int addViewTo){
+        public void generate_page_about_page(int Image, final String institute_id, int addViewTo){
+            String[] institute = this.db.getInstituteInfo(institute_id);
+
+            String Title = institute[1];
+            String Text = institute[2];
 
             String[] contentList = new String[]{Text};
 
@@ -834,6 +838,7 @@ public class appHelper extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent map = new Intent(context,map_activity.class);
+                        map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
                 });

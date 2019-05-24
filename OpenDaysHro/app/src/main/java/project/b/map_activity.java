@@ -397,6 +397,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
     LayoutHelper layout;
     GestureDetector gestureDetector;
     ScaleGestureDetector scaleGestureDetector;
+    String passedInstituteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -419,8 +420,23 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                 (Button)findViewById(R.id.button_ResetZoom),
                 (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
                 (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
+
         layout = new LayoutHelper(this);
-        String[] buildings=  layout.db.getFloorplansByInstitute("1");
+
+        try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null;}
+
+        if (passedInstituteID == null) {
+            String[] institutes = layout.db.getInstitutes();
+            for (int i = 0; i < institutes.length; i++) {
+                String[] institute_info = layout.db.getInstituteInfo(institutes[i]);
+                if (institute_info[1].equals("CMI")) {
+                    passedInstituteID = institute_info[3];
+                }
+            }
+        }
+
+        String[] buildings=  layout.db.getFloorplansByInstitute(passedInstituteID);
+
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
