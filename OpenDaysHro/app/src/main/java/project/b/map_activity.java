@@ -85,7 +85,6 @@ class Room{
 
 class AttributePackForMapManger {
     public Button upBut,downBut,leftBut,rightBut,zoomInBut,zoomOutBut,resetZoomBut;
-    TextView floorIndicator;
     ImageView showFloor,showRoom;
     LinearLayout floorSel,buildingSel;
     FrameLayout mapContainer;
@@ -93,7 +92,6 @@ class AttributePackForMapManger {
     public AttributePackForMapManger(ImageView showFloorInvoer ,
                                      ImageView showRoom,
                                      FrameLayout mapContainer,
-                                     TextView floorIndicatorinvoer,
                                      Button upButton,
                                      Button downButton,
                                      Button leftButton,
@@ -106,7 +104,6 @@ class AttributePackForMapManger {
         showFloor=showFloorInvoer;
         this.showRoom=showRoom;
         this.mapContainer=mapContainer;
-        floorIndicator=floorIndicatorinvoer;
         upBut=upButton;
         downBut=downButton;
         leftBut=leftButton;
@@ -130,7 +127,6 @@ class mapManager{
 
 
     public Button upButton,downButton,leftButton,rightButton,zoomInButton,zoomOutButton,resetZoomButton;
-    TextView floorIndicator;
     ImageView showFloor,showRoom;
     float scale,startScale,maxscale;
     int movedSpaceX, movedSpaceY;
@@ -145,7 +141,6 @@ class mapManager{
         showFloor=attributes.showFloor;
         this.showRoom=attributes.showRoom;
         this.mapContainer=attributes.mapContainer;
-        floorIndicator=attributes.floorIndicator;
         upButton=attributes.upBut;
         downButton=attributes.downBut;
         leftButton=attributes.leftBut;
@@ -217,7 +212,6 @@ class mapManager{
         showFloor.setImageResource(0);
         int id=getPic.getID(createName());
         showFloor.setImageResource(id);
-        floorIndicator.setText(createName()+"\n");
         movedSpaceX =0;
         movedSpaceY =0;
         scale=startScale;
@@ -455,17 +449,21 @@ class mapManager{
 
     //---------------------------------- zoom process -----------------------------------------
     public void moveSpace(int movementOnX,int movementOnY){
-        /*
-        movedSpaceX +=movementOnX;
-        movedSpaceY +=movementOnY;
+        mapContainer.scrollBy(movementOnX,movementOnY);
 
-        int extraSpaceX=Math.round((((scale-0.5f)*showFloor.getMeasuredWidth())-showFloor.getMeasuredWidth())/2);
-        int extraSpaceY=Math.round((((scale-0.5f)*showFloor.getMeasuredHeight())-showFloor.getMeasuredHeight())/2);
+        float width=mapContainer.getMeasuredWidth();
+        float height=mapContainer.getMeasuredHeight();
 
-        movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,movedSpaceX);
-        movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,movedSpaceY);
-*/
-        mapContainer.scrollBy(movementOnX, movementOnY);
+        int extraSpaceX=Math.round((((scale)*width)-width)/2);
+        int extraSpaceY=Math.round((((scale)*height)-height)/2);
+
+        int scrollX=mapContainer.getScrollX();
+        int scrollY=mapContainer.getScrollY();
+
+        movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,scrollX);
+        movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,scrollY);
+
+        mapContainer.scrollTo(movedSpaceX, movedSpaceY);
         updateVisabilatyButtons();
     }
 
@@ -514,7 +512,6 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor,
                 showRoom,
                 mapContainer,
-                (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
                 (Button) findViewById(R.id.Button_BuildingLeft),
