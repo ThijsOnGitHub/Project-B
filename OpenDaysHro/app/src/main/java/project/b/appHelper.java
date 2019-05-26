@@ -284,6 +284,7 @@ public class appHelper extends AppCompatActivity {
                         String[] locationList= ListItem_Location.split("\\.");
                         openMap.putExtra("building",locationList[0].toLowerCase());
                         openMap.putExtra("floor",Integer.parseInt(locationList[1]));
+                        openMap.putExtra("rawString",ListItem_Location);
                         startActivity(openMap);
                     }
                 });

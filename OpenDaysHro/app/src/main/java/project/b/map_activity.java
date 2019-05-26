@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -65,15 +66,32 @@ class DrawableManager{
     }
 }
 
+class Room{
+    public String roomNumber;
+    public int X,Y,width,height;
+    public float photoshopWidth,photoshopHeight;
+
+
+    public Room(String roomNumber,int X,int Y,int width,int height,float photoshopWidth,float photoshopHeight){
+        this.roomNumber=roomNumber.toLowerCase();
+        this.X=X;
+        this.Y=Y;
+        this.width=width;
+        this.height=height;
+        this.photoshopWidth=photoshopWidth;
+        this.photoshopHeight=photoshopHeight;
+    }
+}
 
 class AttributePackForMapManger {
     public Button upBut,downBut,leftBut,rightBut,zoomInBut,zoomOutBut,resetZoomBut;
-    ImageView showFloor;
     TextView floorIndicator;
+    ImageView showFloor,showRoom;
     LinearLayout floorSel,buildingSel;
     FrameLayout mapContainer;
 
     public AttributePackForMapManger(ImageView showFloorInvoer ,
+                                     ImageView showRoom,
                                      FrameLayout mapContainer,
                                      TextView floorIndicatorinvoer,
                                      Button upButton,
@@ -86,6 +104,7 @@ class AttributePackForMapManger {
                                      LinearLayout floorSelector,
                                      LinearLayout buildingSelector){
         showFloor=showFloorInvoer;
+        this.showRoom=showRoom;
         this.mapContainer=mapContainer;
         floorIndicator=floorIndicatorinvoer;
         upBut=upButton;
@@ -111,18 +130,20 @@ class mapManager{
 
 
     public Button upButton,downButton,leftButton,rightButton,zoomInButton,zoomOutButton,resetZoomButton;
-    ImageView showFloor;
     TextView floorIndicator;
+    ImageView showFloor,showRoom;
     float scale,startScale,maxscale;
     int movedSpaceX, movedSpaceY;
     LinearLayout floorSelector,buildingSelector;
     int[] floorsInBuilding;
     FrameLayout mapContainer;
+    Room[] rooms;
 
     //Button upBut,Button downBut,Button leftBut,Button rightBut
     public mapManager(Context c, AttributePackForMapManger attributes, String[] buildings){
         //elements
         showFloor=attributes.showFloor;
+        this.showRoom=attributes.showRoom;
         this.mapContainer=attributes.mapContainer;
         floorIndicator=attributes.floorIndicator;
         upButton=attributes.upBut;
@@ -137,6 +158,7 @@ class mapManager{
 
 
         //vars
+        rooms=new Room[]{new Room("h.2.204",1200,450,230,380,1469,1117),new Room("h.2.111",499,260,177,125,1469,1117)};
         getPic = new DrawableManager(c);
         context=c;
         buildingsList=buildings;
@@ -198,7 +220,11 @@ class mapManager{
         floorIndicator.setText(createName()+"\n");
         movedSpaceX =0;
         movedSpaceY =0;
-        scale= startScale;
+        scale=startScale;
+
+        //temporary
+        showRoom.setVisibility(View.GONE);
+
         mapContainer.setScaleX(scale);
         mapContainer.setScaleY(scale);
         mapContainer.scrollTo(0,0);
@@ -279,6 +305,53 @@ class mapManager{
 
 
                 buildingSelector.addView(item);
+            }
+        }
+    }
+
+    private void drawRoom(Room room){
+        //https://stackoverflow.com/questions/12463155/get-the-displayed-size-of-an-image-inside-an-imageview
+
+
+        //https://stackoverflow.com/questions/40691174/how-can-i-get-wrap-content-or-match-parent-layout-width-and-height-in-android
+        showFloor.post(new Runnable(){
+            public void run(){
+                showRoom.setVisibility(View.VISIBLE);
+                float actualHeight, actualWidth;
+                float imageViewHeight = showFloor.getMeasuredHeight(), imageViewWidth = showFloor.getMeasuredWidth();
+
+                float bitmapHeight = showFloor.getDrawable().getIntrinsicHeight(), bitmapWidth = showFloor.getDrawable().getIntrinsicWidth();
+
+                if (imageViewHeight * bitmapWidth <= imageViewWidth * bitmapHeight) {
+                    actualWidth = bitmapWidth * imageViewHeight / bitmapHeight;
+                    actualHeight = imageViewHeight;
+                } else {
+                    actualHeight = bitmapHeight * imageViewWidth / bitmapWidth;
+                    actualWidth = imageViewWidth;
+                }
+
+                float photoshopHeight=room.photoshopHeight;
+                float photoshopWidht=room.photoshopWidth;
+
+                float newX= (room.X*actualWidth)/photoshopWidht;
+                float newY= (room.Y*actualHeight)/photoshopHeight;
+
+                float emptyWidth=(imageViewWidth-actualWidth)/2;
+                float emptyHeight=(imageViewHeight-actualHeight)/2;
+
+                FrameLayout.LayoutParams  newLayoutParams=new FrameLayout.LayoutParams((int)((room.width*actualWidth)/photoshopWidht),(int)((room.height*actualHeight)/photoshopHeight));
+                newLayoutParams.setMargins((int)(newX+emptyWidth),(int)(newY+emptyHeight),0,0);
+                showRoom.setLayoutParams(newLayoutParams);
+            }
+        });
+
+
+}
+
+    public void colorRoom(String roomNumber){
+        for (int i = 0; i <rooms.length; i++) {
+            if (rooms[i].roomNumber.equals(roomNumber)){
+                drawRoom(rooms[i]);
             }
         }
     }
@@ -428,15 +501,18 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
     GestureDetector gestureDetector;
     ScaleGestureDetector scaleGestureDetector;
     FrameLayout mapContainer;
+    ImageView showFloor,showRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ImageView showFloor = findViewById(R.id.ImageView_showFloor);
+        showFloor = findViewById(R.id.ImageView_showFloor);
+        showRoom =findViewById(R.id.ImageView_showroom);
         mapContainer=findViewById(R.id.mapContainer);
         AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor,
+                showRoom,
                 mapContainer,
                 (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
@@ -462,6 +538,8 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                     buildingCode=floor.buildingsList[i];
                 }
             }
+            String rawString=getIntent().getExtras().getString("rawString").toLowerCase();
+            floor.colorRoom(rawString);
             int floorInt = getIntent().getExtras().getInt("floor");
             floor.setFloor(floorInt);
             floor.setBuilding(buildingCode);

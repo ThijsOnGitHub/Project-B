@@ -36,29 +36,33 @@
             android:layout_weight="6"
             tools:ignore="Suspicious0dp">
 
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rotation="90">
+
+                <ImageView
+                    android:id="@+id/ImageView_showroom"
+                    android:layout_width="225dp"
+                    android:layout_height="494dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/highlight" />
+
+                <ImageView
+                    android:id="@+id/ImageView_showFloor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:scrollbars="horizontal|vertical" />
+
+            </FrameLayout>
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".Map">
-
-                <ImageView
-                    android:id="@+id/ImageView_showFloor"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="#00FFFFFF"
-                    android:contentDescription="TODO"
-                    android:cropToPadding="false"
-                    android:rotation="90"
-                    android:scaleType="centerInside"
-                    android:scaleX="1.4"
-                    android:scaleY="1.4"
-                    android:scrollbars="horizontal|vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
 
                 <Button
                     android:id="@+id/Button_FloorUp"
