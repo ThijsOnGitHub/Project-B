@@ -159,7 +159,7 @@ class mapManager{
         context=c;
         buildingsList=buildings;
         building=buildingsList[0];
-        startScale=1.0f;
+        startScale=1.5f;
         maxscale=8.0f;
 
 
@@ -455,8 +455,8 @@ class mapManager{
         float width=mapContainer.getMeasuredWidth();
         float height=mapContainer.getMeasuredHeight();
 
-        int extraSpaceX=Math.round((((scale)*width)-width)/2);
-        int extraSpaceY=Math.round((((scale)*height)-height)/2);
+        int extraSpaceX=Math.round((((scale)*width)-(width*startScale))/2);
+        int extraSpaceY=Math.round((((scale)*height)-(height*startScale))/2);
 
         int scrollX=mapContainer.getScrollX();
         int scrollY=mapContainer.getScrollY();

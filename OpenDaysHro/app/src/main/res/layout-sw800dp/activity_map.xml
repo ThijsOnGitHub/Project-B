@@ -40,7 +40,9 @@
                 android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:rotation="90">
+                android:rotation="90"
+                android:scaleX="1.5"
+                android:scaleY="1.5">
 
                 <ImageView
                     android:id="@+id/ImageView_showroom"
