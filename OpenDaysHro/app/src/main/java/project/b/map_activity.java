@@ -158,7 +158,8 @@ class mapManager{
 
 
         //vars
-        rooms=new Room[]{new Room("h.2.204",1200,450,230,380,1469,1117),new Room("h.2.111",499,260,177,125,1469,1117)};
+        rooms=new Room[]{new Room("h.2.204",1200,450,230,380,1469,1117),
+                new Room("h.2.111",499,260,177,125,1469,1117)};
         getPic = new DrawableManager(c);
         context=c;
         buildingsList=buildings;
@@ -383,11 +384,11 @@ class mapManager{
 
 
     public String createName(){
-        return building+floor+"e";
+        return (building+floor+"e").replace("-","_");
     }
 
     public String createName(int floor,String building){
-        return building+floor+"e";
+        return (building+floor+"e").replace("-","_");
     }
 
     // ------------------------------- check existence ---------------------------------
