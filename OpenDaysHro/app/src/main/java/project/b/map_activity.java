@@ -456,17 +456,21 @@ class mapManager{
 
     //---------------------------------- zoom process -----------------------------------------
     public void moveSpace(int movementOnX,int movementOnY){
-        /*
-        movedSpaceX +=movementOnX;
-        movedSpaceY +=movementOnY;
+        mapContainer.scrollBy(movementOnX,movementOnY);
 
-        int extraSpaceX=Math.round((((scale-0.5f)*showFloor.getMeasuredWidth())-showFloor.getMeasuredWidth())/2);
-        int extraSpaceY=Math.round((((scale-0.5f)*showFloor.getMeasuredHeight())-showFloor.getMeasuredHeight())/2);
+        float width=mapContainer.getMeasuredWidth();
+        float height=mapContainer.getMeasuredHeight();
 
-        movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,movedSpaceX);
-        movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,movedSpaceY);
-*/
-        mapContainer.scrollBy(movementOnX, movementOnY);
+        int extraSpaceX=Math.round((((scale)*width)-width)/2);
+        int extraSpaceY=Math.round((((scale)*height)-height)/2);
+
+        int scrollX=mapContainer.getScrollX();
+        int scrollY=mapContainer.getScrollY();
+
+        movedSpaceX=stayBetweenIncl(extraSpaceX*-1,extraSpaceX,scrollX);
+        movedSpaceY=stayBetweenIncl(extraSpaceY*-1,extraSpaceY,scrollY);
+
+        mapContainer.scrollTo(movedSpaceX, movedSpaceY);
         updateVisabilatyButtons();
     }
 
