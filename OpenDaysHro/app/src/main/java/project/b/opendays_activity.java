@@ -68,9 +68,9 @@ public class opendays_activity extends appHelper {
         }
         else{
 
-            layout.workshop("General Information\n" + Description, "H.2.002", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "WN.5.002", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "H.2.002", Time, R.id.page_container);
+            layout.workshop("General Information\n" + Description, "H.2.111", Time, R.id.page_container);
+            layout.workshop("General Information\n" + Description, "WN.5.023", Time, R.id.page_container);
+            layout.workshop("General Information\n" + Description, "H.2.204", Time, R.id.page_container);
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
