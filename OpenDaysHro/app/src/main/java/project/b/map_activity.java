@@ -283,16 +283,10 @@ class mapManager{
                     String numberBuildingString = buildingStr.substring(0, indexOfSplit);
                     String characterBuildingString = buildingStr.substring(indexOfSplit);
 
-
-                    TextView characterBuilding = new TextView(context);
-                        characterBuilding.setText(characterBuildingString);
-                        characterBuilding.setGravity(Gravity.CENTER);
-                        characterBuilding.setTextColor(Color.parseColor("#000000"));
-                        characterBuilding.setTextSize(19.f);
-                        item.addView(characterBuilding);
-
                     TextView numberBuilding = new TextView(context);
-                        numberBuilding.setText(numberBuildingString);
+                        numberBuilding.setTextSize(21.f);
+                        numberBuilding.setPadding(0,5,0,5);
+                        numberBuilding.setText(buildingStr);
                         numberBuilding.setGravity(Gravity.CENTER);
                         numberBuilding.setTextColor(Color.parseColor("#000000"));
                         item.addView(numberBuilding);
@@ -378,11 +372,11 @@ class mapManager{
 
 
     public String createName(){
-        return (building+floor+"e").replace("-","_");
+        return (building+floor).replace("-","_");
     }
 
     public String createName(int floor,String building){
-        return (building+floor+"e").replace("-","_");
+        return (building+floor).replace("-","_");
     }
 
     // ------------------------------- check existence ---------------------------------
@@ -522,7 +516,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                 (Button)findViewById(R.id.button_ResetZoom),
                 (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
                 (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
-        String[] buildings=  new String[]{"h107","wd103","wn99"};
+        String[] buildings=  new String[]{"h","wd","wn"};
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
@@ -530,17 +524,11 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
         try{
             String buildingString=getIntent().getExtras().getString("building").toLowerCase();
-            String buildingCode=null;
-            for (int i = 0; i < floor.buildingsList.length; i++) {
-                if(floor.buildingsList[i].contains(buildingString)){
-                    buildingCode=floor.buildingsList[i];
-                }
-            }
             String rawString=getIntent().getExtras().getString("rawString").toLowerCase();
             floor.colorRoom(rawString);
             int floorInt = getIntent().getExtras().getInt("floor");
             floor.setFloor(floorInt);
-            floor.setBuilding(buildingCode);
+            floor.setBuilding(buildingString);
         }catch (Exception e){
             System.out.println(e);
         }
