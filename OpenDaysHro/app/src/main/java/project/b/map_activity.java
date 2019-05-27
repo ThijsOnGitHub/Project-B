@@ -134,6 +134,7 @@ class mapManager{
     int[] floorsInBuilding;
     FrameLayout mapContainer;
     Room[] rooms;
+    Room lastSelectRoom;
 
     //Button upBut,Button downBut,Button leftBut,Button rightBut
     public mapManager(Context c, AttributePackForMapManger attributes, String[] buildings){
@@ -162,6 +163,7 @@ class mapManager{
         building=buildingsList[0];
         startScale=1.5f;
         maxscale=8.0f;
+
 
 
 
@@ -208,11 +210,13 @@ class mapManager{
     }
 
 
+
     public void updateImage(){
         updateFloorSecector();
         updateBuildingSelector();
         showFloor.setImageResource(0);
-        int id=getPic.getID(createName());
+        String name=createName();
+        int id=getPic.getID(name);
         showFloor.setImageResource(id);
         movedSpaceX =0;
         movedSpaceY =0;
@@ -220,7 +224,12 @@ class mapManager{
 
         //temporary
         showRoom.setVisibility(View.GONE);
-
+        if (lastSelectRoom!=null) {
+            String[] roomSplit = lastSelectRoom.roomNumber.split("\\.");
+            if (name.equals(roomSplit[0]+roomSplit[1])){
+                drawRoom(lastSelectRoom);
+            }
+        }
         mapContainer.setScaleX(scale);
         mapContainer.setScaleY(scale);
         mapContainer.scrollTo(0,0);
@@ -273,7 +282,7 @@ class mapManager{
                             setBuilding(buildingStr);
                         }
                     });
-                    if (building == buildingStr) {
+                    if (building.equals(buildingStr)) {
                         item.setBackgroundColor(context.getResources().getColor(R.color.dark_grey));
                     } else {
                         item.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
@@ -301,8 +310,7 @@ class mapManager{
 
     private void drawRoom(Room room){
         //https://stackoverflow.com/questions/12463155/get-the-displayed-size-of-an-image-inside-an-imageview
-
-
+        lastSelectRoom=room;
         //https://stackoverflow.com/questions/40691174/how-can-i-get-wrap-content-or-match-parent-layout-width-and-height-in-android
         showFloor.post(new Runnable(){
             public void run(){
@@ -332,6 +340,7 @@ class mapManager{
                 FrameLayout.LayoutParams  newLayoutParams=new FrameLayout.LayoutParams((int)((room.width*actualWidth)/photoshopWidht),(int)((room.height*actualHeight)/photoshopHeight));
                 newLayoutParams.setMargins((int)(newX+emptyWidth),(int)(newY+emptyHeight),0,0);
                 showRoom.setLayoutParams(newLayoutParams);
+                
             }
         });
 
