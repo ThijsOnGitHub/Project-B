@@ -464,7 +464,7 @@ class mapManager{
     }
 
 
-    private void zoomCheck(){
+    private void scaleCheck(){
         if(scale>=startScale && scale<=maxscale) {
             mapContainer.setScaleX(scale);
             mapContainer.setScaleY(scale);
@@ -479,12 +479,12 @@ class mapManager{
 
     public void scaleAdd(float amount){
         scale+=amount;
-        zoomCheck();
+        scaleCheck();
     }
 
     public void scaleTimes(float amount){
         scale*=amount;
-        zoomCheck();
+        scaleCheck();
     }
 }
 
