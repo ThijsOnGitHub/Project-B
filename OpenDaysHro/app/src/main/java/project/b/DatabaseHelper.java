@@ -157,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(location_id.length > 0) {
             location = getLocationInfo(location_id[0]);
             if(location.length > 0) {
-                zipcode = location[2];
+                zipcode = location[2] + " " + location[3];
             }
         }
 

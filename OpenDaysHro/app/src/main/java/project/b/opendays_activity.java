@@ -12,6 +12,7 @@ public class opendays_activity extends appHelper {
     String[] passedInfo;
 
     String openday_id;
+    String study_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,28 +26,33 @@ public class opendays_activity extends appHelper {
         int add_to_calendar_image = R.drawable.calendar_icon;
         int share_image = R.drawable.twotone_share_24px;
 
+
+        try { passedInfo = getIntent().getStringArrayExtra("INFO"); study_id = passedInfo[1]; }
+        catch (Exception e) { study_id = ""; }
+        passedInfo = getIntent().getStringArrayExtra("INFO");
+        openday_id = passedInfo[0];
+
+        String[] calendar = layout.db.getCalenderInfo(openday_id);
+
         String Calendar_event_title = "HRO Open day";
-        String Calendar_event_description = "CMI";
-        String Calendar_event_location = "3011WN Rotterdam";
-        int Calendar_event_year = 2019;
-        int Calendar_event_month = 5;
-        int Calendar_event_day = 5;
-        int Calendar_event_START_hour = 8;
-        int Calendar_event_START_min = 0;
-        int Calendar_event_END_hour = 18;
-        int Calendar_event_END_min = 0;
+        String Calendar_event_description = calendar[0];
+        String Calendar_event_location = calendar[1];
+
+        String[] starttime = calendar[2].split(":");
+        String[] endtime = calendar[3].split(":");
+        String[] date = calendar[4].split("-");
+        
+        int Calendar_event_year = Integer.parseInt(date[2]);
+        int Calendar_event_month = Integer.parseInt(date[1]);
+        int Calendar_event_day = Integer.parseInt(date[0]);
+        int Calendar_event_START_hour = Integer.parseInt(starttime[0]);
+        int Calendar_event_START_min = Integer.parseInt(starttime[1]);
+        int Calendar_event_END_hour = Integer.parseInt(endtime[0]);
+        int Calendar_event_END_min = Integer.parseInt(endtime[1]);
 
         layout.calendar_page(R.id.page_container, header_image, add_to_calendar_image, share_image, Calendar_event_title,
                 Calendar_event_description, Calendar_event_location, Calendar_event_year, Calendar_event_month, Calendar_event_day,
                 Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min);
-
-        String study_id;
-
-        try { passedInfo = getIntent().getStringArrayExtra("INFO"); study_id = passedInfo[1]; }
-        catch (Exception e) { study_id = ""; }
-
-        passedInfo = getIntent().getStringArrayExtra("INFO");
-        openday_id = passedInfo[0];
 
         String[] openday = layout.db.getOpendayInfo(openday_id);
 
@@ -59,8 +65,6 @@ public class opendays_activity extends appHelper {
             }
         }
         else{
-//            get workshops from study id + openday id
-//            layout.workshop("Python workshop", "H2.002", "06:00-08:00", R.id.page_container);
             String[] activities = layout.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
 
             for (int i = 0; i < activities.length; i++) {
