@@ -15,7 +15,8 @@ public class POPUP_activity extends appHelper {
 
         int pop_width = (int) getIntent().getIntExtra("WIDTH",0);
         int pop_height = (int) getIntent().getIntExtra("HEIGHT",0);
+        String openday_id = getIntent().getStringExtra("Openday_id");
 
-        layout.popup(R.id.popup_container,pop_width,pop_height);
+        layout.popup(R.id.popup_container,pop_width,pop_height, openday_id);
     }
 }

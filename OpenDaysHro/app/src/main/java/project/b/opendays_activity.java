@@ -1,9 +1,8 @@
 package project.b;
 
-import android.os.Bundle;
-import android.content.pm.ActivityInfo;
 import android.content.Intent;
-import android.util.EventLogTags;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 
 public class opendays_activity extends appHelper {
 
@@ -52,7 +51,7 @@ public class opendays_activity extends appHelper {
 
         layout.calendar_page(R.id.page_container, header_image, add_to_calendar_image, share_image, Calendar_event_title,
                 Calendar_event_description, Calendar_event_location, Calendar_event_year, Calendar_event_month, Calendar_event_day,
-                Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min);
+                Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min, openday_id);
 
         String[] openday = layout.db.getOpendayInfo(openday_id);
 

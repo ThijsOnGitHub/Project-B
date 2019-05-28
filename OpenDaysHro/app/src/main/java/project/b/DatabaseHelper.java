@@ -718,7 +718,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Language
-    private Boolean language() {
+    public Boolean language() {
         if(Locale.getDefault().getLanguage() == "nl") {
             return true;
         } else {

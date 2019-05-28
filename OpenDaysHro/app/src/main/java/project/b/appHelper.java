@@ -672,7 +672,7 @@ public class appHelper extends AppCompatActivity {
         public void calendar_page(int addToThisLayout, int Image, int Calendar_Image,
                                   int Share_Image, String EVENT_TITLE, String EVENT_DESCRIPTION, String EVENT_LOCATION,
                                   int EVENT_YEAR, int EVENT_MONTH, int EVENT_DAY, int EVENT_START_HOUR, int EVENT_START_MINUTE,
-                                  int EVENT_END_HOUR, int EVENT_END_MINUTE){
+                                  int EVENT_END_HOUR, int EVENT_END_MINUTE, String openday_id){
 
             int horizontal_space = ( (int) ( (float) phone_width / (float) 50 ) );
             int vertical_space = ( (int) ( (float) phone_height / (float) 50 ) );
@@ -763,6 +763,7 @@ public class appHelper extends AppCompatActivity {
                             Intent share_intent = new Intent(context, POPUP_activity.class);
                                 share_intent.putExtra("WIDTH", (int) (phone_width * 0.8));
                                 share_intent.putExtra("HEIGHT", (int) (phone_width * 0.8));
+                                share_intent.putExtra("Openday_id", openday_id);
                             startActivity(share_intent);
                         }
                     });
@@ -859,7 +860,17 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void popup(int addToThisLayout, int width, int height){
+        public void popup(int addToThisLayout, int width, int height, String openday_id){
+
+            String[] openday = this.db.getOpendayInfo(openday_id);
+
+            String message = "";
+            if (this.db.language() == true) {
+                message = "Er is een opendag op de Hogeschool Rotterdam bij het instituut: " + openday[0] + " op " + openday[1];
+            } else {
+                message = "There is an opday at the Hogeschool Rotterdam at the institute of: " + openday[0] + " on " + openday[1];
+            }
+
 
             getWindow().setLayout(width,height);
 
@@ -919,13 +930,19 @@ public class appHelper extends AppCompatActivity {
                     twitter.setOrientation(LinearLayout.HORIZONTAL);
                     twitter.setLayoutParams(button_params);
 
-                    twitter.setOnClickListener(new View.OnClickListener() {
+            String finalMessage = message;
+            String facebookMessage = message.replace(" ", "%20");
+            facebookMessage = facebookMessage.replace(":", "%3A");
+            facebookMessage = facebookMessage.replace(",", "%2C");
+            final String facebookmsg = facebookMessage;
+
+            twitter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             try {
                                 Intent twitterintent = new Intent(Intent.ACTION_SEND);
                                     twitterintent.setType("text/plain");
-                                    twitterintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    twitterintent.putExtra(android.content.Intent.EXTRA_TEXT, finalMessage);
                                     twitterintent.setPackage("com.twitter.android");
                                     startActivity(twitterintent);
                             } catch (Exception e) { Toast.makeText(context, "Twitter is not installed!", Toast.LENGTH_LONG).show();}
@@ -942,7 +959,7 @@ public class appHelper extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             //https://stackoverflow.com/questions/5023602/facebook-share-link-can-you-customize-the-message-body-text
-                            String fb_url = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.hogeschoolrotterdam.nl%2F&quote=Hi!%20Check%20out%20our%20open%20day!";
+                            String fb_url = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.hogeschoolrotterdam.nl%2F&quote=" + facebookmsg;
                             Intent facebookintent = new Intent(Intent.ACTION_VIEW);
                             facebookintent.setData(  Uri.parse(fb_url));
                             startActivity(facebookintent);
@@ -966,7 +983,7 @@ public class appHelper extends AppCompatActivity {
                             try {
                                 Intent whatsappintent = new Intent(Intent.ACTION_SEND);
                                     whatsappintent.setType("text/plain");
-                                    whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out our new app!");
+                                    whatsappintent.putExtra(android.content.Intent.EXTRA_TEXT, finalMessage);
                                     whatsappintent.setPackage("com.whatsapp");
                                     startActivity(whatsappintent);
                             } catch (Exception e) { Toast.makeText(context, "Whatsapp is not installed!", Toast.LENGTH_LONG).show();}
@@ -988,7 +1005,7 @@ public class appHelper extends AppCompatActivity {
                                     emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
                                     emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
                                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
-                                    emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                    emailIntent.putExtra(Intent.EXTRA_TEXT, finalMessage);
                                     emailIntent.setPackage("com.microsoft.office.outlook");
                                     startActivity(emailIntent);
                             } catch (Exception e){
@@ -997,7 +1014,7 @@ public class appHelper extends AppCompatActivity {
                                         emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
                                         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
                                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
-                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, finalMessage);
                                         emailIntent.setPackage("com.google.android.gm");
                                         startActivity(emailIntent);
                                 } catch (Exception f){
@@ -1006,7 +1023,7 @@ public class appHelper extends AppCompatActivity {
                                     emailIntent.setType("message/rfc822");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
                                         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@hr.nl"}); // recipients
                                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Openday HRO");
-                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "This is the default message everyone wants to send.");
+                                        emailIntent.putExtra(Intent.EXTRA_TEXT, finalMessage);
                                         startActivity(emailIntent);
                                 }
                             }
