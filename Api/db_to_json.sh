@@ -52,5 +52,24 @@ for table_name in $( cat tableName.txt ); do
 done
 rm select.sql
 
+### PREPAIRING DATA ###
+for table_name in $( cat tableName.txt ); do
+        char=$(head -c 2 ${data_folder}/${table_name}${extention_data}_JSON.txt);
+        while [[ ${char} != "[{" ]]; do
+                sed '1d' ${data_folder}/${table_name}${extention_data}_JSON.txt > tmpfile; mv tmpfile ${data_folder}/${table_name}${extention_data}_JSON.txt
+                char=$(head -c 2 ${data_folder}/${table_name}${extention_data}_JSON.txt);
+        done
+
+        echo "{ \"${table_name}\": " > tmpfile && cat ${data_folder}/${table_name}${extention_data}_JSON.txt >> tmpfile && echo " }" >> tmpfile
+        mv tmpfile ${data_folder}/${table_name}${extention_data}_JSON.txt
+done
+
+#for x in $( ls ${data_folder} | grep JSON ); do
+#       cat ${data_folder}/${x};
+#done
+
+jq -s 'reduce .[] as $item ({}; . * $item)' ${data_folder}/*${extention_data}_JSON.txt > ${db}.json
+cat ${db}.json
+
 rm -r ${data_folder}/; rm tableName.txt
 
