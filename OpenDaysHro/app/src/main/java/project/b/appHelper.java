@@ -868,7 +868,7 @@ public class appHelper extends AppCompatActivity {
             if (this.db.language() == true) {
                 message = "Er is een opendag op de Hogeschool Rotterdam bij het instituut: " + openday[0] + " op " + openday[1];
             } else {
-                message = "There is an opday at the Hogeschool Rotterdam at the institute of: " + openday[0] + " on " + openday[1];
+                message = "There is an openday at the Hogeschool Rotterdam at the institute of: " + openday[0] + " on " + openday[1];
             }
 
 

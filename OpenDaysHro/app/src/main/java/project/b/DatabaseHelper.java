@@ -11,12 +11,13 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 51;
+    private static final int HROOPENDAY_VERSION = 52;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -89,6 +90,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 openday = getOpendayInfo(opendays_id[i]);
                 if (openday.length > 0) {
                     Date date_now = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date());
+                    cal.add(Calendar.HOUR_OF_DAY, 2);
+                    date_now = cal.getTime();
+
                     String date = openday[1] + " " + openday[3];
                     Date date_openday = dateFormat.parse(date, new ParsePosition(0));
 
@@ -585,8 +591,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
         createOpenday("09-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
         createOpenday("04-06-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
-        createOpenday("21-05-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
         createOpenday("15-08-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("21-05-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("29-05-2019", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
+        createOpenday("29-05-2019", "09:00:00", "12:00:00", "Communicatie, Media en Informatietechnologie");
+
 
         // Create activities for CMI
         createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "H.04.318", "Python stuff", "Python dingen");
