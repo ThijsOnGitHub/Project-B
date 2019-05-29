@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 52;
+    private static final int HROOPENDAY_VERSION = 54;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -583,9 +583,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","3011WN99");
 
         // Floorplans
-        createImage("h107", "floorplan", "3011WN107");
-        createImage("wd103", "floorplan", "3011WN103");
-        createImage("wn99", "floorplan", "3011WN99");
+        createImage("h", "floorplan", "3011WN107");
+        createImage("wd", "floorplan", "3011WN103");
+        createImage("wn", "floorplan", "3011WN99");
 
         // Create openday for CMI
         createOpenday("04-06-1900", "17:00:00", "20:00:00", "Communicatie, Media en Informatietechnologie");
