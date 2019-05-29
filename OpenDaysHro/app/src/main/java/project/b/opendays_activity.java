@@ -1,18 +1,8 @@
 package project.b;
 
-import android.os.Bundle;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageView;
-import android.view.Gravity;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.content.Intent;
-
-import org.w3c.dom.Text;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 
 public class opendays_activity extends appHelper {
 
@@ -20,9 +10,8 @@ public class opendays_activity extends appHelper {
 
     String[] passedInfo;
 
-    String Description;
-    String Location;
-    String Time;
+    String openday_id;
+    String study_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,41 +25,52 @@ public class opendays_activity extends appHelper {
         int add_to_calendar_image = R.drawable.calendar_icon;
         int share_image = R.drawable.twotone_share_24px;
 
+
+        try { passedInfo = getIntent().getStringArrayExtra("INFO"); study_id = passedInfo[1]; }
+        catch (Exception e) { study_id = ""; }
+        passedInfo = getIntent().getStringArrayExtra("INFO");
+        openday_id = passedInfo[0];
+
+        String[] calendar = layout.db.getCalenderInfo(openday_id);
+
         String Calendar_event_title = "HRO Open day";
-        String Calendar_event_description = "CMI";
-        String Calendar_event_location = "3011WN Rotterdam";
-        int Calendar_event_year = 2019;
-        int Calendar_event_month = 5;
-        int Calendar_event_day = 5;
-        int Calendar_event_START_hour = 8;
-        int Calendar_event_START_min = 0;
-        int Calendar_event_END_hour = 18;
-        int Calendar_event_END_min = 0;
+        String Calendar_event_description = calendar[0];
+        String Calendar_event_location = calendar[1];
+
+        String[] starttime = calendar[2].split(":");
+        String[] endtime = calendar[3].split(":");
+        String[] date = calendar[4].split("-");
+        
+        int Calendar_event_year = Integer.parseInt(date[2]);
+        int Calendar_event_month = Integer.parseInt(date[1]);
+        int Calendar_event_day = Integer.parseInt(date[0]);
+        int Calendar_event_START_hour = Integer.parseInt(starttime[0]);
+        int Calendar_event_START_min = Integer.parseInt(starttime[1]);
+        int Calendar_event_END_hour = Integer.parseInt(endtime[0]);
+        int Calendar_event_END_min = Integer.parseInt(endtime[1]);
 
         layout.calendar_page(R.id.page_container, header_image, add_to_calendar_image, share_image, Calendar_event_title,
                 Calendar_event_description, Calendar_event_location, Calendar_event_year, Calendar_event_month, Calendar_event_day,
-                Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min);
+                Calendar_event_START_hour, Calendar_event_START_min, Calendar_event_END_hour, Calendar_event_END_min, openday_id);
 
-        String page;
+        String[] openday = layout.db.getOpendayInfo(openday_id);
 
-        try { passedInfo = getIntent().getStringArrayExtra("INFO"); page = passedInfo[3]; }
-        catch (Exception e) { page = "page0"; }
+        if ( study_id.equals("")) {
+            // Studies
+            String[] studies = layout.db.getStudiesWithActivitiesByOpenday(openday_id);
 
-        passedInfo = getIntent().getStringArrayExtra("INFO");
-        Description = passedInfo[0];
-        Location = passedInfo[1];
-        Time = passedInfo[2];
-
-        if ( page == "page0") {
-            layout.workshop_menu(Description, "H.2.002", Time, R.id.page_container);
-            layout.workshop_menu(Description, "H.2.002", Time, R.id.page_container);
-            layout.workshop_menu(Description, "H.2.002", Time, R.id.page_container);
+            for (int i = 0; i < studies.length; i++) {
+                layout.workshop_menu(studies[i], openday_id, R.id.page_container);
+            }
         }
         else{
+            String[] activities = layout.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
 
-            layout.workshop("General Information\n" + Description, "H.2.111", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "WN.5.023", Time, R.id.page_container);
-            layout.workshop("General Information\n" + Description, "H.2.204", Time, R.id.page_container);
+            for (int i = 0; i < activities.length; i++) {
+                String[] activity = layout.db.getActivityInfo(activities[i]);
+
+                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), R.id.page_container);
+            }
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
@@ -80,7 +80,7 @@ public class opendays_activity extends appHelper {
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_grey_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
-        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 
