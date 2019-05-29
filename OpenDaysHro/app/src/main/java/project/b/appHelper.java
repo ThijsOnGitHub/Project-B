@@ -3,6 +3,11 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
@@ -248,11 +253,23 @@ public class appHelper extends AppCompatActivity {
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Location = new TextView(this.context);
-                listItem_Location.setText(ListItem_Location); listItem_description.setGravity(Gravity.CENTER);
+                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER);
+                listItem_Location.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                 listItem_Location.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+                listItem_Location.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent openMap = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        String[] locationList= ListItem_Location.split("\\.");
+                        openMap.putExtra("building",locationList[0].toLowerCase());
+                        openMap.putExtra("floor",Integer.parseInt(locationList[1]));
+                        openMap.putExtra("rawString",ListItem_Location);
+                        startActivity(openMap);
+                    }
+                });
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_description.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
 

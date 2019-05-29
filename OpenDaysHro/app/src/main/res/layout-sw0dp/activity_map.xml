@@ -33,25 +33,34 @@
             android:layout_height="0dp"
             android:layout_weight="6.75"
             tools:ignore="Suspicious0dp">>
+
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rotation="90">
+
+                <ImageView
+                    android:id="@+id/ImageView_showroom"
+                    android:layout_width="225dp"
+                    android:layout_height="494dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/highlight" />
+
+                <ImageView
+                    android:id="@+id/ImageView_showFloor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:scrollbars="horizontal|vertical" />
+
+            </FrameLayout>
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".Map">
-
-                <ImageView
-                    android:id="@+id/ImageView_showFloor"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:contentDescription="TODO"
-                    android:rotation="90"
-                    android:scaleType="centerInside"
-                    android:scaleX="1.4"
-                    android:scaleY="1.4"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/Button_FloorUp"
@@ -68,23 +77,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/TextView_FloorIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="TextView"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.92" />
 
                 <Button
                     android:id="@+id/Button_FloorDown"
