@@ -36,6 +36,21 @@ for table_name in $( cat tableName.txt ); do
 done
 rm select.sql
 
+### GETTING DATA FROM A SPECIFIC TABLE IN JSON FORMAT ###
+for table_name in $( cat tableName.txt ); do
+        echo "SELECT JSON_ARRAYAGG(JSON_OBJECT(" > select.sql; count=0
+        for field_name in $( cat ${data_folder}/${table_name}${extention_fields}.txt ); do
+                if [[ ${count} -eq 0 ]]; then
+                        echo "\"${field_name}\", ${field_name}" >> select.sql
+                        count=1
+                else
+                        echo ",\"${field_name}\", ${field_name}" >> select.sql
+                fi
+        done
+        echo ")) FROM ${db}.${table_name};" >> select.sql
+        cat select.sql | mysql -u ${mysql_user} > ${data_folder}/${table_name}${extention_data}_JSON.txt
+done
+rm select.sql
 
 rm -r ${data_folder}/; rm tableName.txt
 
