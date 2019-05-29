@@ -4,40 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class DrawableManager{
     private static Context context = null;
@@ -420,6 +397,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
     LayoutHelper layout;
     GestureDetector gestureDetector;
     ScaleGestureDetector scaleGestureDetector;
+    String passedInstituteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -431,7 +409,7 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
 
 
-        
+
         AttributePackForMapManger attributes = new AttributePackForMapManger(showFloor, (TextView) findViewById(R.id.TextView_FloorIndicator),
                 (Button) findViewById(R.id.Button_FloorUp),
                 (Button) findViewById(R.id.Button_FloorDown),
@@ -442,7 +420,23 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
                 (Button)findViewById(R.id.button_ResetZoom),
                 (LinearLayout)findViewById(R.id.linearLayout_floorSelector_Floorplan),
                 (LinearLayout)findViewById(R.id.linearLayout_buidlingSelector_Floorplan));
-        String[] buildings=  new String[]{"h107","wd103","wn99"};
+
+        layout = new LayoutHelper(this);
+
+        try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null;}
+
+        if (passedInstituteID == null) {
+            String[] institutes = layout.db.getInstitutes();
+            for (int i = 0; i < institutes.length; i++) {
+                String[] institute_info = layout.db.getInstituteInfo(institutes[i]);
+                if (institute_info[1].equals("CMI")) {
+                    passedInstituteID = institute_info[3];
+                }
+            }
+        }
+
+        String[] buildings=  layout.db.getFloorplansByInstitute(passedInstituteID);
+
         floor = new mapManager(this, attributes,buildings);
         gestureDetector=new GestureDetector(this,this);
         scaleGestureDetector= new ScaleGestureDetector(this, new ScaleListener() );
@@ -457,9 +451,8 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
-        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
 
-        layout = new LayoutHelper(this);
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }
 
