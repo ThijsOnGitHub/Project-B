@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="hro_red">#CC0033</color>
+    <color name="hro_red_trans">#B7CC0033</color>
     <color name="light_grey">#D2D2D2</color>
     <color name="dark_grey">#aeaeae</color>
 
