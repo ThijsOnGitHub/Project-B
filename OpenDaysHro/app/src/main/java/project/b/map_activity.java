@@ -161,7 +161,7 @@ class mapManager{
         context=c;
         buildingsList=buildings;
         building=buildingsList[0];
-        startScale=1.5f;
+        startScale=1.0f;
         maxscale=8.0f;
 
 
