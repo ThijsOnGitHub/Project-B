@@ -30,7 +30,8 @@ public class MainActivity extends appHelper {
                 if (layout.db.isOnline() == true) {
                     jsonApi json = new jsonApi();
                     json.execute();
-                    layout.db.fillDatabaseWithJson(new JSONObject(json.data));
+                    JSONObject jsonObject = new JSONObject(json.data);
+                    layout.db.fillDatabaseWithJson(jsonObject);
                 } else {
                     layout.db.fillDatabase_offline();
                 }

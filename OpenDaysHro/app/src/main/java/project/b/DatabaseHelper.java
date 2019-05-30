@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 60;
+    private static final int HROOPENDAY_VERSION = 62;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
