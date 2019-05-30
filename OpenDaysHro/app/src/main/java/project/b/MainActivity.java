@@ -1,12 +1,23 @@
 package project.b;
 
-import android.os.Bundle;
-import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class MainActivity extends appHelper {
 
     LayoutHelper layout;
+    String jsonString = "";
 
     int numOfListItems;
 
@@ -22,9 +33,8 @@ public class MainActivity extends appHelper {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layout = new LayoutHelper(this);
 
-        if (layout.db.checkDatabase() == true) {
-            layout.db.fillDatabase();
-        }
+        new yourDataTask().execute(layout.db.fillDatabase()[1]);
+        System.out.println(jsonString);
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
@@ -46,4 +56,57 @@ public class MainActivity extends appHelper {
 
     }
 
+
+    // https://stackoverflow.com/questions/33229869/get-json-data-from-url-using-android
+    protected class yourDataTask extends AsyncTask<String, Void, JSONObject>
+    {
+        @Override
+        protected JSONObject doInBackground(String... params)
+        {
+
+            String str=params[0];
+            URLConnection urlConn = null;
+            BufferedReader bufferedReader = null;
+            try
+            {
+                URL url = new URL(str);
+                urlConn = url.openConnection();
+                bufferedReader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line;
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    stringBuffer.append(line);
+                }
+
+                return new JSONObject(stringBuffer.toString());
+            }
+            catch(Exception ex)
+            {
+                Log.e("App", "yourDataTask", ex);
+                return null;
+            }
+            finally
+            {
+                if(bufferedReader != null)
+                {
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response)
+        {
+            if(response != null)
+            {
+                jsonString = response.toString();
+            }
+        }
+    }
 }
