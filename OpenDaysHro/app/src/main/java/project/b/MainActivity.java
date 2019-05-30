@@ -27,7 +27,7 @@ public class MainActivity extends appHelper {
 
         try {
             if (layout.db.checkDatabase()) {
-                if (layout.db.isOnline() == true) {
+                if (layout.db.isOnline(this) == true) {
                     jsonApi json = new jsonApi();
                     json.execute();
                     JSONObject jsonObject = new JSONObject(json.data);
