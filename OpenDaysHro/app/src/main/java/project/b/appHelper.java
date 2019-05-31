@@ -1315,7 +1315,7 @@ public class appHelper extends AppCompatActivity {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            System.out.println("heloo");
+                            System.out.println("hello");
                             confirmContactForm(inputFields[0],inputFields[1],inputFields[2],inputFields[3]);
                         }
                     });
