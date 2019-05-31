@@ -3,6 +3,7 @@ package project.b;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,14 +27,42 @@ public class MainActivity extends appHelper {
         layout = new LayoutHelper(this);
 
         try {
-            if (layout.db.checkDatabase()) {
+            if (layout.db.emptyDatabase()) {
+                Log.d("Syncing", "onCreate: " + "Database is empty");
                 if (layout.db.isOnline(this) == true) {
-                    jsonApi json = new jsonApi();
-                    json.execute();
-                    JSONObject jsonObject = new JSONObject(json.data);
-                    layout.db.fillDatabaseWithJson(jsonObject);
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (layout.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi();
+                        json.execute(layout.db.latestAppInfo()[1]);
+                        while (!json.finish) {
+                            // wait
+                        }
+                        JSONObject jsonObject = new JSONObject(json.data);
+                        layout.db.fillDatabaseWithJson(jsonObject);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                    }
                 } else {
+                    Log.d("Syncing", "onCreate: " + "Phone is offline");
                     layout.db.fillDatabase_offline();
+                }
+            } else {
+                Log.d("Syncing", "onCreate: " + "Database is not empty");
+                if (layout.db.isOnline(this) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (layout.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi();
+                        json.execute(layout.db.latestAppInfo()[1]);
+                        while(!json.finish) {
+                            // wait
+                        }
+                        JSONObject jsonObject = new JSONObject(json.data);
+                        layout.db.fillDatabaseWithJson(jsonObject);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                    }
                 }
             }
         } catch (JSONException e) {

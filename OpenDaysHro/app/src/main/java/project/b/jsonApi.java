@@ -10,12 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class jsonApi extends AsyncTask<Void, Void, Void> {
+public class jsonApi extends AsyncTask<String, Void, Void> {
     String data = "";
+    Boolean finish = false;
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String... params) {
         try {
-            URL url = new URL("http://projectb.caslayoort.nl/api");
+            URL url = new URL(params[0]);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -25,6 +26,7 @@ public class jsonApi extends AsyncTask<Void, Void, Void> {
                 line = bufferedReader.readLine();
                 data = data + line;
             }
+            finish = true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
