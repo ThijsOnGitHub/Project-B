@@ -459,8 +459,6 @@ public class appHelper extends AppCompatActivity {
 
 
         public void generate_page_study_programs(int Image, String ID, int addViewTo){
-            // The text now is static. In the future this will be fetched from the db. The string Text is for the title which will be passed on with the intent.
-
             String[] study = this.db.getStudyInfo(ID);
 
             String study_name = study[2];
@@ -474,6 +472,7 @@ public class appHelper extends AppCompatActivity {
             String[] contentList = new String[]{study_name,study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int quiz_height = (int) ( (float) phone_height / (float) 5 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
@@ -490,6 +489,30 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 this_page_text_lp.setMargins(0,default_margin,0,default_margin);
                 this_page_text.setLayoutParams(this_page_text_lp);
+
+            if (amountOfQuestions > 0) {
+                LinearLayout quiz_button = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams quiz_button_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, quiz_height);
+                        quiz_button_params.setMargins(default_margin,0,default_margin,default_margin);
+                        quiz_button.setLayoutParams(quiz_button_params);
+                    quiz_button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                    LinearLayout quiz_button_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams quiz_button_image_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            quiz_button_image_lp.setMargins(default_margin * 5 ,0, default_margin * 5 ,0);
+                            quiz_button_image.setLayoutParams(quiz_button_image_lp);
+                        quiz_button_image.setBackground(getDrawable(R.drawable.studycheck));
+                        quiz_button.addView(quiz_button_image);
+                    this_page_text.addView(quiz_button);
+                    quiz_button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent goto_quiz_page = new Intent(context,educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                                goto_quiz_page.putExtra("QUIZARRAY", QuizQuestions);
+                                goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                startActivity(goto_quiz_page);
+                        }
+                    });
+            }
 
             for (int x = 0; x < contentList.length; x++) {
                 TextView this_text = new TextView(this.context);
@@ -843,12 +866,40 @@ public class appHelper extends AppCompatActivity {
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class);
+                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
                 });
                 main.addView(button_map);
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void generate_page_quiz_page(String[] Questions, int amountOfQuestions){
+
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
+
+            LinearLayout this_page = new LinearLayout(this.context);
+            this_page.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            this_page.setLayoutParams(this_page_lp);
+            LinearLayout this_page_header = new LinearLayout(this.context);
+            this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+            this_page_header.setLayoutParams(this_page_header_lp);
+            this_page_header.setBackground(getDrawable(R.drawable.studycheck));
+            LinearLayout this_page_text = new LinearLayout(this.context);
+            this_page_text.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            this_page_text_lp.setMargins(0,default_margin,0,default_margin);
+            this_page_text.setLayoutParams(this_page_text_lp);
+
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+            this_page.addView(this_page_header);
+            this_page.addView(this_page_text);
+            main.addView(this_page);
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

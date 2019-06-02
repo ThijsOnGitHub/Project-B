@@ -482,7 +482,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             question[5] = data.getString(data.getColumnIndex("answer3"));
             question[6] = data.getString(data.getColumnIndex("answer3_points"));
             question[7] = data.getString(data.getColumnIndex("target_study"));
-            myData[i] = TextUtils.join(",", question);
+            myData[i] = TextUtils.join("|||", question);
             data.moveToNext();
         }
         db.close();
@@ -826,8 +826,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
 
         //create questions for the quiz
-        createQuiz("Question?", "1", "1", "1",  "1", "1", "1", "Informatica");
-
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
