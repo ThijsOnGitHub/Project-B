@@ -458,15 +458,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int amountOfQuestions(String target_study){
         SQLiteDatabase db = this.getWritableDatabase();
-        String QUERY = "SELECT Count(id) FROM " + HROOPENDAY_QUIZ + " WHERE " + QUIZ_TARGET_STUDY + " = " + target_study;
+        String QUERY = "SELECT * FROM " + HROOPENDAY_QUIZ + " WHERE " + QUIZ_TARGET_STUDY + " = " + '"' + target_study + '"';
         Cursor data = db.rawQuery(QUERY, null);
+        int mydata = data.getCount();
         db.close();
-        return (int) data.getInt(0);
+        return mydata;
     }
 
     public String[] getQuizQuestions(String myTarget_study){
         SQLiteDatabase db = this.getWritableDatabase();
-        String QUERY = "SELECT question,answer1,answer1_points,answer2,answer2_points,answer3,answer3_points,target_study FROM " + HROOPENDAY_QUIZ + " WHERE " + QUIZ_TARGET_STUDY + " = " + myTarget_study;
+        String QUERY = "SELECT question,answer1,answer1_points,answer2,answer2_points,answer3,answer3_points,target_study FROM " + HROOPENDAY_QUIZ;
         Cursor data = db.rawQuery(QUERY, null);
         db.close();
         data.moveToFirst();
@@ -825,6 +826,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
 
         //create questions for the quiz
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
         createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
     }
 

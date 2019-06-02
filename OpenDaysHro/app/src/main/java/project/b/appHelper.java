@@ -466,6 +466,9 @@ public class appHelper extends AppCompatActivity {
             String study_name = study[2];
             String study_information = study[3];
 
+            System.out.println(db.amountOfQuestions(study_name));
+            //System.out.println(db.getQuizQuestions(study_name));
+
             String[] contentList = new String[]{study_name,study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
