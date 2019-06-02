@@ -24,31 +24,6 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
-
-FUNCTIONS:
-1. ListItem_openday ( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout)
-2. workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout)
-3. generate_study_program_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text)
-4. generate_page_study_programs (int Image, String Text, int addViewTo)
-5. generate_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text, Intent[] gotoThisPage)
-6. Image_with_Buttons (int addToThisLinearLayout, int[] images)
-7. calendar_page(int addToThisLayout, int Image, int Calendar_Image,
-                                  int Share_Image, String EVENT_TITLE, String EVENT_DESCRIPTION, String EVENT_LOCATION,
-                                  int EVENT_YEAR, int EVENT_MONTH, int EVENT_DAY, int EVENT_START_HOUR, int EVENT_START_MINUTE,
-                                  int EVENT_END_HOUR, int EVENT_END_MINUTE)
-
-Status (updated 05-05-2019):
-1. ListItem_openday : Text needs to be scaled and the real info image needs to be implemented.
-2. workshop : Text needs to be scaled and the timer needs to be implemented.
-3. generate_study_program_menu : need to add support for broken strings (test\ntest) and need to break them if they are larger than x.
-4. generate_page_study_programs: Layout needs to be adjusted. also the image needs to has the centered logo and text.
-5. generate_menu : done.
-6. Image_with_Buttons : done.
-7. calendar_page : scaling for the workshops and need to make the share button working. also need to test if the reminder exists / add the reminder.
-
-*/
-
 public class appHelper extends AppCompatActivity {
 
     // https://stackoverflow.com/questions/3204852/android-add-a-textview-to-linear-layout-programmatically
@@ -166,34 +141,34 @@ public class appHelper extends AppCompatActivity {
             String workshops = "Workshops: " + String.valueOf(all_workshops.length);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
-            LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout_main.isClickable();
-            LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
-            LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
-            LinearLayout_main_layoutParams.setMargins(0,0,0,0);
-            LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+                LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout_main.isClickable();
+                LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
+                LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
+                    LinearLayout_main_layoutParams.setMargins(0,0,0,0);
+                    LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
-            listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
 
             RelativeLayout listItem_loc = new RelativeLayout(this.context);
-            listItem_loc.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,5));
+                listItem_loc.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,5));
 
             RelativeLayout info_layout = new RelativeLayout(this.context);
-            info_layout.setGravity(Gravity.CENTER);
-            info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
+                info_layout.setGravity(Gravity.CENTER);
+                info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-            listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
-            listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-            listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
-            listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
-            info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
-            info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
+                info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
+                info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
 
 
             ((RelativeLayout) listItem_description_layout ).addView((TextView) listItem_description);
@@ -355,8 +330,8 @@ public class appHelper extends AppCompatActivity {
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout Main_layout = new LinearLayout(this.context);
                 LinearLayout.LayoutParams my_main_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
-                Main_layout.setLayoutParams(my_main_params);
+                    my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
+                    Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
 
             String longest_string;
@@ -625,11 +600,11 @@ public class appHelper extends AppCompatActivity {
             LinearLayout the_image = new LinearLayout(this.context);
                 the_image.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams image_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, image_height));
-                the_image.setLayoutParams(image_lp);
+                    the_image.setLayoutParams(image_lp);
                 the_image.setBackground(getDrawable(images[0]));
 
             RelativeLayout button_left = new RelativeLayout(this.context);
-            button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                 TextView button1_txt = new TextView(this.context);
                     button1_txt.setText("<");
                     button1_txt.setTextSize(text_size);
@@ -703,8 +678,8 @@ public class appHelper extends AppCompatActivity {
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout page = new LinearLayout(this.context);
                 LinearLayout.LayoutParams page_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    page.setLayoutParams(page_params);
                 page.setOrientation(LinearLayout.VERTICAL);
-                page.setLayoutParams(page_params);
             LinearLayout image = new LinearLayout(this.context);
                 LinearLayout.LayoutParams image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 3.5 ) ));
                     image.setLayoutParams(image_params);
@@ -1157,6 +1132,7 @@ public class appHelper extends AppCompatActivity {
             }
         }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private int calcHeightFromDesign(float elementHeight){
             float designHeight= 1080.f;
             return (int)((elementHeight*phone_height)*designHeight);
