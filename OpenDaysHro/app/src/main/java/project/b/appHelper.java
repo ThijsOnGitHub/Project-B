@@ -466,8 +466,10 @@ public class appHelper extends AppCompatActivity {
             String study_name = study[2];
             String study_information = study[3];
 
-            System.out.println(db.amountOfQuestions(study_name));
-            //System.out.println(db.getQuizQuestions(study_name));
+            int amountOfQuestions = db.amountOfQuestions(study_name);
+            String[] QuizQuestions = db.getQuizQuestions(study_name);
+
+            for (int i = 0; i < amountOfQuestions; i++){ System.out.println(QuizQuestions[i]); };
 
             String[] contentList = new String[]{study_name,study_information};
 
