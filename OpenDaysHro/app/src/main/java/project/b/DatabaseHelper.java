@@ -482,7 +482,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             question[5] = data.getString(data.getColumnIndex("answer3"));
             question[6] = data.getString(data.getColumnIndex("answer3_points"));
             question[7] = data.getString(data.getColumnIndex("target_study"));
-            myData[i] = TextUtils.join("|||", question);
+            myData[i] = TextUtils.join("\n", question);
             data.moveToNext();
         }
         db.close();

@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -514,6 +516,7 @@ public class appHelper extends AppCompatActivity {
                             Intent goto_quiz_page = new Intent(context,educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
                                 goto_quiz_page.putExtra("QUIZARRAY", QuizQuestions);
                                 goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                goto_quiz_page.putExtra("PROGRESSION", 0);
                                 startActivity(goto_quiz_page);
                         }
                     });
@@ -881,7 +884,12 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_quiz_page(String[] Questions, int amountOfQuestions){
+        public void generate_page_quiz_page(String[] Questions, int amountOfQuestions, int Progression){
+
+            String[] this_question = Questions[Progression].split("\n", -1);
+            System.out.println(this_question[1]);
+            System.out.println(this_question[3]);
+            System.out.println(this_question[5]);
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int studycheckimage_height = header_height - (2 * default_margin);
@@ -890,6 +898,13 @@ public class appHelper extends AppCompatActivity {
                 studycheckimage_width = phone_width - ( 4 * default_margin );
                 studycheckimage_height = (int) ( ( (float) studycheckimage_width / (float) 2100 ) * (float) 1500 );
             }
+
+            int progressionbar_height = ( default_margin * 3 ) / 2;
+            int progressionbar_width = phone_width - (default_margin * 4);
+            int progression_done_width = ( progressionbar_width / amountOfQuestions ) * Progression;
+            int buttons_width = phone_width - (default_margin * 4);
+            int buttons_height = phone_height / 11;
+
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
@@ -904,17 +919,75 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout this_page_header_image = new LinearLayout(this.context);
                         LinearLayout.LayoutParams this_page_header_image_params = new LinearLayout.LayoutParams(studycheckimage_width,studycheckimage_height);
                             this_page_header_image.setLayoutParams(this_page_header_image_params);
+                        this_page_header_image.setBackground(getDrawable(R.drawable.studycheck));
                         this_page_header.addView(this_page_header_image);
-                this_page_header_image.setBackground(getDrawable(R.drawable.studycheck));
-                LinearLayout this_page_text = new LinearLayout(this.context);
-                this_page_text.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                this_page_text_lp.setMargins(0,default_margin,0,default_margin);
-                this_page_text.setLayoutParams(this_page_text_lp);
+                LinearLayout this_page_question = new LinearLayout(this.context);
+                    this_page_question.setOrientation(LinearLayout.VERTICAL); this_page_question.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_question_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        this_page_question_lp.setMargins(0,default_margin * 2,0,default_margin * 2);
+                        this_page_question.setLayoutParams(this_page_question_lp);
+
+                LinearLayout Progress = new LinearLayout(this.context);
+                    Progress.setOrientation(LinearLayout.VERTICAL); Progress.setGravity(Gravity.CENTER); this_page_question.addView(Progress);
+                    TextView progression = new TextView(this.context); progression.setText("Progression: (" + Progression + "/" + amountOfQuestions + ")"); progression.setGravity(Gravity.CENTER); progression.setTextAlignment(View.TEXT_ALIGNMENT_CENTER); Progress.addView(progression);
+                    LinearLayout progressionBar = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams progressionBar_params = new LinearLayout.LayoutParams(progressionbar_width, progressionbar_height);
+                            progressionBar.setLayoutParams(progressionBar_params);
+                            progressionBar.setBackgroundColor(getResources().getColor(R.color.dark_grey));
+                        Progress.addView(progressionBar);
+                        progressionBar.setGravity(Gravity.LEFT);
+                        LinearLayout progression_done = new LinearLayout(this.context);
+                            progression_done.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                            LinearLayout.LayoutParams progression_done_params = new LinearLayout.LayoutParams(progression_done_width, progressionbar_height);
+                                progression_done.setLayoutParams(progression_done_params);
+                            progressionBar.addView(progression_done);
+
+
+                LinearLayout question_layout = new LinearLayout(this.context); question_layout.setGravity(Gravity.CENTER); question_layout.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout.LayoutParams question_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        question_layout_params.setMargins(default_margin,default_margin * 3,default_margin,default_margin * 3);
+                    question_layout.setLayoutParams(question_layout_params);
+                    TextView question = new TextView(this.context); question.setText(this_question[0]); question.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        question_layout.addView(question);
+                    this_page_question.addView(question_layout);
+
+                LinearLayout radio_spacing = new LinearLayout(this.context); this_page_question.addView(radio_spacing);
+                    LinearLayout.LayoutParams radio_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        radio_params.setMargins(default_margin,default_margin,default_margin,default_margin);
+                        radio_spacing.setLayoutParams(radio_params);
+                RadioGroup answer_group = new RadioGroup(this.context); radio_spacing.addView(answer_group);
+                    RadioButton answerButton = new RadioButton(this.context); answerButton.setText(this_question[1]); answer_group.addView(answerButton);
+                    RadioButton answerButton2 = new RadioButton(this.context); answerButton2.setText(this_question[3]); answer_group.addView(answerButton2);
+                    RadioButton answerButton3 = new RadioButton(this.context); answerButton3.setText(this_question[5]); answer_group.addView(answerButton3);
+
+                LinearLayout buttons = new LinearLayout(this.context);
+                    buttons.setOrientation(LinearLayout.HORIZONTAL); buttons.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams buttons_params = new LinearLayout.LayoutParams(buttons_width,buttons_height); buttons_params.setMargins(default_margin, default_margin, default_margin, default_margin);
+                        buttons.setLayoutParams(buttons_params);
+                    LinearLayout backButton = new LinearLayout(this.context); LinearLayout.LayoutParams backButton_params; backButton.setBackgroundColor(getResources().getColor(R.color.dark_grey)); buttons.addView(backButton);
+                        TextView backButton_text = new TextView(this.context); backButton_text.setText("Back");
+                    LinearLayout nextButton = new LinearLayout(this.context); LinearLayout.LayoutParams nextButton_params; nextButton.setBackgroundColor(getResources().getColor(R.color.dark_grey)); buttons.addView(nextButton);
+                        TextView nextButton_text = new TextView(this.context); nextButton.addView(nextButton_text);
+                        nextButton.setGravity(Gravity.CENTER);
+
+                    if (Progression + 1 >= amountOfQuestions) { nextButton_text.setText("Finish"); } else { nextButton_text.setText("Next"); }
+
+                    if (Progression <= 0){
+                        backButton_params = new LinearLayout.LayoutParams(0,0);
+                        nextButton_params = new LinearLayout.LayoutParams(buttons_width,buttons_height);
+                    }
+                    else {
+                        backButton_params = new LinearLayout.LayoutParams(0,buttons_height,1); backButton_params.setMargins(0,0,default_margin / 2,0);
+                            backButton.addView(backButton_text);
+                            backButton.setGravity(Gravity.CENTER);
+                        nextButton_params = new LinearLayout.LayoutParams(0,buttons_height,1); nextButton_params.setMargins(default_margin / 2,0,0,0);
+                    }
+                    backButton.setLayoutParams(backButton_params); nextButton.setLayoutParams(nextButton_params);
+                    this_page_question.addView(buttons);
 
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
             this_page.addView(this_page_header);
-            this_page.addView(this_page_text);
+            this_page.addView(this_page_question);
             main.addView(this_page);
         }
 

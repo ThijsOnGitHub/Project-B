@@ -7,7 +7,7 @@ import android.os.Bundle;
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
-    String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions;
+    String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class educations_activity extends appHelper {
 
         layout = new LayoutHelper(this);
 
-        try { passedQuizQuestions = getIntent().getStringArrayExtra("QUIZARRAY"); amountOfQuizQuestions = (int) getIntent().getIntExtra("AMOUNTOFQUESTIONS",0); }
+        try { passedQuizQuestions = getIntent().getStringArrayExtra("QUIZARRAY"); amountOfQuizQuestions = (int) getIntent().getIntExtra("AMOUNTOFQUESTIONS",0); Progression = getIntent().getIntExtra("PROGRESSION", 0); }
         catch (Exception e){
             System.out.println(e);
         }
@@ -39,7 +39,7 @@ public class educations_activity extends appHelper {
 
         if (passedQuizQuestions != null) {
             // This is the page for the quiz
-            layout.generate_page_quiz_page(passedQuizQuestions,amountOfQuizQuestions);
+            layout.generate_page_quiz_page(passedQuizQuestions,amountOfQuizQuestions, Progression);
         }
 
         else {
