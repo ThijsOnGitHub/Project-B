@@ -473,6 +473,10 @@ public class appHelper extends AppCompatActivity {
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int quiz_height = (int) ( (float) phone_height / (float) 5 );
+            int studycheckimage_height = quiz_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            //int studycheckimage_width = phone_width - (10 * default_margin);
+            //int studycheckimage_height = (int) ( ( (float) studycheckimage_width / (float) 2100 ) * (float) 1500 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
@@ -492,13 +496,14 @@ public class appHelper extends AppCompatActivity {
 
             if (amountOfQuestions > 0) {
                 LinearLayout quiz_button = new LinearLayout(this.context);
+                    quiz_button.setGravity(Gravity.CENTER);
                     LinearLayout.LayoutParams quiz_button_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, quiz_height);
                         quiz_button_params.setMargins(default_margin,0,default_margin,default_margin);
                         quiz_button.setLayoutParams(quiz_button_params);
                     quiz_button.setBackgroundColor(getResources().getColor(R.color.light_grey));
                     LinearLayout quiz_button_image = new LinearLayout(this.context);
-                        LinearLayout.LayoutParams quiz_button_image_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            quiz_button_image_lp.setMargins(default_margin * 5 ,0, default_margin * 5 ,0);
+                        LinearLayout.LayoutParams quiz_button_image_lp = new LinearLayout.LayoutParams(studycheckimage_width, studycheckimage_height);
+                            quiz_button_image_lp.setMargins(0 ,0, 0 ,0);
                             quiz_button_image.setLayoutParams(quiz_button_image_lp);
                         quiz_button_image.setBackground(getDrawable(R.drawable.studycheck));
                         quiz_button.addView(quiz_button_image);
@@ -879,22 +884,33 @@ public class appHelper extends AppCompatActivity {
         public void generate_page_quiz_page(String[] Questions, int amountOfQuestions){
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int studycheckimage_height = header_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            if ( studycheckimage_width > phone_width ) {
+                studycheckimage_width = phone_width - ( 4 * default_margin );
+                studycheckimage_height = (int) ( ( (float) studycheckimage_width / (float) 2100 ) * (float) 1500 );
+            }
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
-            this_page.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            this_page.setLayoutParams(this_page_lp);
-            LinearLayout this_page_header = new LinearLayout(this.context);
-            this_page_header.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
-            this_page_header.setLayoutParams(this_page_header_lp);
-            this_page_header.setBackground(getDrawable(R.drawable.studycheck));
-            LinearLayout this_page_text = new LinearLayout(this.context);
-            this_page_text.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            this_page_text_lp.setMargins(0,default_margin,0,default_margin);
-            this_page_text.setLayoutParams(this_page_text_lp);
+                this_page.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    this_page.setLayoutParams(this_page_lp);
+                LinearLayout this_page_header = new LinearLayout(this.context);
+                    this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                    this_page_header.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                        this_page_header.setLayoutParams(this_page_header_lp);
+                    LinearLayout this_page_header_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams this_page_header_image_params = new LinearLayout.LayoutParams(studycheckimage_width,studycheckimage_height);
+                            this_page_header_image.setLayoutParams(this_page_header_image_params);
+                        this_page_header.addView(this_page_header_image);
+                this_page_header_image.setBackground(getDrawable(R.drawable.studycheck));
+                LinearLayout this_page_text = new LinearLayout(this.context);
+                this_page_text.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                this_page_text_lp.setMargins(0,default_margin,0,default_margin);
+                this_page_text.setLayoutParams(this_page_text_lp);
 
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
             this_page.addView(this_page_header);
