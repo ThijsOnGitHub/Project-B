@@ -866,14 +866,31 @@ public class appHelper extends AppCompatActivity {
 
 
             LinearLayout button_map = new LinearLayout(this.context);
-                button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                LinearLayout.LayoutParams button_map_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(phone_height / 10));
-                    button_map.setGravity(Gravity.CENTER); button_map.setLayoutParams(button_map_params);
-                LinearLayout image_map = new LinearLayout(this.context);
-                    LinearLayout.LayoutParams image_map_params = new LinearLayout.LayoutParams((phone_height / 10),(phone_height / 10));
-                        image_map.setLayoutParams(image_map_params);
-                    image_map.setBackground(getDrawable(R.drawable.ic_map_white_24dp));
-                    button_map.addView(image_map);
+                button_map.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950),calcHeightFromDesign(350));
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
+                button_map.setLayoutParams(layoutParamsButtonMap);
+                button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
+                button_map.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                ImageView icon = new ImageView(context);
+                    LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(calcWithFromDesign(150),calcWithFromDesign(150));
+                    iconLayout.setMargins(0,calcHeightFromDesign(40),0,0);
+                    icon.setLayoutParams(iconLayout);
+                    icon.setImageResource(R.drawable.twotone_map_black_18dp);
+
+                    icon.setColorFilter(getResources().getColor(R.color.hro_red));
+                button_map.addView(icon);
+
+                TextView floorplanText=new TextView(context);
+                    floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                    floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                    floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                    floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                button_map.addView(floorplanText);
+
+
+
                 button_map.isClickable();
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override

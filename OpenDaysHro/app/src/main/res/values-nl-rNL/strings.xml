@@ -17,4 +17,5 @@
     <string name="classroom">klaslokaal</string>
     <string name="roomnumber">lokaalnummer</string>
     <string name="Classroom_highlighted">Klaslokaal kan worden uitgelicht</string>
+    <string name="floorPlan">plattegrond</string>
 </resources>

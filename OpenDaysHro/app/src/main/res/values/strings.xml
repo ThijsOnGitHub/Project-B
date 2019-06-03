@@ -20,4 +20,5 @@
     <string name="classroom">classroom</string>
     <string name="roomnumber">roomnumber</string>
     <string name="Classroom_highlighted">Classroom can be highlighted</string>
+    <string name="floorPlan">Floor Plan</string>
 </resources>
