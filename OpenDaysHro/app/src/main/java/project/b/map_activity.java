@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 class DrawableManager{
     private static Context context = null;
@@ -102,7 +103,10 @@ class mapManager{
     public int floor=0;
     public Context context;
     public DrawableManager getPic;
-
+    static Room[] ROOMS = new Room[]{new Room("h.2.204",1200,450,230,380,1469,1117),
+            new Room("h.2.111",499,260,177,125,1469,1117),
+            new Room("wn.5.023",
+                    604,556,344,287,1572,1117)};
 
 
     public Button upButton,downButton,leftButton,rightButton,zoomInButton,zoomOutButton,resetZoomButton;
@@ -112,8 +116,14 @@ class mapManager{
     LinearLayout floorSelector,buildingSelector;
     int[] floorsInBuilding;
     FrameLayout mapContainer;
-    Room[] rooms;
     Room lastSelectRoom;
+
+    public mapManager(Context c,String[] buildings){
+        context=c;
+        buildingsList=buildings;
+        getPic = new DrawableManager(c);
+        context=c;
+    }
 
     //Button upBut,Button downBut,Button leftBut,Button rightBut
     public mapManager(Context c, AttributePackForMapManger attributes, String[] buildings){
@@ -133,9 +143,6 @@ class mapManager{
 
 
         //vars
-        rooms=new Room[]{new Room("h.2.204",1200,450,230,380,1469,1117),
-                new Room("h.2.111",499,260,177,125,1469,1117),
-                new Room("wn.5.023",604,556,344,287,1572,1117)};
         getPic = new DrawableManager(c);
         context=c;
         buildingsList=buildings;
@@ -157,6 +164,17 @@ class mapManager{
         if(checkFloorExist(newFloor,building)){
             floor=newFloor;
             updateImage();
+        }
+    }
+
+    public void setBuildingWhitoutUpdate(String newBuilding){
+        if(checkFloorExist(floor,newBuilding)){
+            building=newBuilding;
+            for (int i = 0; i < buildingsList.length; i++) {
+                if (building==buildingsList[i]){
+                    buildingNum=i;
+                }
+            }
         }
     }
 
@@ -215,7 +233,7 @@ class mapManager{
         updateVisabilatyButtons();
     }
 
-    private void updateFloorsInBuilding(){
+    public void updateFloorsInBuilding(){
         int minFloor=0;
         int maxFloor=0;
         int checkFloor=0;
@@ -327,10 +345,15 @@ class mapManager{
 }
 
     public void colorRoom(String roomNumber){
-        for (int i = 0; i <rooms.length; i++) {
-            if (rooms[i].roomNumber.equals(roomNumber)){
-                drawRoom(rooms[i]);
+        int amount=0;
+        for (int i = 0; i <ROOMS.length; i++) {
+            if (ROOMS[i].roomNumber.equals(roomNumber)){
+                drawRoom(ROOMS[i]);
+                amount+=1;
             }
+        }
+        if (amount==0){
+            Toast.makeText(context,context.getString(R.string.Classroom_not_highlighted),Toast.LENGTH_LONG).show();
         }
     }
 
@@ -553,6 +576,10 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }
 
+    public void clickSearch(View v){
+        Intent openSearch=new Intent(this,searchRoom_activaty.class);
+        startActivity(openSearch);
+    }
 
 
     public void clickUp(View v){

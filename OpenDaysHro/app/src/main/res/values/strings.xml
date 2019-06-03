@@ -13,4 +13,11 @@
     <string name="Question">Question</string>
     <string name="Send_question">Send question</string>
     <string name="buidling">building</string>
+    <string name="Classroom_not_highlighted">Classroom cannot be highlighted</string>
+    <string name="search">search</string>
+    <string name="Search_Classroom_Title">Search A Classroom</string>
+    <string name="floor">floor</string>
+    <string name="classroom">classroom</string>
+    <string name="roomnumber">roomnumber</string>
+    <string name="Classroom_highlighted">Classroom can be highlighted</string>
 </resources>
