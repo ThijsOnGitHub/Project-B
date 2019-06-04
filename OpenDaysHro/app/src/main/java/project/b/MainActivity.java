@@ -72,7 +72,9 @@ public class MainActivity extends appHelper {
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
-        Boolean firstdatefirst = true;
+        Boolean firstdatefirst;
+
+        try { firstdatefirst = getIntent().getBooleanExtra("opendaylist", true); } catch (Exception e){ System.out.println(e); firstdatefirst = true;}
 
 
         String[] opendays_ids = layout.db.getUpcomingOpendays(firstdatefirst);
