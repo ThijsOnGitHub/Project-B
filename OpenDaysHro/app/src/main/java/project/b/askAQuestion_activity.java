@@ -1,19 +1,7 @@
 package project.b;
 
-import android.arch.core.util.Function;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.net.Proxy.Type.HTTP;
 
 
 public class askAQuestion_activity extends appHelper {
@@ -37,7 +25,11 @@ public class askAQuestion_activity extends appHelper {
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_grey_24dp};
-        String[] text = new String[]{"home","Study programs","About CMI","Contact"};
+
+        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
+        if(layout.db.language() == true) {
+            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
+        }
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }

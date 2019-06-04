@@ -36,29 +36,71 @@
             android:layout_weight="6"
             tools:ignore="Suspicious0dp">
 
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rotation="90">
+
+                <ImageView
+                    android:id="@+id/ImageView_showroom"
+                    android:layout_width="225dp"
+                    android:layout_height="494dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/highlight" />
+
+                <ImageView
+                    android:id="@+id/ImageView_showFloor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:scrollbars="horizontal|vertical" />
+
+            </FrameLayout>
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".Map">
 
-                <ImageView
-                    android:id="@+id/ImageView_showFloor"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="#00FFFFFF"
-                    android:contentDescription="TODO"
-                    android:cropToPadding="false"
-                    android:rotation="90"
-                    android:scaleType="centerInside"
-                    android:scaleX="1.4"
-                    android:scaleY="1.4"
-                    android:scrollbars="horizontal|vertical"
+                <LinearLayout
+                    android:layout_width="84dp"
+                    android:layout_height="31dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/light_grey"
+                    android:gravity="center|start"
+                    android:onClick="clickSearch"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.92"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.04000002">
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#00FFFFFF"
+                        android:clickable="false"
+                        app:srcCompat="@drawable/ic_search_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autoText="true"
+                        android:onClick="clickSearch"
+                        android:text="@string/search"
+                        android:textColor="@color/text_dark" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/Button_FloorUp"
@@ -74,24 +116,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/TextView_FloorIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="TextView"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.89" />
 
                 <Button
                     android:id="@+id/Button_FloorDown"
