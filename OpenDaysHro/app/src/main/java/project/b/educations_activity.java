@@ -46,9 +46,7 @@ public class educations_activity extends appHelper {
                 int myAnswers = 0;
                 int theAnswers = 0;
                 for (int i = 0; i < myPassedAnswers.length; i++) { myAnswers += Integer.parseInt(myPassedAnswers[i]); theAnswers += Integer.parseInt(passedAnswers[i]); }
-                if (myAnswers >= ( theAnswers / 2 ) ) { Toast.makeText(this, "This study is for you!",Toast.LENGTH_LONG).show(); } else { Toast.makeText(this, "This study is not for you.",Toast.LENGTH_LONG).show(); }
-                String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
-                layout.generate_study_program_menu(R.id.page_container, id_all);
+                if (myAnswers >= ( theAnswers / 2 ) ) { layout.studyCheck_result_page(true); } else { layout.studyCheck_result_page(false); }
             }
         }
 

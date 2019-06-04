@@ -1006,6 +1006,7 @@ public class appHelper extends AppCompatActivity {
                                     goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
                                     goto_quiz_page.putExtra("PROGRESSION", (int) Progression + 1);
                                     startActivity(goto_quiz_page);
+                                    finish(); overridePendingTransition(0, 0);
                             }
                             else { Toast.makeText(context,"Select one.",Toast.LENGTH_LONG).show(); }
                         }
@@ -1021,6 +1022,7 @@ public class appHelper extends AppCompatActivity {
                                 goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
                                 goto_quiz_page.putExtra("PROGRESSION", (int) Progression - 1);
                                 startActivity(goto_quiz_page);
+                                finish();
                         }
                     });
 
@@ -1207,6 +1209,63 @@ public class appHelper extends AppCompatActivity {
                 pop.addView(horizontal2);
 
 
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void studyCheck_result_page(Boolean check){
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int back_button_height = (int) ( (float) phone_height / (float) 8 );
+            int studycheckimage_height = header_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            if ( studycheckimage_width >= studycheckimage_height ) {
+                studycheckimage_width = studycheckimage_height;
+            } else { studycheckimage_height = studycheckimage_width; }
+
+            int textSize = (int) ( (float) ( (float) (float) 30 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
+
+            LinearLayout this_page = new LinearLayout(this.context);
+                this_page.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    this_page.setLayoutParams(this_page_lp);
+                LinearLayout this_page_header = new LinearLayout(this.context);
+                    this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                    this_page_header.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                        this_page_header.setLayoutParams(this_page_header_lp);
+                    this_page.addView(this_page_header);
+                    LinearLayout this_page_header_image = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams this_page_header_image_params = new LinearLayout.LayoutParams(studycheckimage_width,studycheckimage_height);
+                        this_page_header_image.setLayoutParams(this_page_header_image_params);
+                    if (check) { this_page_header_image.setBackground(getDrawable(R.drawable.tumb_up)); }
+                    else { this_page_header_image.setBackground(getDrawable(R.drawable.tumb_down)); }
+                    this_page_header.addView(this_page_header_image);
+                LinearLayout this_page_txt = new LinearLayout(this.context); this_page_txt.setGravity(Gravity.CENTER);
+                    this_page_txt.setOrientation(LinearLayout.VERTICAL); this_page_txt.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_txt_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        this_page_txt_lp.setMargins(0,default_margin * 2,0,default_margin * 2);
+                        this_page_txt.setLayoutParams(this_page_txt_lp);
+                        this_page.addView(this_page_txt);
+
+                        LinearLayout result = new LinearLayout(this.context); result.setGravity(Gravity.CENTER);
+                        LinearLayout backbutton = new LinearLayout(this.context); backbutton.setGravity(Gravity.CENTER);
+                            backbutton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, back_button_height));
+                        TextView result_textview = new TextView(this.context); result.addView(result_textview);
+                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize);
+                        TextView backbutton_text = new TextView(this.context);
+                            backbutton_text.setText("Close the quiz"); backbutton_text.setTextSize(textSize);
+                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.hro_red));
+                            backbutton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    finish();
+                                }
+                            });
+
+                        this_page_txt.addView(result);
+                        this_page_txt.addView(backbutton);
+
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container); main.addView(this_page); main.setBackgroundColor(getResources().getColor(R.color.white));
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
