@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +78,22 @@ public class MainActivity extends appHelper {
 
         try { firstdatefirst = getIntent().getBooleanExtra("opendaylist", true); } catch (Exception e){ System.out.println(e); firstdatefirst = true;}
 
+        LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+        LinearLayout buttonForSorting = new LinearLayout(this);
+            LinearLayout.LayoutParams buttonForSorting_params = new LinearLayout.LayoutParams(250, 250);
+            buttonForSorting.setLayoutParams(buttonForSorting_params);
+            buttonForSorting.setBackgroundColor(getResources().getColor(R.color.hro_red));
+        Boolean finalFirstdatefirst = firstdatefirst;
+        buttonForSorting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent gotoMainActivity = new Intent(getBaseContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                        if (finalFirstdatefirst == true) { gotoMainActivity.putExtra("opendaylist", false); }
+                        else {gotoMainActivity.putExtra("opendaylist", true); }
+                        startActivity(gotoMainActivity);
+                }
+            });
+        main.addView(buttonForSorting);
 
         String[] opendays_ids = layout.db.getUpcomingOpendays(firstdatefirst);
         for (int i = 0; i < opendays_ids.length; i++) {
