@@ -3,26 +3,38 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Outline;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -855,14 +867,31 @@ public class appHelper extends AppCompatActivity {
 
 
             LinearLayout button_map = new LinearLayout(this.context);
-                button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                LinearLayout.LayoutParams button_map_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(phone_height / 10));
-                    button_map.setGravity(Gravity.CENTER); button_map.setLayoutParams(button_map_params);
-                LinearLayout image_map = new LinearLayout(this.context);
-                    LinearLayout.LayoutParams image_map_params = new LinearLayout.LayoutParams((phone_height / 10),(phone_height / 10));
-                        image_map.setLayoutParams(image_map_params);
-                    image_map.setBackground(getDrawable(R.drawable.ic_map_white_24dp));
-                    button_map.addView(image_map);
+                button_map.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950),calcHeightFromDesign(350));
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
+                button_map.setLayoutParams(layoutParamsButtonMap);
+                button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
+                button_map.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                ImageView icon = new ImageView(context);
+                    LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(calcWithFromDesign(150),calcWithFromDesign(150));
+                    iconLayout.setMargins(0,calcHeightFromDesign(40),0,0);
+                    icon.setLayoutParams(iconLayout);
+                    icon.setImageResource(R.drawable.twotone_map_black_18dp);
+
+                    icon.setColorFilter(getResources().getColor(R.color.hro_red));
+                button_map.addView(icon);
+
+                TextView floorplanText=new TextView(context);
+                    floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                    floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                    floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                    floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                button_map.addView(floorplanText);
+
+
+
                 button_map.isClickable();
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1049,7 +1078,6 @@ public class appHelper extends AppCompatActivity {
                     horizontal2.addView(email);
                 pop.addView(horizontal2);
 
-
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1161,20 +1189,45 @@ public class appHelper extends AppCompatActivity {
             }
         }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private String captFirstLetter(String string){
+            return string.substring(0,1).toUpperCase()+string.substring(1);
+        }
+
         private int calcHeightFromDesign(float elementHeight){
-            float designHeight= 1080.f;
-            return (int)((elementHeight*phone_height)*designHeight);
+            float designHeight= 1920.f;
+            return (int)((elementHeight*phone_height)/designHeight);
         }
 
         private int calcWithFromDesign(float elementWidth){
-            float designWidth= 1920.f;
-            return (int)((elementWidth*phone_width)*designWidth);
+            float designWidth= 1080.f;
+            return (int)((elementWidth*phone_width)/designWidth);
         }
 
         private int calcTextSizeInt(float default_text_size,float text_length,float elementWidth){
             return (int) ( (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 );
         }
 
+        private float makeTextFit(int availableWidth,String tekst) {
+
+            //https://stackoverflow.com/questions/7259016/scale-text-in-a-view-to-fit/7259136#7259136
+            // and edited by myself to fit
+            TextView textView=new TextView(context);
+            textView.setLayoutParams(new LinearLayout.LayoutParams(availableWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            CharSequence text = tekst;
+            float textSize = 0;
+            textView.setTextSize(textSize);
+
+
+            while (text == (TextUtils.ellipsize(text, textView.getPaint(), availableWidth, TextUtils.TruncateAt.END))) {
+                textSize += 1;
+                textView.setTextSize(textSize);
+            }
+            textSize -= 5;
+            textView.setTextSize(textSize);
+            return  textSize;
+        }
         private float calcTextSizeFloat(float default_text_size,float text_length,float elementWidth){
             return  (float) ( (float) ( (float) default_text_size - ( (float) text_length / 2 ) ) * (float) ((float) phone_width / (float) elementWidth) / (float) metrics.density ) * (float) 2.625 ;
         }
@@ -1187,6 +1240,13 @@ public class appHelper extends AppCompatActivity {
             return Chars;
         }
 
+        private String getMaxText(String... strings){
+            String Chars="";
+            for ( int counter = 0; counter < strings.length; counter++ ) {
+                if ( strings[counter].length() > Chars.length() ) { Chars = strings[counter]; }
+            }
+            return Chars;
+        }
 
 //---------------------------------------function for sending email -----------------------------------------------------------
         //https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
@@ -1327,5 +1387,310 @@ public class appHelper extends AppCompatActivity {
             layout.addView(linearLayout);
         }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public LinearLayout.LayoutParams giveLayoutFieldParams(){
+        return new LinearLayout.LayoutParams(calcWithFromDesign(400), ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void updateWarning(TextView warning,EditText roomEdit,Spinner buidlingSelector,Spinner floorSelector){
+        Room[] rooms=mapManager.ROOMS;
+
+        String tekst=roomEdit.getText().toString();
+        int lengte=3-tekst.length();
+        for (int i=lengte;i>0;i--){
+            tekst="0"+tekst;
+        }
+
+        String buidling =buidlingSelector.getSelectedItem().toString();
+        int floor=Integer.parseInt(floorSelector.getSelectedItem().toString());
+        String room=tekst;
+
+        String rawString = buidling+"."+floor+"."+room;
+
+        boolean error=true;
+        for(int i=0;i<rooms.length;i++){
+            if(rawString.equals(rooms[i].roomNumber)){
+                error=false;
+            }
+        }
+        if (error){
+            warning.setTextColor(Color.parseColor("#FFAC52"));
+            warning.setText(getResources().getString(R.string.Classroom_not_highlighted));
+        }else {
+            warning.setTextColor(Color.parseColor("#34AC37"));
+            warning.setText(getResources().getString(R.string.Classroom_highlighted));
+        }
+
+
+    }
+        private void updateFloorSpinner(Spinner spinner,String buidlingStr,String[] buidlings){
+            mapManager test = new mapManager(context,buidlings);
+
+            test.setBuildingWhitoutUpdate(buidlingStr);
+            test.updateFloorsInBuilding();
+            int[] floors= test.floorsInBuilding;
+            String[] stringFloors = new String[floors.length];
+            for (int i = 0; i < stringFloors.length; i++) {
+                stringFloors[i]=Integer.toString(floors[i]);
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.spinner_item, stringFloors);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        }
+
+        public void generateSearchPopup(int addToThisLayout){
+            EditText roomEdit;
+            TextView warning;
+
+
+            int width=calcWithFromDesign(900);
+            int height=calcHeightFromDesign(1300);
+            getWindow().setLayout(width,height);
+
+            LinearLayout pop = (LinearLayout) findViewById(addToThisLayout);
+                pop.setBackgroundColor(getResources().getColor(R.color.hro_red));
+                LinearLayout topBar = new LinearLayout(context);
+                topBar.setOrientation(LinearLayout.HORIZONTAL);
+                    TextView Title = new TextView(context);
+                        LinearLayout.LayoutParams TiltleLayoutParams = new LinearLayout.LayoutParams(calcWithFromDesign(500),calcHeightFromDesign(70));
+                        TiltleLayoutParams.setMargins(calcWithFromDesign(40),calcHeightFromDesign(55),0,0);
+                        Title.setLayoutParams(TiltleLayoutParams);
+                        String titleText = getText(R.string.Search_Classroom_Title).toString();
+                        Title.setText(titleText);
+                        Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
+                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        Title.setTextColor(getResources().getColor(R.color.white));
+
+                    topBar.addView(Title);
+
+                    ImageView close = new ImageView(context);
+                        close.setImageResource(R.drawable.close_image);
+                        close.setColorFilter(ContextCompat.getColor(context,R.color.white));
+                        LinearLayout.LayoutParams closeLayoutParams = new LinearLayout.LayoutParams(calcWithFromDesign(80),calcHeightFromDesign(80));
+                        closeLayoutParams.setMargins(calcWithFromDesign(220),calcHeightFromDesign(55),0,0);
+                        close.setLayoutParams(closeLayoutParams);
+                        close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finish();
+                            }
+                        });
+                    topBar.addView(close);
+
+                pop.addView(topBar,calcWithFromDesign(900),calcHeightFromDesign(200));
+
+                LinearLayout middleBar= new LinearLayout(context);
+                    middleBar.setOrientation(LinearLayout.VERTICAL);
+                    middleBar.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                        //selectors get made
+                            String passedInstituteID;
+                            try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null;}
+
+                            if (passedInstituteID == null) {
+                                String[] institutes = db.getInstitutes();
+                                for (int i = 0; i < institutes.length; i++) {
+                                    String[] institute_info = db.getInstituteInfo(institutes[i]);
+                                    if (institute_info[1].equals("CMI")) {
+                                        passedInstituteID = institute_info[3];
+                                    }
+                                }
+                            }
+
+                            String[] buildings=  db.getFloorplansByInstitute(passedInstituteID);
+
+
+
+                            Spinner floorSelector = new Spinner(context);
+                                updateFloorSpinner(floorSelector,buildings[0],buildings);
+
+
+                            Spinner buidlingSelector = new Spinner(context);
+
+                                String[] arraySpinner = buildings;
+                                buidlingSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.spinner_item, arraySpinner);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                buidlingSelector.setAdapter(adapter);
+
+                                
+
+                    //put it inside the layout
+
+                        float textSize=makeTextFit(calcWithFromDesign(300),getMaxText(getResources().getString(R.string.buidling)+':',getResources().getString(R.string.floor)+":",captFirstLetter(getResources().getString(R.string.classroom))+":"));
+
+                        LinearLayout.LayoutParams layoutParamsSpinners= new LinearLayout.LayoutParams(calcWithFromDesign(250), ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                        LinearLayout buidling = new LinearLayout(context);
+                            buidling.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                            TextView buidlingTitle = new TextView(context);
+                                buidlingTitle.setText(captFirstLetter(getResources().getString(R.string.buidling))+":");
+                                buidlingTitle.setTextColor(getResources().getColor(R.color.white));
+                                buidlingTitle.setTextSize(textSize);
+                                LinearLayout.LayoutParams buidlingTitleparams= giveLayoutFieldParams();
+                                buidlingTitleparams.setMargins(0,0,0,calcHeightFromDesign(20));
+                                buidlingTitle.setLayoutParams(buidlingTitleparams);
+                                buidlingTitle.setGravity(Gravity.RIGHT);
+
+                            buidling.addView(buidlingTitle);
+                                buidlingSelector.setLayoutParams(layoutParamsSpinners);
+                            buidling.addView(buidlingSelector);
+
+                        LinearLayout floor=new LinearLayout(context);
+
+                            floor.setOrientation(LinearLayout.HORIZONTAL);
+                            TextView floorTitle = new TextView(context);
+                                floorTitle.setText(captFirstLetter(getResources().getString(R.string.floor))+":");
+                                floorTitle.setTextSize(textSize);
+                                floorTitle.setTextColor(getResources().getColor(R.color.white));
+                                floorTitle.setLayoutParams(giveLayoutFieldParams());
+                                floorTitle.setGravity(Gravity.RIGHT);
+                            floor.addView(floorTitle);
+                                floorSelector.setLayoutParams(layoutParamsSpinners);
+                                floorSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                            floor.addView(floorSelector);
+
+                        LinearLayout room = new LinearLayout(context);
+                            room.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                            TextView roomTitle = new TextView(context);
+                                roomTitle.setText(captFirstLetter(getResources().getString(R.string.classroom))+":");
+                                roomTitle.setLayoutParams(giveLayoutFieldParams());
+                                roomTitle.setTextSize(textSize);
+                                roomTitle.setGravity(Gravity.RIGHT);
+                                roomTitle.setTextColor(getResources().getColor(R.color.white));
+                            room.addView(roomTitle);
+
+
+                            warning=new TextView(context);
+                                LinearLayout.LayoutParams waringParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                waringParams.setMargins(0,calcHeightFromDesign(40),0,0);
+                                warning.setLayoutParams(waringParams);
+                                warning.setText(captFirstLetter(getResources().getString(R.string.Classroom_not_highlighted).toString()));
+                                warning.setGravity(Gravity.CENTER_HORIZONTAL);
+                                warning.setTextColor(Color.parseColor("#FFAC52"));
+                                warning.setTextSize(makeTextFit(calcWithFromDesign(800),warning.getText().toString().split("\\n").toString()));
+
+                             roomEdit = new EditText(context);
+                                roomEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                roomEdit.setHint(captFirstLetter(getResources().getString(R.string.roomnumber)));
+                                roomEdit.setHintTextColor(Color.parseColor("#B5FFFFFF"));
+                                roomEdit.getBackground().mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                                roomEdit.setTextColor(getResources().getColor(R.color.white));
+                                LinearLayout.LayoutParams roomEditParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                roomEditParams.setMargins(0, 0,0,0);
+                                roomEdit.setLayoutParams(roomEditParams);
+                                roomEdit.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                                roomEdit.setOnKeyListener(new View.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                        updateWarning(warning,roomEdit,buidlingSelector,floorSelector);
+                                        return false;
+                                    }
+                                });
+
+                                roomEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                                    @Override
+                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                        int lengte=3-v.getText().toString().length();
+                                        for (int i=lengte;i>0;i--){
+                                            v.setText("0"+v.getText());
+
+                                        }
+                                        return true;
+                                    }
+                                });
+
+                            room.addView(roomEdit);
+
+
+                            buidlingSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    updateWarning(warning, roomEdit, buidlingSelector, floorSelector);
+                                    updateFloorSpinner(floorSelector,buidlingSelector.getSelectedItem().toString(),buildings);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+
+                            floorSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    updateWarning(warning, roomEdit, buidlingSelector, floorSelector);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+
+
+                        Button search = new Button(context);
+                            LinearLayout.LayoutParams searchLayoutParams=new LinearLayout.LayoutParams(calcWithFromDesign(450), ViewGroup.LayoutParams.WRAP_CONTENT);
+                            searchLayoutParams.setMargins(0,calcHeightFromDesign(60),0,0);
+                            search.setLayoutParams(searchLayoutParams);
+                            search.setTextSize(makeTextFit(calcWithFromDesign(160),captFirstLetter(getResources().getString(R.string.search))));
+                            search.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                            search.setText(captFirstLetter(getResources().getString(R.string.search)));
+                            search.setGravity(Gravity.CENTER);
+                            search.setTextColor(getResources().getColor(android.R.color.black));
+                            search.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String tekst=roomEdit.getText().toString();
+                                    int lengte=3-tekst.length();
+                                    for (int i=lengte;i>0;i--){
+                                        tekst="0"+tekst;
+
+                                    }
+
+
+                                    Intent searchRoomIntent = new Intent(context,map_activity.class);
+                                    String buidling =buidlingSelector.getSelectedItem().toString();
+                                    int floor=Integer.parseInt(floorSelector.getSelectedItem().toString());
+                                    String room=tekst;
+
+
+                                    String rawString = buidling+"."+floor+"."+room;
+
+                                    searchRoomIntent.putExtra("building",buidling);
+                                    searchRoomIntent.putExtra("floor",Integer.parseInt(floorSelector.getSelectedItem().toString()));
+                                    searchRoomIntent.putExtra("rawString",rawString);
+                                    startActivity(searchRoomIntent);
+                                    finish();
+                                }
+                            });
+
+
+
+
+
+
+
+                    middleBar.addView(buidling);
+                    middleBar.addView(floor);
+                    middleBar.addView(room);
+                    middleBar.addView(warning);
+                    middleBar.addView(search);
+
+
+                pop.addView(middleBar,calcWithFromDesign(900),calcHeightFromDesign(910));
+
+                LinearLayout bottomBar=new LinearLayout(context);
+                    bottomBar.setBackground(getDrawable(R.drawable.onderkant));
+                pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
+
+
+
+        }
+
+
     }
 }
