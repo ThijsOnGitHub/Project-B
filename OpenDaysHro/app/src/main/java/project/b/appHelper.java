@@ -3,6 +3,7 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -770,7 +771,12 @@ public class appHelper extends AppCompatActivity {
                     addToCalendar_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1));
                     addToCalendar_text.setGravity(Gravity.CENTER);
                     TextView addToCalendar_TextView = new TextView(this.context);
-                        addToCalendar_TextView.setText("Add to\ncalendar"); addToCalendar_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        if(this.db.language() == true){
+                            addToCalendar_TextView.setText("Voeg toe\naan agenda");
+                        } else {
+                            addToCalendar_TextView.setText("Add to\ncalendar");
+                        }
+                        addToCalendar_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         addToCalendar_TextView.setTextSize(text_size_buttons);
                         addToCalendar_text.addView(addToCalendar_TextView);
                     addToCalendar.addView(addToCalendar_text);
@@ -801,7 +807,12 @@ public class appHelper extends AppCompatActivity {
                 share_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1));
                 share_text.setGravity(Gravity.CENTER);
                 TextView share_TextView = new TextView(this.context);
-                    share_TextView.setText("Share"); share_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    if (this.db.language() == true) {
+                        share_TextView.setText("Delen");
+                    } else {
+                        share_TextView.setText("Share");
+                    }
+                    share_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     share_TextView.setTextSize(text_size_buttons);
                     share_text.addView(share_TextView);
                 share.addView(share_text);
@@ -1379,7 +1390,7 @@ public class appHelper extends AppCompatActivity {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            System.out.println("heloo");
+                            System.out.println("hello");
                             confirmContactForm(inputFields[0],inputFields[1],inputFields[2],inputFields[3]);
                         }
                     });

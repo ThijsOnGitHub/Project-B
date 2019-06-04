@@ -5,6 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -12,12 +19,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 54;
+    private static final int HROOPENDAY_VERSION = 79;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -76,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
 
-    public String[] getUpcomingOpendays() {
+    public String[] getUpcomingOpendays(Boolean firstToLast) {
         ArrayList<String> result = new ArrayList<>();
         String[] opendays_id = getAllOpendays();
         String[] openday = new String[]{};
@@ -89,11 +97,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             for (int i = 0; i < opendays_id.length; i++) {
                 openday = getOpendayInfo(opendays_id[i]);
                 if (openday.length > 0) {
-                    Date date_now = new Date();
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(new Date());
                     cal.add(Calendar.HOUR_OF_DAY, 2);
-                    date_now = cal.getTime();
+                    Date date_now = cal.getTime();
 
                     String date = openday[1] + " " + openday[3];
                     Date date_openday = dateFormat.parse(date, new ParsePosition(0));
@@ -116,6 +123,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     }
                 }
             }
+        }
+
+        if (!firstToLast) {
+            Collections.reverse(result);
         }
 
         String[] result_string = result.toArray(new String[result.size()]);
@@ -562,11 +573,143 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //////////////////////////////////////////////////////////////////////////
     // CHECKS
 
-    public void fillDatabase() {
-        // API CALL......
+    public void fillDatabaseWithJson(JSONObject json) {
+        try {
+            JSONArray activity_all = json.getJSONArray("activity");
+            JSONArray openday_all = json.getJSONArray("openday");
+            JSONArray institute_all = json.getJSONArray("institute");
+            JSONArray study_all = json.getJSONArray("study");
+            JSONArray location_all = json.getJSONArray("location");
+            JSONArray image_all = json.getJSONArray("image");
+            JSONArray app_info_all = json.getJSONArray("app_info");
 
-        // Set version
-        createAppinfo("projectb.caslayoort.nl/api", "0");
+            Integer items = 0;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            truncateDatabase(db);
+            Log.d("Syncing", "fillDatabaseWithJson: " + "made the old database empty.");
+
+            // activity table
+            for (int i = 0; i < activity_all.length(); i++) {
+                JSONObject activity = activity_all.getJSONObject(i);
+
+                String openday_date = activity.getString("openday_date");
+                String study_name = activity.getString("study_name");
+                String starttime = activity.getString("starttime");
+                String endtime = activity.getString("endtime");
+                String classroom = activity.getString("classroom");
+                String information_english = activity.getString("information_english");
+                String information_dutch = activity.getString("information_dutch");
+
+                createActivity(openday_date, study_name, starttime, endtime, classroom, information_english, information_dutch);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "activity table synced, " + items.toString() + " activities added.  (table 1/7)");
+            items = 0;
+
+            // openday table
+            for (int i = 0; i < openday_all.length(); i++) {
+                JSONObject openday = openday_all.getJSONObject(i);
+
+                String date = openday.getString("date");
+                String starttime = openday.getString("starttime");
+                String endtime = openday.getString("endtime");
+                String institute_fullname = openday.getString("institute_fullname");
+
+                createOpenday(date, starttime, endtime, institute_fullname);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "openday table synced, " + items.toString() + " opendays added.  (table 2/7)");
+            items = 0;
+
+            // institute table
+            for (int i = 0; i < institute_all.length(); i++) {
+                JSONObject institute = institute_all.getJSONObject(i);
+
+                String fullname = institute.getString("fullname");
+                String shortname = institute.getString("shortname");
+                String generalinformation_english = institute.getString("generalinformation_english");
+                String generalinformation_dutch = institute.getString("generalinformation_dutch");
+                String phonenumber = institute.getString("phonenumber");
+
+                createInstitute(fullname, shortname, generalinformation_english, generalinformation_dutch, phonenumber);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "institute table synced, " + items.toString() + " institutes added.  (table 3/7)");
+            items = 0;
+
+            // study table
+            for (int i = 0; i < study_all.length(); i++) {
+                JSONObject study = study_all.getJSONObject(i);
+
+                String institute_fullname = study.getString("institute_fullname");
+                String name_dutch = study.getString("name_dutch");
+                String name_english = study.getString("name_english");
+                String type = study.getString("type");
+                String generalinfomation_dutch = study.getString("generalinformation_dutch");
+                String generalinformation_english = study.getString("generalinformation_english");
+                String icon = study.getString("icon");
+
+                createStudy(institute_fullname, name_dutch, name_english, type, generalinfomation_dutch, generalinformation_english, icon);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "study table synced, " + items.toString() + " studies added.  (table 4/7)");
+            items = 0;
+
+            // location table
+            for (int i = 0; i < location_all.length(); i++) {
+                JSONObject location = location_all.getJSONObject(i);
+
+                String street = location.getString("street");
+                String city = location.getString("city");
+                String institute_fullname = location.getString("institute_fullname");
+                String zipcode = location.getString("zipcode");
+                String image_description = location.getString("image_description");
+
+                createLocation(street, city, institute_fullname, zipcode, image_description);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "location table synced, " + items.toString() + " locations added.  (table 5/7)");
+            items = 0;
+
+            // image table
+            for (int i = 0; i < image_all.length(); i++) {
+                JSONObject image = image_all.getJSONObject(i);
+
+                String filename = image.getString("filename");
+                String context = image.getString("context");
+                String description = image.getString("description");
+
+                createImage(filename, context, description);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "image table synced, " + items.toString() + " images added.  (table 1/7)");
+            items = 0;
+
+            // app_info table
+            for (int i = 0; i < app_info_all.length(); i++) {
+                JSONObject app_info = app_info_all.getJSONObject(i);
+
+                String api_link = app_info.getString("api_link");
+                String data_version = app_info.getString("data_version");
+
+                createAppinfo(api_link, data_version);
+                items += 1;
+            }
+            Log.d("Syncing", "fillDatabaseWithJson: " + "app_info table synced, " + items.toString() + " informations added.  (table 1/7)");
+            items = 0;
+
+            Log.d("Syncing", "fillDatabaseWithJson: " + "Database is updated to the latest version!");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void fillDatabase_offline() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        truncateDatabase(db);
+
+        setAppinfoFirst();
 
         // Create CMI
         createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.", "0107944000");
@@ -575,12 +718,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time / Part-time", "informatica info dutch", "informatica info english", "calendar_icon");
         createStudy("Communicatie, Media en Informatietechnologie", "Technisch Informatica", "Computer engineering", "Full-time", "TI info dutch", "TI info english", "ic_location_city_white_24dp");
         createStudy("Communicatie, Media en Informatietechnologie", "Creative Media and Game Technologies", "Creative Media and Game Technologies", "Full-time", "CMGT info dutch", "CMGT info english", "ic_map_white_24dp");
-        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication","Full-time / Part-time", "Communicatie info dutch", "Communicatie info english", "ic_home_white_24dp");
+        createStudy("Communicatie, Media en Informatietechnologie", "Communicatie", "Communication", "Full-time / Part-time", "Communicatie info dutch", "Communicatie info english", "ic_home_white_24dp");
         createStudy("Communicatie, Media en Informatietechnologie", "Communication & Multimedia Design", "Communication & Multimedia Design", "Full-time", "CMD info dutch", "CMD info english", "ic_chat_white_24dp");
         // CMI locations
         createLocation("Wijnhaven 107", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "3011WN107");
         createLocation("Wijnhaven 103", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "3011WN103");
-        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN","3011WN99");
+        createLocation("Wijnhaven 99", "Rotterdam", "Communicatie, Media en Informatietechnologie", "3011WN", "3011WN99");
 
         // Floorplans
         createImage("h", "floorplan", "3011WN107");
@@ -601,18 +744,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createActivity("04-06-2019", "Technisch Informatica", "18:15:00", "19:00:00", "H.04.318", "Python stuff", "Python dingen");
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:15:00", "H.05.314", "General Information", "Algemene informatie");
         createActivity("04-06-2019", "Informatica", "17:30:00", "18:00:00", "WD.02.002", "Workshop Android Studio and SQLite", "Workshop over Android Studio en SQLite");
-    }
-    public Boolean checkDatabase() {
-        Boolean empty = emptyDatabase();
-        Boolean version = versionDatabase();
-
-        if (empty == true) {
-            return true;
-        } else if (version == true) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,7 +783,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Database Checkers
-    private Boolean emptyDatabase() {
+    private void setAppinfoFirst() {
+        if (emptyDatabase() == true) {
+            createAppinfo("http://projectb.caslayoort.nl/api", "0");
+        }
+    }
+    public Boolean emptyDatabase() {
         Boolean empty = true;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur = db.rawQuery("SELECT COUNT(*) FROM " + HROOPENDAY_OPENDAY, null);
@@ -700,30 +836,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return empty;
     }
-    private Boolean versionDatabase() {
-        String[] appinfo_id = getAllAppInfo();
-        String link = "";
-        Integer local_version = -1;
-        Integer online_version = -1;
-        if (appinfo_id.length > 0) {
-            for (int i = 0; i < appinfo_id.length; i++) {
-                if (Integer.parseInt(getAppinfo(appinfo_id[i])[0]) > local_version) {
-                    local_version = Integer.parseInt(getAppinfo(appinfo_id[i])[0]);
-                    link = getAppinfo(appinfo_id[i])[1];
-                }
-            }
-            link += "/version";
+    public Boolean versionDatabase() {
+        String[] appinfo = latestAppInfo();
+        Integer local_version = Integer.parseInt(appinfo[0]);
 
-            if (online_version == local_version) {
-                return false;
-            } else if(online_version == -1) {
-                return false;
-            } else {
-                return true;
-            }
+        String link = appinfo[1] + "/version";
+        jsonApi json = new jsonApi();
+        json.execute(link);
+
+        while(!json.finish) {
+            //wait
+        }
+        String online = json.data.substring(0, json.data.length() - 4);
+        Integer online_version = Integer.parseInt(online);
+
+        if (online_version == local_version) {
+            return false;
         } else {
             return true;
         }
+    }
+    public String[] latestAppInfo() {
+        setAppinfoFirst();
+        String[] all_info = getAllAppInfo();
+        return getAppinfo(all_info[all_info.length - 1]);
     }
 
     // Language
@@ -805,7 +941,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return query;
     }
 
+    public boolean isOnline(Context ctx) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if ((connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
+                || (connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .getState() == NetworkInfo.State.CONNECTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Standard For SQLite
+    private void truncateDatabase(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_OPENDAY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_INSTITUTE);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_STUDY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_ACTIVITY);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_LOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_IMAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_APPINFO);
+        onCreate(db);
+    }
+
     public DatabaseHelper(Context context) {
         super(context, HROOPENDAY, null, HROOPENDAY_VERSION);
     }
@@ -821,13 +983,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_OPENDAY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_INSTITUTE);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_STUDY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_ACTIVITY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_LOCATION);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_IMAGE);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_APPINFO);
-        onCreate(db);
+        truncateDatabase(db);
     }
 }
+
