@@ -19,17 +19,18 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-
     <application
         android:allowBackup="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -38,9 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".POPUP_activity"
-            android:theme="@style/AppTheme.POPUP"/>
+        <activity
+            android:name=".POPUP_activity"
+            android:theme="@style/AppTheme.POPUP" />
+        <activity
+            android:name=".searchRoom_activaty"
+            android:theme="@style/AppTheme.POPUP" />
 
         <activity android:name=".About_activity" />
         <activity android:name=".askAQuestion_activity" />
@@ -53,12 +57,11 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        
+
         <provider
-            android:authorities="com.facebook.app.FacebookContentProvider666"
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-        
+            android:authorities="com.facebook.app.FacebookContentProvider666"
+            android:exported="true" />
     </application>
 
 </manifest>

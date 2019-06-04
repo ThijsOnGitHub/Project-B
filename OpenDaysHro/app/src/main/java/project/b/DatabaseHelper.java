@@ -20,12 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 78;
+    private static final int HROOPENDAY_VERSION = 79;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -95,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
 
-    public String[] getUpcomingOpendays() {
+    public String[] getUpcomingOpendays(Boolean firstToLast) {
         ArrayList<String> result = new ArrayList<>();
         String[] opendays_id = getAllOpendays();
         String[] openday = new String[]{};
@@ -108,11 +109,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             for (int i = 0; i < opendays_id.length; i++) {
                 openday = getOpendayInfo(opendays_id[i]);
                 if (openday.length > 0) {
-                    Date date_now = new Date();
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(new Date());
                     cal.add(Calendar.HOUR_OF_DAY, 2);
-                    date_now = cal.getTime();
+                    Date date_now = cal.getTime();
 
                     String date = openday[1] + " " + openday[3];
                     Date date_openday = dateFormat.parse(date, new ParsePosition(0));
@@ -135,6 +135,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     }
                 }
             }
+        }
+
+        if (!firstToLast) {
+            Collections.reverse(result);
         }
 
         String[] result_string = result.toArray(new String[result.size()]);
@@ -1079,15 +1083,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_OPENDAY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_INSTITUTE);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_STUDY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_ACTIVITY);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_LOCATION);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_IMAGE);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_APPINFO);
-        db.execSQL("DROP TABLE IF EXISTS " + HROOPENDAY_QUIZ);
-        onCreate(db);
+        truncateDatabase(db);
     }
 }
 
