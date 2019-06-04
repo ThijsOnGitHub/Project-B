@@ -69,6 +69,7 @@ done
 #done
 
 jq -s 'reduce .[] as $item ({}; . * $item)' ${data_folder}/*${extention_data}_JSON.txt > ${db}.json
+sed -i 's/ \\\\/\\/g' ${db}.json && sed -i 's/\\\\n*/\\n/g' ${db}.json
 cat ${db}.json
 
 rm -r ${data_folder}/; rm tableName.txt
