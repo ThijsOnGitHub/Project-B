@@ -515,6 +515,8 @@ public class appHelper extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent goto_quiz_page = new Intent(context,educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
                                 goto_quiz_page.putExtra("QUIZARRAY", QuizQuestions);
+                                goto_quiz_page.putExtra("MYANSWERARRAY",new String[QuizQuestions.length]);
+                                goto_quiz_page.putExtra("ANSWERARRAY", new String[QuizQuestions.length]);
                                 goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
                                 goto_quiz_page.putExtra("PROGRESSION", 0);
                                 startActivity(goto_quiz_page);
@@ -884,12 +886,15 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_quiz_page(String[] Questions, int amountOfQuestions, int Progression){
+        public void generate_page_quiz_page(String[] Questions, String[] myAnswer, String[] answer, int amountOfQuestions, int Progression){
 
             String[] this_question = Questions[Progression].split("\n", -1);
-            System.out.println(this_question[1]);
-            System.out.println(this_question[3]);
-            System.out.println(this_question[5]);
+
+            int highest = 0; int this_answer1 = Integer.parseInt(this_question[2]); int this_answer2 = Integer.parseInt(this_question[4]); int this_answer3 = Integer.parseInt(this_question[6]);
+            if ( this_answer1 >= highest) { highest = this_answer1; }
+            if ( this_answer2 >= highest) { highest = this_answer2; }
+            if ( this_answer3 >= highest) { highest = this_answer3; }
+            answer[Progression] = Integer.toString(highest);
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int studycheckimage_height = header_height - (2 * default_margin);
@@ -983,6 +988,42 @@ public class appHelper extends AppCompatActivity {
                         nextButton_params = new LinearLayout.LayoutParams(0,buttons_height,1); nextButton_params.setMargins(default_margin / 2,0,0,0);
                     }
                     backButton.setLayoutParams(backButton_params); nextButton.setLayoutParams(nextButton_params);
+
+                    nextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ( answerButton.isChecked() || answerButton2.isChecked() || answerButton3.isChecked() ) {
+                                int chosen_answer = 0;
+                                if (answerButton.isChecked()) { chosen_answer = this_answer1; }
+                                if (answerButton2.isChecked()) { chosen_answer = this_answer2; }
+                                if (answerButton3.isChecked()) { chosen_answer = this_answer3; }
+                                myAnswer[Progression] = Integer.toString(chosen_answer);
+
+                                Intent goto_quiz_page = new Intent(context, educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    goto_quiz_page.putExtra("QUIZARRAY", Questions);
+                                    goto_quiz_page.putExtra("MYANSWERARRAY",myAnswer);
+                                    goto_quiz_page.putExtra("ANSWERARRAY", answer);
+                                    goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                    goto_quiz_page.putExtra("PROGRESSION", (int) Progression + 1);
+                                    startActivity(goto_quiz_page);
+                            }
+                            else { Toast.makeText(context,"Select one.",Toast.LENGTH_LONG).show(); }
+                        }
+                    });
+
+                    backButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent goto_quiz_page = new Intent(context, educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                goto_quiz_page.putExtra("QUIZARRAY", Questions);
+                                goto_quiz_page.putExtra("MYANSWERARRAY",new String[Questions.length]);
+                                goto_quiz_page.putExtra("ANSWERARRAY", new String[Questions.length]);
+                                goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                goto_quiz_page.putExtra("PROGRESSION", (int) Progression - 1);
+                                startActivity(goto_quiz_page);
+                        }
+                    });
+
                     this_page_question.addView(buttons);
 
             LinearLayout main = (LinearLayout) findViewById(R.id.page_container);

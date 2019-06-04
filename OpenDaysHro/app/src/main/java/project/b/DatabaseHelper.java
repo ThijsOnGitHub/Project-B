@@ -827,6 +827,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //create questions for the quiz
         createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
+        createQuiz("Do you like computers?", "Yes, i love them!", "10", "Yes, but i rather do something else than sit behind one for days.",  "6", "No, i hate those devices.", "0", "Informatica");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

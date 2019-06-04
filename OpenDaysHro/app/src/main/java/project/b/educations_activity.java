@@ -3,11 +3,13 @@ package project.b;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
     String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
+    String[] passedAnswers, myPassedAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +19,7 @@ public class educations_activity extends appHelper {
 
         layout = new LayoutHelper(this);
 
-        try { passedQuizQuestions = getIntent().getStringArrayExtra("QUIZARRAY"); amountOfQuizQuestions = (int) getIntent().getIntExtra("AMOUNTOFQUESTIONS",0); Progression = getIntent().getIntExtra("PROGRESSION", 0); }
+        try { passedAnswers = getIntent().getStringArrayExtra("ANSWERARRAY"); myPassedAnswers = getIntent().getStringArrayExtra("MYANSWERARRAY"); passedQuizQuestions = getIntent().getStringArrayExtra("QUIZARRAY"); amountOfQuizQuestions = (int) getIntent().getIntExtra("AMOUNTOFQUESTIONS",0); Progression = getIntent().getIntExtra("PROGRESSION", 0); }
         catch (Exception e){
             System.out.println(e);
         }
@@ -39,7 +41,17 @@ public class educations_activity extends appHelper {
 
         if (passedQuizQuestions != null) {
             // This is the page for the quiz
-            layout.generate_page_quiz_page(passedQuizQuestions,amountOfQuizQuestions, Progression);
+            if ( Progression <= ( amountOfQuizQuestions - 1) ) { layout.generate_page_quiz_page(passedQuizQuestions, myPassedAnswers, passedAnswers, amountOfQuizQuestions, Progression); }
+            else {
+                int myAnswers = 0;
+                int theAnswers = 0;
+                System.out.println("myPassedAnswers = { " + myPassedAnswers[0] + ", " + myPassedAnswers[1] + ", " + myPassedAnswers[2] + ", " + myPassedAnswers[3] + ", " + myPassedAnswers[4] + " }");
+                System.out.println("passedAnswers = { " + passedAnswers[0] + ", " + passedAnswers[1] + ", " + passedAnswers[2] + ", " + passedAnswers[3] + ", " + passedAnswers[4] + " }");
+                for (int i = 0; i < myPassedAnswers.length; i++) { myAnswers += Integer.parseInt(myPassedAnswers[i]); theAnswers += Integer.parseInt(passedAnswers[i]); }
+                if (myAnswers >= ( theAnswers / 2 ) ) { Toast.makeText(this, "This study is for you!",Toast.LENGTH_LONG).show(); } else { Toast.makeText(this, "This study is not for you.",Toast.LENGTH_LONG).show(); }
+                String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
+                layout.generate_study_program_menu(R.id.page_container, id_all);
+            }
         }
 
         else {
