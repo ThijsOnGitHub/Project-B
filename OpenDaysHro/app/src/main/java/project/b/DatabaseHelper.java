@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
 
-    public String[] getUpcomingOpendays() {
+    public String[] getUpcomingOpendays(Boolean firstToLast) {
         ArrayList<String> result = new ArrayList<>();
         String[] opendays_id = getAllOpendays();
         String[] openday = new String[]{};
@@ -122,6 +123,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     }
                 }
             }
+        }
+
+        if (!firstToLast) {
+            Collections.reverse(result);
         }
 
         String[] result_string = result.toArray(new String[result.size()]);

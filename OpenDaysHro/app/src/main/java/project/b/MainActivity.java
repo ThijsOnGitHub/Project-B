@@ -72,7 +72,10 @@ public class MainActivity extends appHelper {
 
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
-        String[] opendays_ids = layout.db.getUpcomingOpendays();
+        Boolean firstdatefirst = true;
+
+
+        String[] opendays_ids = layout.db.getUpcomingOpendays(firstdatefirst);
         for (int i = 0; i < opendays_ids.length; i++) {
             layout.ListItem_openday(opendays_ids[i], R.id.page_container);
         }
