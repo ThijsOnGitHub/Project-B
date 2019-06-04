@@ -12,6 +12,7 @@ import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -1570,7 +1571,7 @@ public class appHelper extends AppCompatActivity {
                                 warning.setText(captFirstLetter(getResources().getString(R.string.Classroom_not_highlighted).toString()));
                                 warning.setGravity(Gravity.CENTER_HORIZONTAL);
                                 warning.setTextColor(Color.parseColor("#FFAC52"));
-                                warning.setTextSize(makeTextFit(calcWithFromDesign(800),warning.getText().toString()));
+                                warning.setTextSize(makeTextFit(calcWithFromDesign(800),warning.getText().toString().split("\\n").toString()));
 
                              roomEdit = new EditText(context);
                                 roomEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
