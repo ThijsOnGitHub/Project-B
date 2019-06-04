@@ -942,7 +942,7 @@ public class appHelper extends AppCompatActivity {
                         Progress.addView(progressionBar);
                         progressionBar.setGravity(Gravity.LEFT);
                         LinearLayout progression_done = new LinearLayout(this.context);
-                            progression_done.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                            progression_done.setBackgroundColor(getResources().getColor(R.color.hro_red));
                             LinearLayout.LayoutParams progression_done_params = new LinearLayout.LayoutParams(progression_done_width, progressionbar_height);
                                 progression_done.setLayoutParams(progression_done_params);
                             progressionBar.addView(progression_done);
@@ -1016,8 +1016,8 @@ public class appHelper extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent goto_quiz_page = new Intent(context, educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 goto_quiz_page.putExtra("QUIZARRAY", Questions);
-                                goto_quiz_page.putExtra("MYANSWERARRAY",new String[Questions.length]);
-                                goto_quiz_page.putExtra("ANSWERARRAY", new String[Questions.length]);
+                                goto_quiz_page.putExtra("MYANSWERARRAY", myAnswer);
+                                goto_quiz_page.putExtra("ANSWERARRAY", answer);
                                 goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
                                 goto_quiz_page.putExtra("PROGRESSION", (int) Progression - 1);
                                 startActivity(goto_quiz_page);
