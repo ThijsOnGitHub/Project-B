@@ -37,11 +37,12 @@ public class contact_activity extends appHelper {
         int[] images = new int[]{R.drawable.ic_home_white_24dp, R.drawable.baseline_school_24px, R.drawable.ic_location_city_white_24dp, R.drawable.ic_chat_grey_24dp};
 
         String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
+        int[] contact_images = new int[]{ R.drawable.button_website, R.drawable.ask_question, R.drawable.button_call_us };
         if(layout.db.language() == true) {
             text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
+            contact_images = new int[] { R.drawable.button_website, R.drawable.ask_question_nl, R.drawable.button_call_nl};
         }
 
-        int[] contact_images = new int[]{ R.drawable.button_website, R.drawable.ask_question, R.drawable.button_call_us };
         int[] social_images = new int[]{ R.drawable.facebook_logo, R.drawable.instagram, R.drawable.twitter };
 
         layout.generate_menu(R.id.menu_bar, images, text, myIntents);
