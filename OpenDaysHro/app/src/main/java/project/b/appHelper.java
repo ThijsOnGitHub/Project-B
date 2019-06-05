@@ -14,6 +14,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -926,7 +930,7 @@ public class appHelper extends AppCompatActivity {
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
@@ -1927,6 +1931,61 @@ public class appHelper extends AppCompatActivity {
 
 
 
+        }
+
+        public void sync(Context context) {
+            Boolean synced = true;
+
+            try {
+                if (this.db.emptyDatabase()) {
+                    Log.d("Syncing", "onCreate: " + "Database is empty");
+                    if (this.db.isOnline(context) == true) {
+                        Log.d("Syncing", "onCreate: " + "Phone is online");
+                        if (this.db.versionDatabase() == true) {
+                            Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                            jsonApi json = new jsonApi();
+                            json.execute(this.db.latestAppInfo()[1]);
+                            while (!json.finish) {
+                                // wait
+                            }
+                            JSONObject jsonObject = new JSONObject(json.data);
+                            this.db.fillDatabaseWithJson(jsonObject);
+                        } else {
+                            Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        }
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Phone is offline");
+                        this.db.fillDatabase_offline();
+                    }
+                } else {
+                    Log.d("Syncing", "onCreate: " + "Database is not empty");
+                    if (this.db.isOnline(context) == true) {
+                        Log.d("Syncing", "onCreate: " + "Phone is online");
+                        if (this.db.versionDatabase() == true) {
+                            Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                            jsonApi json = new jsonApi();
+                            json.execute(this.db.latestAppInfo()[1]);
+                            while(!json.finish) {
+                                // wait
+                            }
+                            JSONObject jsonObject = new JSONObject(json.data);
+                            this.db.fillDatabaseWithJson(jsonObject);
+                        } else {
+                            Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                synced = false;
+            }
+
+            if (synced) {
+                Intent mainActivity = new Intent(context, MainActivity.class);
+                startActivity(mainActivity);
+            } else { // error
+                Log.d("Syncing", "onCreate: Syncing (online/offline) failed");
+            }
         }
 
 

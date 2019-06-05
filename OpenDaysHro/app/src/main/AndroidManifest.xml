@@ -32,7 +32,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +45,6 @@
         <activity
             android:name=".searchRoom_activaty"
             android:theme="@style/AppTheme.POPUP" />
-
         <activity android:name=".About_activity" />
         <activity android:name=".askAQuestion_activity" />
         <activity android:name=".contact_activity" />
@@ -53,6 +52,7 @@
         <activity android:name=".map_activity" />
         <activity android:name=".educations_activity" />
         <activity android:name=".menu_activity" />
+        <activity android:name=".MainActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
