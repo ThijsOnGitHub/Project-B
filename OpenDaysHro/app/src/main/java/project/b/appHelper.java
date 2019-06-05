@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -1696,7 +1695,7 @@ public class appHelper extends AppCompatActivity {
                         String titleText = getText(R.string.Search_Classroom_Title).toString();
                         Title.setText(titleText);
                         Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
-                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+//                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
                         Title.setTextColor(getResources().getColor(R.color.white));
 
                     topBar.addView(Title);
