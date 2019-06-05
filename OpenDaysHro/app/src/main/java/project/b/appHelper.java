@@ -1984,7 +1984,18 @@ public class appHelper extends AppCompatActivity {
                 Intent mainActivity = new Intent(context, MainActivity.class);
                 startActivity(mainActivity);
             } else { // error
-                Log.d("Syncing", "onCreate: Syncing (online/offline) failed");
+                CharSequence text;
+
+                if (this.db.language()) {
+                    text = "Er is iets fout gegaan met het synchroniseren van de database";
+                } else {
+                    text = "Something went wrong while syncing the database";
+                }
+
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context.getApplicationContext(), text, duration);
+                toast.show();
             }
         }
 
