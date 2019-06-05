@@ -82,15 +82,27 @@ public class MainActivity extends appHelper {
         LinearLayout buttonForSorting = new LinearLayout(this);
             LinearLayout.LayoutParams buttonForSorting_params = new LinearLayout.LayoutParams(250, 250);
             buttonForSorting.setLayoutParams(buttonForSorting_params);
-            buttonForSorting.setBackgroundColor(getResources().getColor(R.color.hro_red));
+        buttonForSorting.setBackgroundColor(getResources().getColor(R.color.light_grey));
+            if (firstdatefirst == true) {
+                buttonForSorting.setForeground(getResources().getDrawable(R.drawable.sort19));
+                buttonForSorting.getForeground().setTint(getResources().getColor(R.color.hro_red));
+            }else {
+                    buttonForSorting.setForeground(getResources().getDrawable(R.drawable.sort91));
+                    buttonForSorting.getForeground().setTint(getResources().getColor(R.color.hro_red));
+                }
+
         Boolean finalFirstdatefirst = firstdatefirst;
         buttonForSorting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent gotoMainActivity = new Intent(getBaseContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
-                        if (finalFirstdatefirst == true) { gotoMainActivity.putExtra("opendaylist", false); }
-                        else {gotoMainActivity.putExtra("opendaylist", true); }
+                        if (finalFirstdatefirst == true) {
+                            gotoMainActivity.putExtra("opendaylist", false); }
+                        else {
+                            gotoMainActivity.putExtra("opendaylist", true);
+                        }
                         startActivity(gotoMainActivity);
+
                 }
             });
         main.addView(buttonForSorting);
