@@ -3,6 +3,7 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -28,6 +29,8 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,31 +42,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-/*
-
-FUNCTIONS:
-1. ListItem_openday ( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout)
-2. workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout)
-3. generate_study_program_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text)
-4. generate_page_study_programs (int Image, String Text, int addViewTo)
-5. generate_menu (int addToThisLayout, int[] List_with_images, String[] List_with_text, Intent[] gotoThisPage)
-6. Image_with_Buttons (int addToThisLinearLayout, int[] images)
-7. calendar_page(int addToThisLayout, int Image, int Calendar_Image,
-                                  int Share_Image, String EVENT_TITLE, String EVENT_DESCRIPTION, String EVENT_LOCATION,
-                                  int EVENT_YEAR, int EVENT_MONTH, int EVENT_DAY, int EVENT_START_HOUR, int EVENT_START_MINUTE,
-                                  int EVENT_END_HOUR, int EVENT_END_MINUTE)
-
-Status (updated 05-05-2019):
-1. ListItem_openday : Text needs to be scaled and the real info image needs to be implemented.
-2. workshop : Text needs to be scaled and the timer needs to be implemented.
-3. generate_study_program_menu : need to add support for broken strings (test\ntest) and need to break them if they are larger than x.
-4. generate_page_study_programs: Layout needs to be adjusted. also the image needs to has the centered logo and text.
-5. generate_menu : done.
-6. Image_with_Buttons : done.
-7. calendar_page : scaling for the workshops and need to make the share button working. also need to test if the reminder exists / add the reminder.
-
-*/
 
 public class appHelper extends AppCompatActivity {
 
@@ -182,34 +160,34 @@ public class appHelper extends AppCompatActivity {
             String workshops = "Workshops: " + String.valueOf(all_workshops.length);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
-            LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout_main.isClickable();
-            LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
-            LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
-            LinearLayout_main_layoutParams.setMargins(0,0,0,0);
-            LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+                LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout_main.isClickable();
+                LinearLayout_main.setBackgroundColor(getResources().getColor(menuColor));
+                LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
+                    LinearLayout_main_layoutParams.setMargins(0,0,0,0);
+                    LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
-            listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
 
             RelativeLayout listItem_loc = new RelativeLayout(this.context);
-            listItem_loc.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,5));
+                listItem_loc.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,5));
 
             RelativeLayout info_layout = new RelativeLayout(this.context);
-            info_layout.setGravity(Gravity.CENTER);
-            info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
+                info_layout.setGravity(Gravity.CENTER);
+                info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-            listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
-            listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-            listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
-            listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
-            info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
-            info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
+                info_button.setLayoutParams(new LinearLayout.LayoutParams( info_button_size, info_button_size ));
+                info_button.setBackground(getDrawable(R.drawable.twotone_info_24px));
 
 
             ((RelativeLayout) listItem_description_layout ).addView((TextView) listItem_description);
@@ -371,8 +349,8 @@ public class appHelper extends AppCompatActivity {
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout Main_layout = new LinearLayout(this.context);
                 LinearLayout.LayoutParams my_main_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
-                Main_layout.setLayoutParams(my_main_params);
+                    my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
+                    Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
 
             String longest_string;
@@ -500,16 +478,24 @@ public class appHelper extends AppCompatActivity {
 
 
         public void generate_page_study_programs(int Image, String ID, int addViewTo){
-            // The text now is static. In the future this will be fetched from the db. The string Text is for the title which will be passed on with the intent.
-
             String[] study = this.db.getStudyInfo(ID);
 
             String study_name = study[2];
             String study_information = study[3];
 
+            int amountOfQuestions = db.amountOfQuestions(study_name);
+            String[] QuizQuestions = db.getQuizQuestions(study_name);
+
+            for (int i = 0; i < amountOfQuestions; i++){ System.out.println(QuizQuestions[i]); };
+
             String[] contentList = new String[]{study_name,study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int quiz_height = (int) ( (float) phone_height / (float) 5 );
+            int studycheckimage_height = quiz_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            //int studycheckimage_width = phone_width - (10 * default_margin);
+            //int studycheckimage_height = (int) ( ( (float) studycheckimage_width / (float) 2100 ) * (float) 1500 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
 
             LinearLayout this_page = new LinearLayout(this.context);
@@ -526,6 +512,34 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 this_page_text_lp.setMargins(0,default_margin,0,default_margin);
                 this_page_text.setLayoutParams(this_page_text_lp);
+
+            if (amountOfQuestions > 0) {
+                LinearLayout quiz_button = new LinearLayout(this.context);
+                    quiz_button.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams quiz_button_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, quiz_height);
+                        quiz_button_params.setMargins(default_margin,0,default_margin,default_margin);
+                        quiz_button.setLayoutParams(quiz_button_params);
+                    quiz_button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                    LinearLayout quiz_button_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams quiz_button_image_lp = new LinearLayout.LayoutParams(studycheckimage_width, studycheckimage_height);
+                            quiz_button_image_lp.setMargins(0 ,0, 0 ,0);
+                            quiz_button_image.setLayoutParams(quiz_button_image_lp);
+                        quiz_button_image.setBackground(getDrawable(R.drawable.studycheck));
+                        quiz_button.addView(quiz_button_image);
+                    this_page_text.addView(quiz_button);
+                    quiz_button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent goto_quiz_page = new Intent(context,educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                                goto_quiz_page.putExtra("QUIZARRAY", QuizQuestions);
+                                goto_quiz_page.putExtra("MYANSWERARRAY",new String[QuizQuestions.length]);
+                                goto_quiz_page.putExtra("ANSWERARRAY", new String[QuizQuestions.length]);
+                                goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                goto_quiz_page.putExtra("PROGRESSION", 0);
+                                startActivity(goto_quiz_page);
+                        }
+                    });
+            }
 
             for (int x = 0; x < contentList.length; x++) {
                 TextView this_text = new TextView(this.context);
@@ -641,11 +655,11 @@ public class appHelper extends AppCompatActivity {
             LinearLayout the_image = new LinearLayout(this.context);
                 the_image.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams image_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, image_height));
-                the_image.setLayoutParams(image_lp);
+                    the_image.setLayoutParams(image_lp);
                 the_image.setBackground(getDrawable(images[0]));
 
             RelativeLayout button_left = new RelativeLayout(this.context);
-            button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                 TextView button1_txt = new TextView(this.context);
                     button1_txt.setText("<");
                     button1_txt.setTextSize(text_size);
@@ -719,8 +733,8 @@ public class appHelper extends AppCompatActivity {
                 main.setOrientation(LinearLayout.VERTICAL);
             LinearLayout page = new LinearLayout(this.context);
                 LinearLayout.LayoutParams page_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    page.setLayoutParams(page_params);
                 page.setOrientation(LinearLayout.VERTICAL);
-                page.setLayoutParams(page_params);
             LinearLayout image = new LinearLayout(this.context);
                 LinearLayout.LayoutParams image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 3.5 ) ));
                     image.setLayoutParams(image_params);
@@ -770,7 +784,12 @@ public class appHelper extends AppCompatActivity {
                     addToCalendar_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1));
                     addToCalendar_text.setGravity(Gravity.CENTER);
                     TextView addToCalendar_TextView = new TextView(this.context);
-                        addToCalendar_TextView.setText("Add to\ncalendar"); addToCalendar_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        if(this.db.language() == true){
+                            addToCalendar_TextView.setText("Voeg toe\naan agenda");
+                        } else {
+                            addToCalendar_TextView.setText("Add to\ncalendar");
+                        }
+                        addToCalendar_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         addToCalendar_TextView.setTextSize(text_size_buttons);
                         addToCalendar_text.addView(addToCalendar_TextView);
                     addToCalendar.addView(addToCalendar_text);
@@ -801,7 +820,12 @@ public class appHelper extends AppCompatActivity {
                 share_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1));
                 share_text.setGravity(Gravity.CENTER);
                 TextView share_TextView = new TextView(this.context);
-                    share_TextView.setText("Share"); share_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    if (this.db.language() == true) {
+                        share_TextView.setText("Delen");
+                    } else {
+                        share_TextView.setText("Share");
+                    }
+                    share_TextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     share_TextView.setTextSize(text_size_buttons);
                     share_text.addView(share_TextView);
                 share.addView(share_text);
@@ -896,12 +920,162 @@ public class appHelper extends AppCompatActivity {
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class);
+                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
                 });
                 main.addView(button_map);
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void generate_page_quiz_page(String[] Questions, String[] myAnswer, String[] answer, int amountOfQuestions, int Progression){
+
+            String[] this_question = Questions[Progression].split("\n", -1);
+
+            int highest = 0; int this_answer1 = Integer.parseInt(this_question[2]); int this_answer2 = Integer.parseInt(this_question[4]); int this_answer3 = Integer.parseInt(this_question[6]);
+            if ( this_answer1 >= highest) { highest = this_answer1; }
+            if ( this_answer2 >= highest) { highest = this_answer2; }
+            if ( this_answer3 >= highest) { highest = this_answer3; }
+            answer[Progression] = Integer.toString(highest);
+
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int studycheckimage_height = header_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            if ( studycheckimage_width > phone_width ) {
+                studycheckimage_width = phone_width - ( 4 * default_margin );
+                studycheckimage_height = (int) ( ( (float) studycheckimage_width / (float) 2100 ) * (float) 1500 );
+            }
+
+            int progressionbar_height = ( default_margin * 3 ) / 2;
+            int progressionbar_width = phone_width - (default_margin * 4);
+            int progression_done_width = ( progressionbar_width / amountOfQuestions ) * Progression;
+            int buttons_width = phone_width - (default_margin * 4);
+            int buttons_height = phone_height / 11;
+
+            int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
+
+            LinearLayout this_page = new LinearLayout(this.context);
+                this_page.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    this_page.setLayoutParams(this_page_lp);
+                LinearLayout this_page_header = new LinearLayout(this.context);
+                    this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                    this_page_header.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                        this_page_header.setLayoutParams(this_page_header_lp);
+                    LinearLayout this_page_header_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams this_page_header_image_params = new LinearLayout.LayoutParams(studycheckimage_width,studycheckimage_height);
+                            this_page_header_image.setLayoutParams(this_page_header_image_params);
+                        this_page_header_image.setBackground(getDrawable(R.drawable.studycheck));
+                        this_page_header.addView(this_page_header_image);
+                LinearLayout this_page_question = new LinearLayout(this.context);
+                    this_page_question.setOrientation(LinearLayout.VERTICAL); this_page_question.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_question_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        this_page_question_lp.setMargins(0,default_margin * 2,0,default_margin * 2);
+                        this_page_question.setLayoutParams(this_page_question_lp);
+
+                LinearLayout Progress = new LinearLayout(this.context);
+                    Progress.setOrientation(LinearLayout.VERTICAL); Progress.setGravity(Gravity.CENTER); this_page_question.addView(Progress);
+                    TextView progression = new TextView(this.context); progression.setText("Progression: (" + Progression + "/" + amountOfQuestions + ")"); progression.setGravity(Gravity.CENTER); progression.setTextAlignment(View.TEXT_ALIGNMENT_CENTER); Progress.addView(progression);
+                    LinearLayout progressionBar = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams progressionBar_params = new LinearLayout.LayoutParams(progressionbar_width, progressionbar_height);
+                            progressionBar.setLayoutParams(progressionBar_params);
+                            progressionBar.setBackgroundColor(getResources().getColor(R.color.dark_grey));
+                        Progress.addView(progressionBar);
+                        progressionBar.setGravity(Gravity.LEFT);
+                        LinearLayout progression_done = new LinearLayout(this.context);
+                            progression_done.setBackgroundColor(getResources().getColor(R.color.hro_red));
+                            LinearLayout.LayoutParams progression_done_params = new LinearLayout.LayoutParams(progression_done_width, progressionbar_height);
+                                progression_done.setLayoutParams(progression_done_params);
+                            progressionBar.addView(progression_done);
+
+
+                LinearLayout question_layout = new LinearLayout(this.context); question_layout.setGravity(Gravity.CENTER); question_layout.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout.LayoutParams question_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        question_layout_params.setMargins(default_margin,default_margin * 3,default_margin,default_margin * 3);
+                    question_layout.setLayoutParams(question_layout_params);
+                    TextView question = new TextView(this.context); question.setText(this_question[0]); question.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        question_layout.addView(question);
+                    this_page_question.addView(question_layout);
+
+                LinearLayout radio_spacing = new LinearLayout(this.context); this_page_question.addView(radio_spacing);
+                    LinearLayout.LayoutParams radio_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        radio_params.setMargins(default_margin,default_margin,default_margin,default_margin);
+                        radio_spacing.setLayoutParams(radio_params);
+                RadioGroup answer_group = new RadioGroup(this.context); radio_spacing.addView(answer_group);
+                    RadioButton answerButton = new RadioButton(this.context); answerButton.setText(this_question[1]); answer_group.addView(answerButton);
+                    RadioButton answerButton2 = new RadioButton(this.context); answerButton2.setText(this_question[3]); answer_group.addView(answerButton2);
+                    RadioButton answerButton3 = new RadioButton(this.context); answerButton3.setText(this_question[5]); answer_group.addView(answerButton3);
+
+                LinearLayout buttons = new LinearLayout(this.context);
+                    buttons.setOrientation(LinearLayout.HORIZONTAL); buttons.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams buttons_params = new LinearLayout.LayoutParams(buttons_width,buttons_height); buttons_params.setMargins(default_margin, default_margin, default_margin, default_margin);
+                        buttons.setLayoutParams(buttons_params);
+                    LinearLayout backButton = new LinearLayout(this.context); LinearLayout.LayoutParams backButton_params; backButton.setBackgroundColor(getResources().getColor(R.color.dark_grey)); buttons.addView(backButton);
+                        TextView backButton_text = new TextView(this.context); backButton_text.setText("Back");
+                    LinearLayout nextButton = new LinearLayout(this.context); LinearLayout.LayoutParams nextButton_params; nextButton.setBackgroundColor(getResources().getColor(R.color.dark_grey)); buttons.addView(nextButton);
+                        TextView nextButton_text = new TextView(this.context); nextButton.addView(nextButton_text);
+                        nextButton.setGravity(Gravity.CENTER);
+
+                    if (Progression + 1 >= amountOfQuestions) { nextButton_text.setText("Finish"); } else { nextButton_text.setText("Next"); }
+
+                    if (Progression <= 0){
+                        backButton_params = new LinearLayout.LayoutParams(0,0);
+                        nextButton_params = new LinearLayout.LayoutParams(buttons_width,buttons_height);
+                    }
+                    else {
+                        backButton_params = new LinearLayout.LayoutParams(0,buttons_height,1); backButton_params.setMargins(0,0,default_margin / 2,0);
+                            backButton.addView(backButton_text);
+                            backButton.setGravity(Gravity.CENTER);
+                        nextButton_params = new LinearLayout.LayoutParams(0,buttons_height,1); nextButton_params.setMargins(default_margin / 2,0,0,0);
+                    }
+                    backButton.setLayoutParams(backButton_params); nextButton.setLayoutParams(nextButton_params);
+
+                    nextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ( answerButton.isChecked() || answerButton2.isChecked() || answerButton3.isChecked() ) {
+                                int chosen_answer = 0;
+                                if (answerButton.isChecked()) { chosen_answer = this_answer1; }
+                                if (answerButton2.isChecked()) { chosen_answer = this_answer2; }
+                                if (answerButton3.isChecked()) { chosen_answer = this_answer3; }
+                                myAnswer[Progression] = Integer.toString(chosen_answer);
+
+                                Intent goto_quiz_page = new Intent(context, educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    goto_quiz_page.putExtra("QUIZARRAY", Questions);
+                                    goto_quiz_page.putExtra("MYANSWERARRAY",myAnswer);
+                                    goto_quiz_page.putExtra("ANSWERARRAY", answer);
+                                    goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                    goto_quiz_page.putExtra("PROGRESSION", (int) Progression + 1);
+                                    startActivity(goto_quiz_page);
+                                    finish(); overridePendingTransition(0, 0);
+                            }
+                            else { Toast.makeText(context,"Select one.",Toast.LENGTH_LONG).show(); }
+                        }
+                    });
+
+                    backButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent goto_quiz_page = new Intent(context, educations_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                goto_quiz_page.putExtra("QUIZARRAY", Questions);
+                                goto_quiz_page.putExtra("MYANSWERARRAY", myAnswer);
+                                goto_quiz_page.putExtra("ANSWERARRAY", answer);
+                                goto_quiz_page.putExtra("AMOUNTOFQUESTIONS", (int) amountOfQuestions);
+                                goto_quiz_page.putExtra("PROGRESSION", (int) Progression - 1);
+                                startActivity(goto_quiz_page);
+                                finish();
+                        }
+                    });
+
+                    this_page_question.addView(buttons);
+
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+            this_page.addView(this_page_header);
+            this_page.addView(this_page_question);
+            main.addView(this_page);
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1082,6 +1256,63 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void studyCheck_result_page(Boolean check){
+            int header_height = (int) ( (float) phone_height / (float) 3.5 );
+            int back_button_height = (int) ( (float) phone_height / (float) 8 );
+            int studycheckimage_height = header_height - (2 * default_margin);
+            int studycheckimage_width = (int) ( ( (float) studycheckimage_height / (float) 1500 ) * (float) 2100 );
+            if ( studycheckimage_width >= studycheckimage_height ) {
+                studycheckimage_width = studycheckimage_height;
+            } else { studycheckimage_height = studycheckimage_width; }
+
+            int textSize = (int) ( (float) ( (float) (float) 30 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
+
+            LinearLayout this_page = new LinearLayout(this.context);
+                this_page.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    this_page.setLayoutParams(this_page_lp);
+                LinearLayout this_page_header = new LinearLayout(this.context);
+                    this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                    this_page_header.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
+                        this_page_header.setLayoutParams(this_page_header_lp);
+                    this_page.addView(this_page_header);
+                    LinearLayout this_page_header_image = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams this_page_header_image_params = new LinearLayout.LayoutParams(studycheckimage_width,studycheckimage_height);
+                        this_page_header_image.setLayoutParams(this_page_header_image_params);
+                    if (check) { this_page_header_image.setBackground(getDrawable(R.drawable.tumb_up)); }
+                    else { this_page_header_image.setBackground(getDrawable(R.drawable.tumb_down)); }
+                    this_page_header.addView(this_page_header_image);
+                LinearLayout this_page_txt = new LinearLayout(this.context); this_page_txt.setGravity(Gravity.CENTER);
+                    this_page_txt.setOrientation(LinearLayout.VERTICAL); this_page_txt.setGravity(Gravity.CENTER);
+                    LinearLayout.LayoutParams this_page_txt_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        this_page_txt_lp.setMargins(0,default_margin * 2,0,default_margin * 2);
+                        this_page_txt.setLayoutParams(this_page_txt_lp);
+                        this_page.addView(this_page_txt);
+
+                        LinearLayout result = new LinearLayout(this.context); result.setGravity(Gravity.CENTER);
+                        LinearLayout backbutton = new LinearLayout(this.context); backbutton.setGravity(Gravity.CENTER);
+                            backbutton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, back_button_height));
+                        TextView result_textview = new TextView(this.context); result.addView(result_textview);
+                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize);
+                        TextView backbutton_text = new TextView(this.context);
+                            backbutton_text.setText("Close the quiz"); backbutton_text.setTextSize(textSize);
+                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.hro_red));
+                            backbutton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    finish();
+                                }
+                            });
+
+                        this_page_txt.addView(result);
+                        this_page_txt.addView(backbutton);
+
+            LinearLayout main = (LinearLayout) findViewById(R.id.page_container); main.addView(this_page); main.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void contact_page(int image, int[] contact_images, int[] social_media_images, String institute_id){
             String callnumber = this.db.getInstituteInfo(institute_id)[4];
 
@@ -1190,10 +1421,11 @@ public class appHelper extends AppCompatActivity {
         }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
         private String captFirstLetter(String string){
             return string.substring(0,1).toUpperCase()+string.substring(1);
         }
-
+      
         private int calcHeightFromDesign(float elementHeight){
             float designHeight= 1920.f;
             return (int)((elementHeight*phone_height)/designHeight);
@@ -1379,7 +1611,7 @@ public class appHelper extends AppCompatActivity {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            System.out.println("heloo");
+                            System.out.println("hello");
                             confirmContactForm(inputFields[0],inputFields[1],inputFields[2],inputFields[3]);
                         }
                     });

@@ -11,14 +11,11 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 class DrawableManager{
@@ -571,7 +568,11 @@ public class map_activity extends appHelper implements GestureDetector.OnGesture
 
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
+
         String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
+        if(layout.db.language() == true) {
+            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
+        }
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
     }
