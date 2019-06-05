@@ -3,11 +3,13 @@ package project.b;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
-    String passedStudyID, passedInstituteID;
+    String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
+    String[] passedAnswers, myPassedAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,13 +17,19 @@ public class educations_activity extends appHelper {
         setContentView(R.layout.activity_educations);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        try { passedStudyID = getIntent().getStringExtra("StudyID"); } catch (Exception e){ System.out.println(e); passedStudyID = null; }
-        try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null;}
-
-
         layout = new LayoutHelper(this);
 
+        try { passedAnswers = getIntent().getStringArrayExtra("ANSWERARRAY"); myPassedAnswers = getIntent().getStringArrayExtra("MYANSWERARRAY"); passedQuizQuestions = getIntent().getStringArrayExtra("QUIZARRAY"); amountOfQuizQuestions = (int) getIntent().getIntExtra("AMOUNTOFQUESTIONS",0); Progression = getIntent().getIntExtra("PROGRESSION", 0); }
+        catch (Exception e){
+            System.out.println(e);
+        }
+
+        try { passedStudyID = getIntent().getStringExtra("StudyID"); } catch (Exception e){ System.out.println(e); passedStudyID = null; passedInstituteID = "NOT NULL"; }
+        try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null; passedStudyID = "NOT NULL";}
+
+
         if (passedInstituteID == null) {
+            // gets the information for the right institute.
             String[] institutes = layout.db.getInstitutes();
             for (int i = 0; i < institutes.length; i++) {
                 String[] institute_info = layout.db.getInstituteInfo(institutes[i]);
@@ -31,12 +39,27 @@ public class educations_activity extends appHelper {
             }
         }
 
-        if (passedStudyID == null) {
-            String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
-            layout.generate_study_program_menu(R.id.page_container, id_all);
+        if (passedQuizQuestions != null) {
+            // This is the page for the quiz
+            if ( Progression <= ( amountOfQuizQuestions - 1) ) { layout.generate_page_quiz_page(passedQuizQuestions, myPassedAnswers, passedAnswers, amountOfQuizQuestions, Progression); }
+            else {
+                int myAnswers = 0;
+                int theAnswers = 0;
+                for (int i = 0; i < myPassedAnswers.length; i++) { myAnswers += Integer.parseInt(myPassedAnswers[i]); theAnswers += Integer.parseInt(passedAnswers[i]); }
+                if (myAnswers >= ( theAnswers / 2 ) ) { layout.studyCheck_result_page(true); } else { layout.studyCheck_result_page(false); }
+            }
         }
+
         else {
-            layout.generate_page_study_programs(R.drawable.blaak,passedStudyID,R.id.page_container);
+
+            if (passedStudyID == null) {
+                // this is the study selector.
+                String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
+                layout.generate_study_program_menu(R.id.page_container, id_all);
+            } else {
+                // this is the page for the study selected inside the study selector
+                layout.generate_page_study_programs(R.drawable.blaak, passedStudyID, R.id.page_container);
+            }
         }
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
