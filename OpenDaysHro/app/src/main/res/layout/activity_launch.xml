@@ -27,13 +27,13 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/hro_opendays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="8dp"
-        android:text="Hogeschool Rotterdam\nOpen dagen"
+        android:text="Hogeschool Rotterdam\nOpen days"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/white"
@@ -50,12 +50,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
-        android:text="Versie 0.9"
+        android:text="Version 0.9"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/hro_opendays" />
 </android.support.constraint.ConstraintLayout>
