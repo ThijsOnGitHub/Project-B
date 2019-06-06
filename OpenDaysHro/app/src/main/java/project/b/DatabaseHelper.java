@@ -93,6 +93,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String QUIZ_ANSWER3_POINTS = "answer3_points";
             private static final String QUIZ_TARGET_STUDY = "target_study";
 
+    Context mainContext;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
 
@@ -939,7 +941,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Integer local_version = Integer.parseInt(appinfo[0]);
 
         String link = appinfo[1] + "/version";
-        jsonApi json = new jsonApi();
+        jsonApi json = new jsonApi(mainContext);
         json.execute(link);
 
         while(!json.finish) {
@@ -1069,6 +1071,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, HROOPENDAY, null, HROOPENDAY_VERSION);
+        mainContext = context;
     }
     @Override
     public void onCreate(SQLiteDatabase db) {

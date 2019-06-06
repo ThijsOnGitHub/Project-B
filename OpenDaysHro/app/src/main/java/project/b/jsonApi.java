@@ -1,6 +1,11 @@
 package project.b;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +14,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public class jsonApi extends AsyncTask<String, Void, Void> {
     String data = "";
     Boolean finish = false;
+    DatabaseHelper db;
+    Context mainContext;
+
+    public jsonApi(Context context) {
+        db = new DatabaseHelper(context);
+        mainContext = context;
+    }
+
     @Override
     protected Void doInBackground(String... params) {
         try {
@@ -33,11 +47,33 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
             e.printStackTrace();
         }
 
+
+
+
         return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        JSONObject jsonObject = null;
+        try {
+
+
+            jsonObject = new JSONObject(this.data);
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            this.db.fillDatabaseWithJson(jsonObject);
+            Intent mainActivity = new Intent(mainContext, MainActivity.class);
+            mainContext.startActivity(mainActivity);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
+

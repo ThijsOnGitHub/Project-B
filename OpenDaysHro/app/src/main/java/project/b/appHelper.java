@@ -32,11 +32,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1934,71 +1932,53 @@ public class appHelper extends AppCompatActivity {
         }
 
         public void sync(Context context) {
-            Boolean synced = true;
+            Boolean latestVersion = false;
 
-            try {
-                if (this.db.emptyDatabase()) {
-                    Log.d("Syncing", "onCreate: " + "Database is empty");
-                    if (this.db.isOnline(context) == true) {
-                        Log.d("Syncing", "onCreate: " + "Phone is online");
-                        if (this.db.versionDatabase() == true) {
-                            Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                            jsonApi json = new jsonApi();
-                            json.execute(this.db.latestAppInfo()[1]);
-                            while (!json.finish) {
-                                // wait
-                            }
-                            JSONObject jsonObject = new JSONObject(json.data);
-                            this.db.fillDatabaseWithJson(jsonObject);
-                        } else {
-                            Log.d("Syncing", "onCreate: " + "Database is up-to-date");
-                        }
+//            LinearLayout red = new LinearLayout(this.context);
+//            red.setBackgroundColor(getResources().getColor(R.color.hro_red));
+//            red.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+//
+//            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
+//            main.addView(red);
+
+
+
+            if (this.db.emptyDatabase()) {
+                Log.d("Syncing", "onCreate: " + "Database is empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context);
+                        json.execute(this.db.latestAppInfo()[1]);
                     } else {
-                        Log.d("Syncing", "onCreate: " + "Phone is offline");
-                        this.db.fillDatabase_offline();
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
                     }
                 } else {
-                    Log.d("Syncing", "onCreate: " + "Database is not empty");
-                    if (this.db.isOnline(context) == true) {
-                        Log.d("Syncing", "onCreate: " + "Phone is online");
-                        if (this.db.versionDatabase() == true) {
-                            Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                            jsonApi json = new jsonApi();
-                            json.execute(this.db.latestAppInfo()[1]);
-                            while(!json.finish) {
-                                // wait
-                            }
-                            JSONObject jsonObject = new JSONObject(json.data);
-                            this.db.fillDatabaseWithJson(jsonObject);
-                        } else {
-                            Log.d("Syncing", "onCreate: " + "Database is up-to-date");
-                        }
+                    Log.d("Syncing", "onCreate: " + "Phone is offline");
+                    this.db.fillDatabase_offline();
+                    latestVersion = true;
+                }
+            } else {
+                Log.d("Syncing", "onCreate: " + "Database is not empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context);
+                        json.execute(this.db.latestAppInfo()[1]);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
                     }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                synced = false;
             }
 
-            if (synced) {
+            if (latestVersion) {
                 Intent mainActivity = new Intent(context, MainActivity.class);
                 startActivity(mainActivity);
-            } else { // error
-                CharSequence text;
-
-                if (this.db.language()) {
-                    text = "Er is iets fout gegaan met het synchroniseren van de database";
-                } else {
-                    text = "Something went wrong while syncing the database";
-                }
-
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context.getApplicationContext(), text, duration);
-                toast.show();
             }
         }
-
-
     }
 }
