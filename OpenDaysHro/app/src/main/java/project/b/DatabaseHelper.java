@@ -394,24 +394,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return stringListType(result);
     }
 
-    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
-        ArrayList<String> result = new ArrayList<>();
-        String image_description = "";
-
-        String[] location = getLocationInfo(location_id);
-        if (location.length > 0) {
-            image_description = location[0];
-        }
-
-        String[] images_id = getImage_id(image_description, floorplan);
-        if (images_id.length > 0) {
-            for (int i = 0; i < images_id.length; i++) {
-                result.add(images_id[i]);
-            }
-        }
-
-        return stringListType(result);
-    }
+//    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
+//        ArrayList<String> result = new ArrayList<>();
+//        String image_description = "";
+//
+//        String[] location = getLocationInfo(location_id);
+//        if (location.length > 0) {
+//            image_description = location[0];
+//        }
+//
+//        String[] images_id = getImage_id(image_description, floorplan);
+//        if (images_id.length > 0) {
+//            for (int i = 0; i < images_id.length; i++) {
+//                result.add(images_id[i]);
+//            }
+//        }
+//
+//        return stringListType(result);
+//    }
     public String[] getImageInfo(String image_id) {
         ArrayList<String> result = new ArrayList<>();
 
