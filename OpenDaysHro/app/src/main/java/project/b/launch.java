@@ -13,8 +13,6 @@ public class launch extends appHelper {
         setContentView(R.layout.activity_launch);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layoutHelper = new LayoutHelper(this);
-
-
         layoutHelper.sync(this);
     }
 }

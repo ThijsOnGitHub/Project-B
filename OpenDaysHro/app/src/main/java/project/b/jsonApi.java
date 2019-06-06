@@ -46,10 +46,6 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
         return null;
     }
 
@@ -58,20 +54,14 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
         super.onPostExecute(aVoid);
         JSONObject jsonObject = null;
         try {
-
-
             jsonObject = new JSONObject(this.data);
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             this.db.fillDatabaseWithJson(jsonObject);
+            TimeUnit.MILLISECONDS.sleep(1250);
             Intent mainActivity = new Intent(mainContext, MainActivity.class);
             mainContext.startActivity(mainActivity);
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

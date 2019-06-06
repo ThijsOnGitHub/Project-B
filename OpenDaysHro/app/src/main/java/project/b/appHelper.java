@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1926,22 +1925,10 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout bottomBar=new LinearLayout(context);
                     bottomBar.setBackground(getDrawable(R.drawable.onderkant));
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
-
-
-
         }
 
         public void sync(Context context) {
             Boolean latestVersion = false;
-
-//            LinearLayout red = new LinearLayout(this.context);
-//            red.setBackgroundColor(getResources().getColor(R.color.hro_red));
-//            red.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//
-//            LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
-//            main.addView(red);
-
-
 
             if (this.db.emptyDatabase()) {
                 Log.d("Syncing", "onCreate: " + "Database is empty");
@@ -1976,8 +1963,9 @@ public class appHelper extends AppCompatActivity {
             }
 
             if (latestVersion) {
-                Intent mainActivity = new Intent(context, MainActivity.class);
-                startActivity(mainActivity);
+                System.out.println("latest version");
+                waitInBackground wait = new waitInBackground(context);
+                wait.execute(2250);
             }
         }
     }
