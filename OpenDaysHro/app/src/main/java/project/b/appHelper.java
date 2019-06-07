@@ -1927,7 +1927,7 @@ public class appHelper extends AppCompatActivity {
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
         }
 
-        public void sync(Context context) {
+        public void sync(Context context, Integer mseconds) {
             Boolean latestVersion = false;
 
             if (this.db.emptyDatabase()) {
@@ -1936,7 +1936,7 @@ public class appHelper extends AppCompatActivity {
                     Log.d("Syncing", "onCreate: " + "Phone is online");
                     if (this.db.versionDatabase() == true) {
                         Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi(context);
+                        jsonApi json = new jsonApi(context, mseconds);
                         json.execute(this.db.latestAppInfo()[1]);
                     } else {
                         Log.d("Syncing", "onCreate: " + "Database is up-to-date");
@@ -1953,7 +1953,7 @@ public class appHelper extends AppCompatActivity {
                     Log.d("Syncing", "onCreate: " + "Phone is online");
                     if (this.db.versionDatabase() == true) {
                         Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi(context);
+                        jsonApi json = new jsonApi(context, mseconds);
                         json.execute(this.db.latestAppInfo()[1]);
                     } else {
                         Log.d("Syncing", "onCreate: " + "Database is up-to-date");
@@ -1965,7 +1965,7 @@ public class appHelper extends AppCompatActivity {
             if (latestVersion) {
                 System.out.println("latest version");
                 waitInBackground wait = new waitInBackground(context);
-                wait.execute(2250);
+                wait.execute(mseconds);
             }
         }
     }

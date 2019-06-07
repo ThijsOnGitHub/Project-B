@@ -30,6 +30,6 @@ public class launch extends appHelper {
             version.setText("Version " + version_number);
         }
 
-        layoutHelper.sync(this);
+        layoutHelper.sync(this, 2250);
     }
 }

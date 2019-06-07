@@ -941,7 +941,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Integer local_version = Integer.parseInt(appinfo[0]);
 
         String link = appinfo[1] + "/version";
-        jsonApi json = new jsonApi(mainContext);
+        jsonApi json = new jsonApi(mainContext, 0010);
         json.execute(link);
 
         while(!json.finish) {
@@ -996,18 +996,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> mArrayList = new ArrayList<>();
         Cursor mCursor = viewAll(table, arguments, values);
 
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-            while (!mCursor.isAfterLast()) {
-                if (doubleCheck == true){
-                    if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+        try {
+            if (mCursor != null) {
+                mCursor.moveToFirst();
+                while (!mCursor.isAfterLast()) {
+                    if (doubleCheck == true) {
+                        if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+                            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                        }
+                    } else {
                         mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
                     }
-                } else {
-                    mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                    mCursor.moveToNext();
                 }
-                mCursor.moveToNext();
             }
+        } finally {
+             if (mCursor != null) {
+                 mCursor.close();
+             }
         }
 
         return stringListType(mArrayList);

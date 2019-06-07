@@ -21,10 +21,12 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
     Boolean finish = false;
     DatabaseHelper db;
     Context mainContext;
+    Integer waitTime;
 
-    public jsonApi(Context context) {
+    public jsonApi(Context context, Integer mseconds) {
         db = new DatabaseHelper(context);
         mainContext = context;
+        waitTime = mseconds;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
         try {
             jsonObject = new JSONObject(this.data);
             this.db.fillDatabaseWithJson(jsonObject);
-            TimeUnit.MILLISECONDS.sleep(1250);
+            TimeUnit.MILLISECONDS.sleep(this.waitTime - 1000);
             Intent mainActivity = new Intent(mainContext, MainActivity.class);
             mainContext.startActivity(mainActivity);
         } catch (JSONException e) {
