@@ -22,11 +22,18 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
     DatabaseHelper db;
     Context mainContext;
     Integer waitTime;
+    Long starttime;
 
     public jsonApi(Context context, Integer mseconds) {
         db = new DatabaseHelper(context);
         mainContext = context;
         waitTime = mseconds;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        this.starttime = System.currentTimeMillis();
     }
 
     @Override
@@ -53,12 +60,19 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
+        Long time = (System.currentTimeMillis() - this.starttime);
+        int time_taken = time.intValue();
+        this.waitTime -= time_taken;
+
+        if (this.waitTime < 0) {
+            this.waitTime = 0;
+        }
+
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(this.data);
             this.db.fillDatabaseWithJson(jsonObject);
-            TimeUnit.MILLISECONDS.sleep(this.waitTime - 1000);
+            TimeUnit.MILLISECONDS.sleep(this.waitTime);
             Intent mainActivity = new Intent(mainContext, MainActivity.class);
             mainContext.startActivity(mainActivity);
         } catch (JSONException e) {
