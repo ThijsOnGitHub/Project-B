@@ -1560,7 +1560,7 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.WRAP_CONTENT);
                     title.setLayoutParams(layoutParamsTitle);
                     title.setGravity(Gravity.RIGHT|Gravity.TOP);
-                    title.setText(name+":");
+                    title.setText(captFirstLetter(name+":"));
                     title.setTextSize(textSize);
                 group.addView(title);
 
@@ -1570,7 +1570,7 @@ public class appHelper extends AppCompatActivity {
                     editText.setGravity(Gravity.TOP);
                     editText.setInputType(InputType.TYPE_CLASS_TEXT|inputType);
                     editText.setTag(name);
-                    editText.setHint(name);
+                    editText.setHint(captFirstLetter(name));
                 group.addView(editText);
 
             return new QuestionItemReturn(group,editText);
@@ -1588,7 +1588,7 @@ public class appHelper extends AppCompatActivity {
                 int newWidth=phone_width-margin*2;
 
 
-                float textSize= calcTextSizeFloat(25,calcMaxTextLength(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)),newWidth);
+                float textSize= makeTextFit(newWidth/4,getMaxText(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)));
 
                 EditText[] inputFields=new EditText[4];
 
