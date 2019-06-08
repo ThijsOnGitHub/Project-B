@@ -3,6 +3,7 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -443,6 +444,7 @@ public class appHelper extends AppCompatActivity {
                                     the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
                                     the_image.setLayoutParams(the_image_params);
                                 the_image.setBackground(getDrawable(List_with_images[i]));
+                                the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                                 button_image.addView(the_image);
                         RelativeLayout button_text = new RelativeLayout(this.context);
                             button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
@@ -658,6 +660,7 @@ public class appHelper extends AppCompatActivity {
                     the_image.setLayoutParams(image_lp);
                 the_image.setBackground(getDrawable(images[0]));
 
+
             RelativeLayout button_left = new RelativeLayout(this.context);
                 button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                 TextView button1_txt = new TextView(this.context);
@@ -755,6 +758,7 @@ public class appHelper extends AppCompatActivity {
                 addToCalendar.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout addToCalendar_inner_image = new LinearLayout(this.context);
                     addToCalendar_inner_image.setBackground(getDrawable(Calendar_Image));
+                    addToCalendar_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams addToCalendar_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         addToCalendar_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         addToCalendar_inner_image.setLayoutParams(addToCalendar_inner_image_params);
@@ -801,6 +805,7 @@ public class appHelper extends AppCompatActivity {
                 share.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout share_inner_image = new LinearLayout(this.context);
                     share_inner_image.setBackground(getDrawable(Share_Image));
+                    share_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams share_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         share_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         share_inner_image.setLayoutParams(share_inner_image_params);
