@@ -22,7 +22,7 @@ public class opendays_activity extends appHelper {
         layout = new LayoutHelper(this);
 
         int header_image = R.drawable.blaak;
-        int add_to_calendar_image = R.drawable.calendar_icon;
+        int add_to_calendar_image = R.drawable.twotone_calendar_today_24;
         int share_image = R.drawable.twotone_share_24px;
 
 

@@ -3,6 +3,8 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -316,7 +318,13 @@ public class appHelper extends AppCompatActivity {
 
             for (int i = 0; i < study_icons.size(); i++) {
                 icon = study_icons.get(i);
-                icons.add(resources.getIdentifier(icon, "drawable", this.context.getPackageName()));
+                int id=resources.getIdentifier(icon, "drawable", this.context.getPackageName());
+                if (id!=0){
+                    icons.add(id);
+                }else{
+                    icons.add(R.drawable.baseline_school_24px);
+                }
+
             }
 
             Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
@@ -384,6 +392,7 @@ public class appHelper extends AppCompatActivity {
                                         the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
                                         the_image.setLayoutParams(the_image_params);
                                     the_image.setBackground(getDrawable(List_with_images[i]));
+                                    the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                                     button_image.addView(the_image);
                             RelativeLayout button_text = new RelativeLayout(this.context);
                                 button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
@@ -437,6 +446,7 @@ public class appHelper extends AppCompatActivity {
                                     the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
                                     the_image.setLayoutParams(the_image_params);
                                 the_image.setBackground(getDrawable(List_with_images[i]));
+                                the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                                 button_image.addView(the_image);
                         RelativeLayout button_text = new RelativeLayout(this.context);
                             button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
@@ -652,6 +662,7 @@ public class appHelper extends AppCompatActivity {
                     the_image.setLayoutParams(image_lp);
                 the_image.setBackground(getDrawable(images[0]));
 
+
             RelativeLayout button_left = new RelativeLayout(this.context);
                 button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                 TextView button1_txt = new TextView(this.context);
@@ -749,6 +760,7 @@ public class appHelper extends AppCompatActivity {
                 addToCalendar.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout addToCalendar_inner_image = new LinearLayout(this.context);
                     addToCalendar_inner_image.setBackground(getDrawable(Calendar_Image));
+                    addToCalendar_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams addToCalendar_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         addToCalendar_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         addToCalendar_inner_image.setLayoutParams(addToCalendar_inner_image_params);
@@ -795,6 +807,7 @@ public class appHelper extends AppCompatActivity {
                 share.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout share_inner_image = new LinearLayout(this.context);
                     share_inner_image.setBackground(getDrawable(Share_Image));
+                    share_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams share_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         share_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         share_inner_image.setLayoutParams(share_inner_image_params);
@@ -1561,7 +1574,7 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.WRAP_CONTENT);
                     title.setLayoutParams(layoutParamsTitle);
                     title.setGravity(Gravity.RIGHT|Gravity.TOP);
-                    title.setText(name+":");
+                    title.setText(captFirstLetter(name+":"));
                     title.setTextSize(textSize);
                 group.addView(title);
 
@@ -1571,7 +1584,7 @@ public class appHelper extends AppCompatActivity {
                     editText.setGravity(Gravity.TOP);
                     editText.setInputType(InputType.TYPE_CLASS_TEXT|inputType);
                     editText.setTag(name);
-                    editText.setHint(name);
+                    editText.setHint(captFirstLetter(name));
                 group.addView(editText);
 
             return new QuestionItemReturn(group,editText);
@@ -1589,7 +1602,7 @@ public class appHelper extends AppCompatActivity {
                 int newWidth=phone_width-margin*2;
 
 
-                float textSize= calcTextSizeFloat(25,calcMaxTextLength(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)),newWidth);
+                float textSize= makeTextFit(newWidth/4,getMaxText(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)));
 
                 EditText[] inputFields=new EditText[4];
 
