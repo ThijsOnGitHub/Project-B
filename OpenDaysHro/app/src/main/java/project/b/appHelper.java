@@ -305,7 +305,7 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < List_with_id.length; i++) {
                 studyname = this.db.getStudyInfo(List_with_id[i])[2];
                 studyid = this.db.getStudyInfo(List_with_id[i])[4];
-                icon = "twotone_"+this.db.getStudyInfo(List_with_id[i])[5]+"_24";
+                icon = this.db.getStudyInfo(List_with_id[i])[5];
                 study_ids.add(studyid);
                 study_names.add(studyname);
                 study_icons.add(icon);
