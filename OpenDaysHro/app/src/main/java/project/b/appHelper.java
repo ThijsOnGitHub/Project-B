@@ -305,7 +305,7 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < List_with_id.length; i++) {
                 studyname = this.db.getStudyInfo(List_with_id[i])[2];
                 studyid = this.db.getStudyInfo(List_with_id[i])[4];
-                icon = this.db.getStudyInfo(List_with_id[i])[5];
+                icon = "twotone_"+this.db.getStudyInfo(List_with_id[i])[5]+"_24";
                 study_ids.add(studyid);
                 study_names.add(studyname);
                 study_icons.add(icon);
@@ -323,7 +323,13 @@ public class appHelper extends AppCompatActivity {
 
             for (int i = 0; i < study_icons.size(); i++) {
                 icon = study_icons.get(i);
-                icons.add(resources.getIdentifier(icon, "drawable", this.context.getPackageName()));
+                int id=resources.getIdentifier(icon, "drawable", this.context.getPackageName());
+                if (id!=0){
+                    icons.add(id);
+                }else{
+                    icons.add(R.drawable.baseline_school_24px);
+                }
+
             }
 
             Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
