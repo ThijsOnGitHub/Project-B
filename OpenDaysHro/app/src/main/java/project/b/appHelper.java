@@ -391,6 +391,7 @@ public class appHelper extends AppCompatActivity {
                                         the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
                                         the_image.setLayoutParams(the_image_params);
                                     the_image.setBackground(getDrawable(List_with_images[i]));
+                                    the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                                     button_image.addView(the_image);
                             RelativeLayout button_text = new RelativeLayout(this.context);
                                 button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
