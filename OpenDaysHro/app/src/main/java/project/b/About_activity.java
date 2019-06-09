@@ -30,7 +30,7 @@ public class About_activity extends appHelper {
             }
         }
 
-        layout.generate_page_about_page(R.drawable.blaak,passedInstituteID,R.id.page_container);
+        layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
