@@ -18,4 +18,5 @@
     <string name="roomnumber">lokaalnummer</string>
     <string name="Classroom_highlighted">Klaslokaal wordt uitgelicht</string>
     <string name="floorPlan">plattegrond</string>
+    <string name="sort_on_Date">sorteer op datum</string>
 </resources>
