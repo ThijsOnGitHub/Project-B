@@ -29,10 +29,17 @@ public class waitInBackground extends AsyncTask<Integer, Void, Void> {
             Integer totaltime = integers[0];
 
             for (int i = 0; i < steps; i++) {
-                Integer time = totaltime / (steps - i);
-                TimeUnit.MILLISECONDS.sleep(time);
-                totaltime = totaltime - time;
-                publishProgress();
+                if (totaltime <= 0) {
+                    progressBar.setProgress(progressBar.getMax());
+                    break;
+                } else {
+                    Long start = System.currentTimeMillis();
+                    Integer time = totaltime / (steps - i);
+                    TimeUnit.MILLISECONDS.sleep(time);
+                    publishProgress();
+                    Long time_done = (System.currentTimeMillis() - start);
+                    totaltime -= time_done.intValue();
+                }
             }
 
         } catch (InterruptedException e) {
