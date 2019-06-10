@@ -13,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class MainActivity extends appHelper {
 
     DisplayMetrics metrics = new DisplayMetrics();
@@ -70,55 +67,10 @@ public class MainActivity extends appHelper {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         layout = new LayoutHelper(this);
-
+      
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         phone_width = metrics.widthPixels;
         phone_height = metrics.heightPixels;
-
-        try {
-            if (layout.db.emptyDatabase()) {
-                Log.d("Syncing", "onCreate: " + "Database is empty");
-                if (layout.db.isOnline(this) == true) {
-                    Log.d("Syncing", "onCreate: " + "Phone is online");
-                    if (layout.db.versionDatabase() == true) {
-                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi();
-                        json.execute(layout.db.latestAppInfo()[1]);
-                        while (!json.finish) {
-                            // wait
-                        }
-                        JSONObject jsonObject = new JSONObject(json.data);
-                        layout.db.fillDatabaseWithJson(jsonObject);
-                    } else {
-                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
-                    }
-                } else {
-                    Log.d("Syncing", "onCreate: " + "Phone is offline");
-                    layout.db.fillDatabase_offline();
-                }
-            } else {
-                Log.d("Syncing", "onCreate: " + "Database is not empty");
-                if (layout.db.isOnline(this) == true) {
-                    Log.d("Syncing", "onCreate: " + "Phone is online");
-                    if (layout.db.versionDatabase() == true) {
-                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi();
-                        json.execute(layout.db.latestAppInfo()[1]);
-                        while(!json.finish) {
-                            // wait
-                        }
-                        JSONObject jsonObject = new JSONObject(json.data);
-                        layout.db.fillDatabaseWithJson(jsonObject);
-                    } else {
-                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
         layout.Image_with_Buttons(R.id.page_container,drawables);
 
         Boolean firstdatefirst;

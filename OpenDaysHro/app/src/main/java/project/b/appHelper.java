@@ -8,17 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.text.InputFilter;
-import android.text.Spanned;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,8 +34,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -852,11 +847,24 @@ public class appHelper extends AppCompatActivity {
 
         public void generate_page_about_page(int Image, final String institute_id, int addViewTo){
             String[] institute = this.db.getInstituteInfo(institute_id);
+            String[] locations_id = this.db.getLocationsByInstitute(institute_id);
 
             String Title = institute[1];
             String Text = institute[2];
+            String location_info = "";
 
-            String[] contentList = new String[]{Text};
+            if (this.db.language() == true) {
+                location_info = "\nLocaties van dit instituut zijn:\n";
+            } else {
+                location_info = "\nLocation of this institute are:\n";
+            }
+
+            for(int i = 0; i < locations_id.length; i++) {
+                String[] location = this.db.getLocationInfo(locations_id[i]);
+                location_info += " - " + location[3] + " " + location[1] + "\n";
+            }
+
+            String[] contentList = new String[]{Text, location_info};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
@@ -932,7 +940,7 @@ public class appHelper extends AppCompatActivity {
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
@@ -1701,7 +1709,7 @@ public class appHelper extends AppCompatActivity {
                         String titleText = getText(R.string.Search_Classroom_Title).toString();
                         Title.setText(titleText);
                         Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
-                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+//                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
                         Title.setTextColor(getResources().getColor(R.color.white));
 
                     topBar.addView(Title);
@@ -1930,11 +1938,48 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout bottomBar=new LinearLayout(context);
                     bottomBar.setBackground(getDrawable(R.drawable.onderkant));
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
-
-
-
         }
 
+        public void sync(Context context, Integer mseconds) {
+            Boolean latestVersion = false;
 
+            if (this.db.emptyDatabase()) {
+                Log.d("Syncing", "onCreate: " + "Database is empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context, mseconds);
+                        json.execute(this.db.latestAppInfo()[1]);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
+                    }
+                } else {
+                    Log.d("Syncing", "onCreate: " + "Phone is offline");
+                    this.db.fillDatabase_offline();
+                    latestVersion = true;
+                }
+            } else {
+                Log.d("Syncing", "onCreate: " + "Database is not empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context, mseconds);
+                        json.execute(this.db.latestAppInfo()[1]);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
+                    }
+                }
+            }
+
+            if (latestVersion) {
+                System.out.println("latest version");
+                waitInBackground wait = new waitInBackground(context);
+                wait.execute(mseconds);
+            }
+        }
     }
 }

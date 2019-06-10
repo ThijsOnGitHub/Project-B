@@ -1,6 +1,11 @@
 package project.b;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +14,28 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public class jsonApi extends AsyncTask<String, Void, Void> {
     String data = "";
     Boolean finish = false;
+    DatabaseHelper db;
+    Context mainContext;
+    Integer waitTime;
+    Long starttime;
+
+    public jsonApi(Context context, Integer mseconds) {
+        db = new DatabaseHelper(context);
+        mainContext = context;
+        waitTime = mseconds;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        this.starttime = System.currentTimeMillis();
+    }
+
     @Override
     protected Void doInBackground(String... params) {
         try {
@@ -32,12 +55,31 @@ public class jsonApi extends AsyncTask<String, Void, Void> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
+        Long time = (System.currentTimeMillis() - this.starttime);
+        int time_taken = time.intValue();
+        this.waitTime -= time_taken;
+
+        if (this.waitTime < 0) {
+            this.waitTime = 0;
+        }
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(this.data);
+            this.db.fillDatabaseWithJson(jsonObject);
+            TimeUnit.MILLISECONDS.sleep(this.waitTime);
+            Intent mainActivity = new Intent(mainContext, MainActivity.class);
+            mainContext.startActivity(mainActivity);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
+
