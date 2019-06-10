@@ -1,6 +1,7 @@
 package project.b;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.ProgressBar;
@@ -24,9 +25,9 @@ public class launch extends appHelper {
         version = (TextView) findViewById(R.id.versie);
 
         pb = (ProgressBar) findViewById(R.id.pb);
-        pb.setProgressBackgroundTintMode(PorterDuff.Mode.SRC);
+        pb.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-        String version_number = "0.9";
+        String version_number = "1.0";
 
         if (layoutHelper.db.language()) {
             hro.setText("Hogeschool Rotterdam\nOpen dagen");
