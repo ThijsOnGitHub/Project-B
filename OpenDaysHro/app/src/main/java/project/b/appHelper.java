@@ -3,8 +3,6 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -214,7 +212,7 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , String institute_id, int addToThisLayout) {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
 
@@ -247,6 +245,7 @@ public class appHelper extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent openMap = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         String[] locationList= ListItem_Location.split("\\.");
+                        openMap.putExtra("InstituteID", institute_id);
                         openMap.putExtra("building",locationList[0].toLowerCase());
                         openMap.putExtra("floor",Integer.parseInt(locationList[1]));
                         openMap.putExtra("rawString",ListItem_Location);
