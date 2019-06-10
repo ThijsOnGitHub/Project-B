@@ -3,20 +3,38 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
 
 import java.util.concurrent.TimeUnit;
 
 public class waitInBackground extends AsyncTask<Integer, Void, Void> {
     Context mainContext;
+    ProgressBar progressBar;
 
-    public waitInBackground(Context mainContext) {
+    public waitInBackground(Context mainContext, ProgressBar mprogressBar) {
         this.mainContext = mainContext;
+        this.progressBar = mprogressBar;
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+        progressBar.setProgress(progressBar.getProgress() + 1);
     }
 
     @Override
     protected Void doInBackground(Integer... integers) {
         try {
-            TimeUnit.MILLISECONDS.sleep(integers[0]);
+            Integer steps = (progressBar.getMax() - progressBar.getProgress());
+            Integer totaltime = integers[0];
+
+            for (int i = 0; i < steps; i++) {
+                Integer time = totaltime / (steps - i);
+                TimeUnit.MILLISECONDS.sleep(time);
+                totaltime = totaltime - time;
+                publishProgress();
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

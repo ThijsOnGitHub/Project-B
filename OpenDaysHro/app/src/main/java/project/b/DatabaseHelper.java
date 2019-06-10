@@ -941,14 +941,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Integer local_version = Integer.parseInt(appinfo[0]);
 
         String link = appinfo[1] + "/version";
-        jsonApi json = new jsonApi(mainContext, 0010);
-        json.execute(link);
+        versionApi version = new versionApi();
+        version.execute(link);
 
-        while(!json.finish) {
+        while(!version.finish) {
             //wait
         }
-        String online = json.data.substring(0, json.data.length() - 4);
-        Integer online_version = Integer.parseInt(online);
+        Integer online_version = Integer.parseInt(version.data);
 
         if (online_version == local_version) {
             return false;

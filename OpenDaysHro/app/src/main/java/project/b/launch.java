@@ -1,13 +1,16 @@
 package project.b;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class launch extends appHelper {
 
     LayoutHelper layoutHelper;
     TextView hro, version;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,9 @@ public class launch extends appHelper {
         hro = (TextView) findViewById(R.id.hro_opendays);
         version = (TextView) findViewById(R.id.versie);
 
+        pb = (ProgressBar) findViewById(R.id.pb);
+        pb.setProgressBackgroundTintMode(PorterDuff.Mode.SRC);
+
         String version_number = "0.9";
 
         if (layoutHelper.db.language()) {
@@ -30,6 +36,6 @@ public class launch extends appHelper {
             version.setText("Version " + version_number);
         }
 
-        layoutHelper.sync(this, 2250);
+        layoutHelper.sync(this, 2250, pb);
     }
 }
