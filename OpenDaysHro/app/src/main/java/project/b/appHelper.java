@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -91,6 +92,7 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
@@ -930,9 +932,9 @@ public class appHelper extends AppCompatActivity {
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                             header_text_params.setMargins((phone_width / 25),(phone_height / 75),(phone_width / 25),(phone_height / 75));
                             header_text.setLayoutParams(header_text_params);
-                        TextView title = new TextView(this.context);
-                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));
-                            header_text.setGravity(Gravity.CENTER);
+                        TextViewOutline title = new TextViewOutline(this.context);
+                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(30);
+            header_text.setGravity(Gravity.CENTER);
                             header_text.addView(title);
                         this_page_header.addView(header_text);
                 LinearLayout this_page_text = new LinearLayout(this.context);
@@ -962,23 +964,35 @@ public class appHelper extends AppCompatActivity {
                 layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
                 button_map.setLayoutParams(layoutParamsButtonMap);
                 button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
-                button_map.setGravity(Gravity.CENTER_HORIZONTAL);
+                button_map.setGravity(Gravity.CENTER);
 
-                ImageView icon = new ImageView(context);
-                    LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(calcWithFromDesign(150),calcWithFromDesign(150));
-                    iconLayout.setMargins(0,calcHeightFromDesign(40),0,0);
-                    icon.setLayoutParams(iconLayout);
-                    icon.setImageResource(R.drawable.twotone_map_black_18dp);
+                LinearLayout iconText=new LinearLayout(context);
+                    iconText.setOrientation(LinearLayout.VERTICAL);
+                    iconText.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                    icon.setColorFilter(getResources().getColor(R.color.hro_red));
-                button_map.addView(icon);
+                    ImageView icon = new ImageView(context);
+                    int size;
+                    if (calcWithFromDesign(150)>calcHeightFromDesign(150)){
+                        size=calcHeightFromDesign(150);
+                    }else {
+                        size=calcHeightFromDesign(150);
+                    }
+                        LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(size,size);
+                        iconLayout.setMargins(0,0,0,calcHeightFromDesign(20));
+                        icon.setLayoutParams(iconLayout);
+                        icon.setImageResource(R.drawable.twotone_map_black_18dp);
 
-                TextView floorplanText=new TextView(context);
-                    floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
-                    floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
-                    floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
-                    floorplanText.setTextColor(getResources().getColor(android.R.color.black));
-                button_map.addView(floorplanText);
+                        icon.setColorFilter(getResources().getColor(R.color.hro_red));
+
+                    iconText.addView(icon);
+
+                    TextView floorplanText=new TextView(context);
+                        floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                        floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                        floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                        floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                    iconText.addView(floorplanText);
+                button_map.addView(iconText);
 
 
 
@@ -1577,17 +1591,16 @@ public class appHelper extends AppCompatActivity {
             }else{
                 String finalText=getString(R.string.fields_empty)+" ";
                 if (name.length()==0){
-                    finalText+=getText(R.string.name)+", ";
+                    finalText+=captFirstLetter(getText(R.string.name)+", ");
+                }
+                if (subject.length()==0){
+                    finalText+=captFirstLetter(getString(R.string.subject)+", ");
                 }
                 if (email.length() == 0) {
-                    finalText+=getString(R.string.email)+", ";
+                    finalText+=captFirstLetter(getString(R.string.email)+", ");
                 }
-                if (email.length()==0){
-                    finalText+=getString(R.string.subject)+", ";
-                }
-
                 if (textField.length() == 0) {
-                    finalText+=getString(R.string.question)+", ";
+                    finalText+=captFirstLetter(getString(R.string.question)+", ");
                 }
 
                 finalText=finalText.substring(0,finalText.length()-2);
@@ -1755,8 +1768,12 @@ public class appHelper extends AppCompatActivity {
                         String titleText = getText(R.string.Search_Classroom_Title).toString();
                         Title.setText(titleText);
                         Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
-//                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
-                        Title.setTextColor(getResources().getColor(R.color.white));
+                        try {
+                            Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                            Title.setTextColor(getResources().getColor(R.color.white));
 
                     topBar.addView(Title);
 
