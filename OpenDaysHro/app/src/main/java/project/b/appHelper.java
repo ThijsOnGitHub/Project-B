@@ -1723,8 +1723,12 @@ public class appHelper extends AppCompatActivity {
                         String titleText = getText(R.string.Search_Classroom_Title).toString();
                         Title.setText(titleText);
                         Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
-//                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
-                        Title.setTextColor(getResources().getColor(R.color.white));
+                        try {
+                            Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                            Title.setTextColor(getResources().getColor(R.color.white));
 
                     topBar.addView(Title);
 
