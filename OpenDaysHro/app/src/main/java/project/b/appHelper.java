@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -917,23 +918,35 @@ public class appHelper extends AppCompatActivity {
                 layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
                 button_map.setLayoutParams(layoutParamsButtonMap);
                 button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
-                button_map.setGravity(Gravity.CENTER_HORIZONTAL);
+                button_map.setGravity(Gravity.CENTER);
 
-                ImageView icon = new ImageView(context);
-                    LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(calcWithFromDesign(150),calcWithFromDesign(150));
-                    iconLayout.setMargins(0,calcHeightFromDesign(40),0,0);
-                    icon.setLayoutParams(iconLayout);
-                    icon.setImageResource(R.drawable.twotone_map_black_18dp);
+                LinearLayout iconText=new LinearLayout(context);
+                    iconText.setOrientation(LinearLayout.VERTICAL);
+                    iconText.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                    icon.setColorFilter(getResources().getColor(R.color.hro_red));
-                button_map.addView(icon);
+                    ImageView icon = new ImageView(context);
+                    int size;
+                    if (calcWithFromDesign(150)>calcHeightFromDesign(150)){
+                        size=calcHeightFromDesign(150);
+                    }else {
+                        size=calcHeightFromDesign(150);
+                    }
+                        LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(size,size);
+                        iconLayout.setMargins(0,0,0,calcHeightFromDesign(20));
+                        icon.setLayoutParams(iconLayout);
+                        icon.setImageResource(R.drawable.twotone_map_black_18dp);
 
-                TextView floorplanText=new TextView(context);
-                    floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
-                    floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
-                    floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
-                    floorplanText.setTextColor(getResources().getColor(android.R.color.black));
-                button_map.addView(floorplanText);
+                        icon.setColorFilter(getResources().getColor(R.color.hro_red));
+
+                    iconText.addView(icon);
+
+                    TextView floorplanText=new TextView(context);
+                        floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                        floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                        floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                        floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                    iconText.addView(floorplanText);
+                button_map.addView(iconText);
 
 
 
