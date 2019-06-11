@@ -340,7 +340,7 @@ public class appHelper extends AppCompatActivity {
                     if (id != 0) {
                         icons.add(id);
                     } else {
-                        icons.add(R.drawable.baseline_school_24px);
+                        icons.add(R.drawable.twotone_school_24);
                     }
 
                 }
