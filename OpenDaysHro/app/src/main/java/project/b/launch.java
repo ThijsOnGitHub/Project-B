@@ -1,13 +1,17 @@
 package project.b;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class launch extends appHelper {
 
     LayoutHelper layoutHelper;
     TextView hro, version;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +24,10 @@ public class launch extends appHelper {
         hro = (TextView) findViewById(R.id.hro_opendays);
         version = (TextView) findViewById(R.id.versie);
 
-        String version_number = "0.9";
+        pb = (ProgressBar) findViewById(R.id.pb);
+        pb.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        String version_number = "1.0";
 
         if (layoutHelper.db.language()) {
             hro.setText("Hogeschool Rotterdam\nOpen dagen");
@@ -30,6 +37,6 @@ public class launch extends appHelper {
             version.setText("Version " + version_number);
         }
 
-        layoutHelper.sync(this, 2250);
+        layoutHelper.sync(this, 2250, pb);
     }
 }
