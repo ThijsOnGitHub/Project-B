@@ -1550,7 +1550,7 @@ public class appHelper extends AppCompatActivity {
                 if (email.length() == 0) {
                     finalText+=getString(R.string.email)+", ";
                 }
-                if (email.length()==0){
+                if (subject.length()==0){
                     finalText+=getString(R.string.subject)+", ";
                 }
 
