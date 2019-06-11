@@ -1972,6 +1972,8 @@ public class appHelper extends AppCompatActivity {
                         Log.d("Syncing", "onCreate: " + "Database is up-to-date");
                         latestVersion = true;
                     }
+                } else {
+                    latestVersion = true;
                 }
             }
 

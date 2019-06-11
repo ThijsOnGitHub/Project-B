@@ -3,7 +3,6 @@ package project.b;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class educations_activity extends appHelper {
 
