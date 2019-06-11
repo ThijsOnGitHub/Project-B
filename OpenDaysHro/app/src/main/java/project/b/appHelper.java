@@ -1545,16 +1545,16 @@ public class appHelper extends AppCompatActivity {
             }else{
                 String finalText=getString(R.string.fields_empty)+" ";
                 if (name.length()==0){
-                    finalText+=getText(R.string.name)+", ";
+                    finalText+=captFirstLetter(getText(R.string.name)+", ");
                 }
                 if (subject.length()==0){
-                    finalText+=getString(R.string.subject)+", ";
+                    finalText+=captFirstLetter(getString(R.string.subject)+", ");
                 }
                 if (email.length() == 0) {
-                    finalText+=getString(R.string.email)+", ";
+                    finalText+=captFirstLetter(getString(R.string.email)+", ");
                 }
                 if (textField.length() == 0) {
-                    finalText+=getString(R.string.question)+", ";
+                    finalText+=captFirstLetter(getString(R.string.question)+", ");
                 }
 
                 finalText=finalText.substring(0,finalText.length()-2);
