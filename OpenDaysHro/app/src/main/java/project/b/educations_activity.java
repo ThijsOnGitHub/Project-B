@@ -61,7 +61,7 @@ public class educations_activity extends appHelper {
                 layout.generate_study_program_menu(R.id.page_container, id_all, passedInstituteID, passedPosition_string);
             } else {
                 // this is the page for the study selected inside the study selector
-                layout.generate_page_study_programs(R.drawable.blaak, passedStudyID, R.id.page_container);
+                layout.generate_page_study_programs(R.drawable.gebouw_cmi, passedStudyID, R.id.page_container);
             }
         }
 

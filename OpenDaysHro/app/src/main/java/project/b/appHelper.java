@@ -406,8 +406,28 @@ public class appHelper extends AppCompatActivity {
             String longest_string;
             int Chars = 0;
 
+            String[] final_text_array = new String[List_with_text.length];
+            int[] final_text_array_length = new int[List_with_text.length];
+
             for ( int counter = 0; counter < List_with_text.length; counter++ ) {
-                if ( List_with_text[counter].length() > Chars ) { longest_string = List_with_text[counter]; Chars = List_with_text[counter].length(); }
+                String[] words = List_with_text[counter].split(" ");
+                if (words.length > 1) {
+                    int split = words.length / 2; String part_one = ""; String part_two = "";
+                    for (int i = 0; i < split; i++) { part_one += words[i]; if ( i != (split - 1) ) { part_one+= " "; } }
+                    for (int i = split; i < words.length; i++) { part_two += words[i]; if ( i != (words.length - 1) ) { part_two+= " "; } }
+                    final_text_array[counter] = part_one + "\n" + part_two;
+                    if ( part_one.length() >= part_two.length() ) { final_text_array_length[counter] = part_one.length(); } else { final_text_array_length[counter] = part_two.length(); }
+                }
+                else {
+                    final_text_array[counter] = List_with_text[counter];
+                    final_text_array_length[counter] = List_with_text[counter].length();
+                }
+            }
+
+            List_with_text = final_text_array;
+
+            for ( int counter = 0; counter < final_text_array.length; counter++ ) {
+                if ( final_text_array_length[counter] > Chars ) { Chars = final_text_array_length[counter]; }
             }
 
             // Technische Informatica = 22 char. textSize = 17 for 500 width (22 char). textSize = 22 for 500 width (12 char).
@@ -447,6 +467,7 @@ public class appHelper extends AppCompatActivity {
                                 button_text.setGravity(Gravity.CENTER);
                                 TextView text = new TextView(this.context);
                                     text.setText(List_with_text[i]);
+                                    text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                     text.setTextSize(textSize);
                                     button_text.addView(text);
                             Button.addView(button_image);
@@ -501,6 +522,7 @@ public class appHelper extends AppCompatActivity {
                             button_text.setGravity(Gravity.CENTER);
                             TextView text = new TextView(this.context);
                                 text.setText(List_with_text[i]);
+                                text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 text.setTextSize(textSize);
                                 button_text.addView(text);
                         Button.addView(button_image);
