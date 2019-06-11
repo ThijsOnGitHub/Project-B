@@ -93,6 +93,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String QUIZ_ANSWER3_POINTS = "answer3_points";
             private static final String QUIZ_TARGET_STUDY = "target_study";
 
+    Context mainContext;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
 
@@ -392,24 +394,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return stringListType(result);
     }
 
-    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
-        ArrayList<String> result = new ArrayList<>();
-        String image_description = "";
-
-        String[] location = getLocationInfo(location_id);
-        if (location.length > 0) {
-            image_description = location[0];
-        }
-
-        String[] images_id = getImage_id(image_description, floorplan);
-        if (images_id.length > 0) {
-            for (int i = 0; i < images_id.length; i++) {
-                result.add(images_id[i]);
-            }
-        }
-
-        return stringListType(result);
-    }
+//    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
+//        ArrayList<String> result = new ArrayList<>();
+//        String image_description = "";
+//
+//        String[] location = getLocationInfo(location_id);
+//        if (location.length > 0) {
+//            image_description = location[0];
+//        }
+//
+//        String[] images_id = getImage_id(image_description, floorplan);
+//        if (images_id.length > 0) {
+//            for (int i = 0; i < images_id.length; i++) {
+//                result.add(images_id[i]);
+//            }
+//        }
+//
+//        return stringListType(result);
+//    }
     public String[] getImageInfo(String image_id) {
         ArrayList<String> result = new ArrayList<>();
 
@@ -939,7 +941,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Integer local_version = Integer.parseInt(appinfo[0]);
 
         String link = appinfo[1] + "/version";
-        jsonApi json = new jsonApi();
+        jsonApi json = new jsonApi(mainContext, 0010);
         json.execute(link);
 
         while(!json.finish) {
@@ -994,18 +996,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> mArrayList = new ArrayList<>();
         Cursor mCursor = viewAll(table, arguments, values);
 
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-            while (!mCursor.isAfterLast()) {
-                if (doubleCheck == true){
-                    if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+        try {
+            if (mCursor != null) {
+                mCursor.moveToFirst();
+                while (!mCursor.isAfterLast()) {
+                    if (doubleCheck == true) {
+                        if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+                            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                        }
+                    } else {
                         mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
                     }
-                } else {
-                    mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                    mCursor.moveToNext();
                 }
-                mCursor.moveToNext();
             }
+        } finally {
+             if (mCursor != null) {
+                 mCursor.close();
+             }
         }
 
         return stringListType(mArrayList);
@@ -1069,6 +1077,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, HROOPENDAY, null, HROOPENDAY_VERSION);
+        mainContext = context;
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
