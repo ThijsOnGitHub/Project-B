@@ -279,8 +279,10 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public int ABOUT = 0;
+        public int STUDY_PROGRAM = 1;
 
-        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id, String current_institute_id, String position){
+        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id, String current_institute_id, String position,int pageID){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -299,15 +301,28 @@ public class appHelper extends AppCompatActivity {
             String studyname = "";
             String studyid = "";
             String icon = "";
-            for (int i = 0; i < List_with_id.length; i++) {
-                studyname = this.db.getStudyInfo(List_with_id[i])[2];
-                studyid = this.db.getStudyInfo(List_with_id[i])[4];
-                icon = this.db.getStudyInfo(List_with_id[i])[5];
-                study_ids.add(studyid);
-                study_names.add(studyname);
-                study_icons.add(icon);
-            }
 
+            if (pageID==STUDY_PROGRAM) {
+                for (int i = 0; i < List_with_id.length; i++) {
+                    studyname = this.db.getStudyInfo(List_with_id[i])[2];
+                    studyid = this.db.getStudyInfo(List_with_id[i])[4];
+                    icon = this.db.getStudyInfo(List_with_id[i])[5];
+                    study_ids.add(studyid);
+                    study_names.add(studyname);
+                    study_icons.add(icon);
+                }
+            }else{
+                String[] institutes=this.db.getInstitutes();
+                for (int i=0;i < institutes.length;i++){
+                    String[] instituteInfo= this.db.getInstituteInfo(institutes[i]);
+                    studyname =instituteInfo[1];
+                    studyid=instituteInfo[3];
+                    icon="";
+                    study_ids.add(studyid);
+                    study_names.add(studyname);
+                    study_icons.add(icon);
+                }
+            }
 
             String[] List_with_text = study_names.toArray(new String[study_names.size()]);
             List_with_id = study_ids.toArray(new String[study_ids.size()]);
@@ -315,21 +330,22 @@ public class appHelper extends AppCompatActivity {
 
             // Get icons -->
             // https://stackoverflow.com/questions/16369814/how-to-access-the-drawable-resources-by-name-in-android
-            ArrayList<Integer> icons = new ArrayList<>();
-            Resources resources = this.context.getResources();
 
-            for (int i = 0; i < study_icons.size(); i++) {
-                icon = study_icons.get(i);
-                int id=resources.getIdentifier(icon, "drawable", this.context.getPackageName());
-                if (id!=0){
-                    icons.add(id);
-                }else{
-                    icons.add(R.drawable.baseline_school_24px);
+                ArrayList<Integer> icons = new ArrayList<>();
+                Resources resources = this.context.getResources();
+
+                for (int i = 0; i < study_icons.size(); i++) {
+                    icon = study_icons.get(i);
+                    int id = resources.getIdentifier(icon, "drawable", this.context.getPackageName());
+                    if (id != 0) {
+                        icons.add(id);
+                    } else {
+                        icons.add(R.drawable.baseline_school_24px);
+                    }
+
                 }
 
-            }
-
-            Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
+                Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
 
 
 
@@ -365,43 +381,44 @@ public class appHelper extends AppCompatActivity {
                 dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
             }
 
-            Spinner instituteSelector = new Spinner(context);
+            if (pageID==STUDY_PROGRAM) {
+                Spinner instituteSelector = new Spinner(context);
 
-            String[] arraySpinner = this.db.stringListType(dropdown_items_list);
+                String[] arraySpinner = this.db.stringListType(dropdown_items_list);
                 instituteSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, arraySpinner);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 instituteSelector.setAdapter(adapter);
 
-            if (position != null) {
-                instituteSelector.setSelection(Integer.parseInt(position));
-            }
+                if (position != null) {
+                    instituteSelector.setSelection(Integer.parseInt(position));
+                }
 
-            instituteSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String selected = instituteSelector.getSelectedItem().toString();
-                    String[] institute_id = db.getInstitute_id(selected);
-                    int select_pos = instituteSelector.getSelectedItemPosition();
+                instituteSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String selected = instituteSelector.getSelectedItem().toString();
+                        String[] institute_id = db.getInstitute_id(selected);
+                        int select_pos = instituteSelector.getSelectedItemPosition();
 
-                    if (!institute_id[0].equals(current_institute_id)) {
-                        Intent gotoPage = new Intent(context, educations_activity.class);
-                        gotoPage.putExtra("InstituteID", institute_id[0]);
-                        gotoPage.putExtra("positionDropdown", select_pos);
-                        gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(gotoPage);
+                        if (!institute_id[0].equals(current_institute_id)) {
+                            Intent gotoPage = new Intent(context, educations_activity.class);
+                            gotoPage.putExtra("InstituteID", institute_id[0]);
+                            gotoPage.putExtra("positionDropdown", select_pos);
+                            gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(gotoPage);
+                        }
                     }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
+                    }
+                });
 
 
-            Main_layout.addView(instituteSelector);
-
+                Main_layout.addView(instituteSelector);
+            }
 
             String longest_string;
             int Chars = 0;
@@ -447,44 +464,55 @@ public class appHelper extends AppCompatActivity {
 
                     for (int y = 0; y < max_ammount_of_buttons_in_a_row; y++) {
                         LinearLayout Button = new LinearLayout(this.context);
-                            Button.setOrientation(LinearLayout.VERTICAL);
-                            Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                            LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
-                                btnSize.setMargins(button_margin,button_margin,button_margin,button_margin);
-                                Button.setLayoutParams(btnSize);
-                            RelativeLayout button_image = new RelativeLayout(this.context);
-                                button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
-                                button_image.setGravity(Gravity.CENTER);
-                                LinearLayout the_image = new LinearLayout(this.context);
-                                    LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
-                                        the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
-                                        the_image.setLayoutParams(the_image_params);
-                                    the_image.setBackground(getDrawable(List_with_images[i]));
-                                    the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
-                                    button_image.addView(the_image);
-                            RelativeLayout button_text = new RelativeLayout(this.context);
-                                button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
-                                button_text.setGravity(Gravity.CENTER);
-                                TextView text = new TextView(this.context);
-                                    text.setText(List_with_text[i]);
-                                    text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    text.setTextSize(textSize);
-                                    button_text.addView(text);
-                            Button.addView(button_image);
-                            Button.addView(button_text);
+                        Button.setOrientation(LinearLayout.VERTICAL);
+                        Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                        LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
+                        btnSize.setMargins(button_margin, button_margin, button_margin, button_margin);
+                        Button.setLayoutParams(btnSize);
+                        RelativeLayout button_image = new RelativeLayout(this.context);
+                        button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                        button_image.setGravity(Gravity.CENTER);
+                        LinearLayout the_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
+                        the_image.setLayoutParams(the_image_params);
+                        the_image.setBackground(getDrawable(List_with_images[i]));
+                        the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_IN);
+                        button_image.addView(the_image);
+                        RelativeLayout button_text = new RelativeLayout(this.context);
+                        button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                        button_text.setGravity(Gravity.CENTER);
+                        TextView text = new TextView(this.context);
+                        text.setText(List_with_text[i]);
+                        text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        text.setTextSize(textSize);
+                        button_text.addView(text);
+                        Button.addView(button_image);
+                        Button.addView(button_text);
 
                         final String this_button_id = List_with_id[i];
                         Button.isClickable();
-                        Button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent gotoPage = new Intent(context, educations_activity.class);
+                    if (pageID == STUDY_PROGRAM){
+                            Button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent gotoPage = new Intent(context, educations_activity.class);
                                     gotoPage.putExtra("StudyID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
+                                }
+                            });
+                    }else{
+                        Button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent gotoPage = new Intent(context, About_activity.class);
+                                gotoPage.putExtra("InstituteID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
                             }
                         });
-
+                    }
                         i++;
 
                         horizontal.addView(Button);
@@ -530,15 +558,27 @@ public class appHelper extends AppCompatActivity {
 
                         final String this_button_id = List_with_id[i];
                         Button.isClickable();
+                    if (pageID == STUDY_PROGRAM){
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("StudyID", this_button_id);
-                                    gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(gotoPage);
+                                gotoPage.putExtra("StudyID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
                             }
                         });
+                    }else{
+                        Button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent gotoPage = new Intent(context, About_activity.class);
+                                gotoPage.putExtra("InstituteID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
+                            }
+                        });
+                    }
 
                     horizontal.addView(Button);
                     Main_layout.addView(horizontal);
