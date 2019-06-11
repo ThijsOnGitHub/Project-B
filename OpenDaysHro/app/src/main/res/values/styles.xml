@@ -25,4 +25,14 @@
 
     </style>
 
+    <!-- this is totaly from https://stackoverflow.com/questions/3182393/android-textview-outline-text -->
+    <declare-styleable name="TextViewOutline">
+        <attr name="outlineSize" format="dimension"/>
+        <attr name="outlineColor" format="color|reference"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>
+        <attr name="android:shadowColor"/>
+    </declare-styleable>
+
 </resources>
