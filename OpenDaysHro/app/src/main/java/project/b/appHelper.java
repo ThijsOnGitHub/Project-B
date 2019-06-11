@@ -1547,13 +1547,12 @@ public class appHelper extends AppCompatActivity {
                 if (name.length()==0){
                     finalText+=getText(R.string.name)+", ";
                 }
-                if (email.length() == 0) {
-                    finalText+=getString(R.string.email)+", ";
-                }
                 if (subject.length()==0){
                     finalText+=getString(R.string.subject)+", ";
                 }
-
+                if (email.length() == 0) {
+                    finalText+=getString(R.string.email)+", ";
+                }
                 if (textField.length() == 0) {
                     finalText+=getString(R.string.question)+", ";
                 }
