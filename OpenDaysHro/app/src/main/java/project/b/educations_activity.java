@@ -7,7 +7,9 @@ import android.os.Bundle;
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
-    String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
+    int passedPosition;
+    String passedStudyID;
+    String passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
     String[] passedAnswers, myPassedAnswers;
 
     @Override
@@ -25,7 +27,9 @@ public class educations_activity extends appHelper {
 
         try { passedStudyID = getIntent().getStringExtra("StudyID"); } catch (Exception e){ System.out.println(e); passedStudyID = null; passedInstituteID = "NOT NULL"; }
         try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null; passedStudyID = "NOT NULL";}
+        try { passedPosition = getIntent().getIntExtra("positionDropdown", 0); } catch (Exception e){ System.out.println(e);}
 
+        String passedPosition_string = String.valueOf(passedPosition);
 
         if (passedInstituteID == null) {
             // gets the information for the right institute.
@@ -54,7 +58,7 @@ public class educations_activity extends appHelper {
             if (passedStudyID == null) {
                 // this is the study selector.
                 String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
-                layout.generate_study_program_menu(R.id.page_container, id_all);
+                layout.generate_study_program_menu(R.id.page_container, id_all, passedInstituteID, passedPosition_string);
             } else {
                 // this is the page for the study selected inside the study selector
                 layout.generate_page_study_programs(R.drawable.blaak, passedStudyID, R.id.page_container);

@@ -278,7 +278,7 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id){
+        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id, String current_institute_id, String position){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -354,6 +354,52 @@ public class appHelper extends AppCompatActivity {
                     my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
                     Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
+
+
+            String[] institutes = this.db.getInstitutes();
+            ArrayList<String> dropdown_items_list = new ArrayList<>();
+            for (int i = 0; i <institutes.length; i++) {
+                String id = institutes[i];
+                dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+            }
+
+            Spinner instituteSelector = new Spinner(context);
+
+            String[] arraySpinner = this.db.stringListType(dropdown_items_list);
+                instituteSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, arraySpinner);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                instituteSelector.setAdapter(adapter);
+
+            if (position != null) {
+                instituteSelector.setSelection(Integer.parseInt(position));
+            }
+
+            instituteSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = instituteSelector.getSelectedItem().toString();
+                    String[] institute_id = db.getInstitute_id(selected);
+                    int select_pos = instituteSelector.getSelectedItemPosition();
+
+                    if (!institute_id[0].equals(current_institute_id)) {
+                        Intent gotoPage = new Intent(context, educations_activity.class);
+                        gotoPage.putExtra("InstituteID", institute_id[0]);
+                        gotoPage.putExtra("positionDropdown", select_pos);
+                        gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(gotoPage);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            Main_layout.addView(instituteSelector);
+
 
             String longest_string;
             int Chars = 0;

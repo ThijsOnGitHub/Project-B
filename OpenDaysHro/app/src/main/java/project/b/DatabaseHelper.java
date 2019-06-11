@@ -988,7 +988,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // GET Handler
-    private String[] stringListType(ArrayList<String> mArraylist) {
+    public String[] stringListType(ArrayList<String> mArraylist) {
         return mArraylist.toArray(new String[mArraylist.size()]);
     }
     private String[] getHandler(String table, List<String> arguments, List<String> values, String returnColumn, Boolean doubleCheck) {
