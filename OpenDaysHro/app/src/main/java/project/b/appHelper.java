@@ -3,8 +3,6 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -27,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -214,7 +213,7 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , String institute_id, int addToThisLayout) {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
 
@@ -247,6 +246,7 @@ public class appHelper extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent openMap = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         String[] locationList= ListItem_Location.split("\\.");
+                        openMap.putExtra("InstituteID", institute_id);
                         openMap.putExtra("building",locationList[0].toLowerCase());
                         openMap.putExtra("floor",Integer.parseInt(locationList[1]));
                         openMap.putExtra("rawString",ListItem_Location);
@@ -278,7 +278,7 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id){
+        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id, String current_institute_id, String position){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -354,6 +354,52 @@ public class appHelper extends AppCompatActivity {
                     my_main_params.setMargins(default_margin,default_margin,default_margin,default_margin);
                     Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
+
+
+            String[] institutes = this.db.getInstitutes();
+            ArrayList<String> dropdown_items_list = new ArrayList<>();
+            for (int i = 0; i <institutes.length; i++) {
+                String id = institutes[i];
+                dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+            }
+
+            Spinner instituteSelector = new Spinner(context);
+
+            String[] arraySpinner = this.db.stringListType(dropdown_items_list);
+                instituteSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, arraySpinner);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                instituteSelector.setAdapter(adapter);
+
+            if (position != null) {
+                instituteSelector.setSelection(Integer.parseInt(position));
+            }
+
+            instituteSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = instituteSelector.getSelectedItem().toString();
+                    String[] institute_id = db.getInstitute_id(selected);
+                    int select_pos = instituteSelector.getSelectedItemPosition();
+
+                    if (!institute_id[0].equals(current_institute_id)) {
+                        Intent gotoPage = new Intent(context, educations_activity.class);
+                        gotoPage.putExtra("InstituteID", institute_id[0]);
+                        gotoPage.putExtra("positionDropdown", select_pos);
+                        gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(gotoPage);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            Main_layout.addView(instituteSelector);
+
 
             String longest_string;
             int Chars = 0;
@@ -1940,7 +1986,7 @@ public class appHelper extends AppCompatActivity {
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
         }
 
-        public void sync(Context context, Integer mseconds) {
+        public void sync(Context context, Integer mseconds, ProgressBar progressBar) {
             Boolean latestVersion = false;
 
             if (this.db.emptyDatabase()) {
@@ -1949,7 +1995,7 @@ public class appHelper extends AppCompatActivity {
                     Log.d("Syncing", "onCreate: " + "Phone is online");
                     if (this.db.versionDatabase() == true) {
                         Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi(context, mseconds);
+                        jsonApi json = new jsonApi(context, mseconds, progressBar);
                         json.execute(this.db.latestAppInfo()[1]);
                     } else {
                         Log.d("Syncing", "onCreate: " + "Database is up-to-date");
@@ -1966,18 +2012,20 @@ public class appHelper extends AppCompatActivity {
                     Log.d("Syncing", "onCreate: " + "Phone is online");
                     if (this.db.versionDatabase() == true) {
                         Log.d("Syncing", "onCreate: " + "Database is not the latest version");
-                        jsonApi json = new jsonApi(context, mseconds);
+                        jsonApi json = new jsonApi(context, mseconds, progressBar);
                         json.execute(this.db.latestAppInfo()[1]);
                     } else {
                         Log.d("Syncing", "onCreate: " + "Database is up-to-date");
                         latestVersion = true;
                     }
+                } else {
+                    latestVersion = true;
                 }
             }
 
             if (latestVersion) {
                 System.out.println("latest version");
-                waitInBackground wait = new waitInBackground(context);
+                waitInBackground wait = new waitInBackground(context, progressBar);
                 wait.execute(mseconds);
             }
         }

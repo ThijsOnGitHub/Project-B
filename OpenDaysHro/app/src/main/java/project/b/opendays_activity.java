@@ -68,8 +68,9 @@ public class opendays_activity extends appHelper {
 
             for (int i = 0; i < activities.length; i++) {
                 String[] activity = layout.db.getActivityInfo(activities[i]);
+                String institute_id = layout.db.getInstitute_id(openday[0])[0];
 
-                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), R.id.page_container);
+                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), institute_id, R.id.page_container);
             }
         }
 
