@@ -93,6 +93,7 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
+
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
 
@@ -884,9 +885,9 @@ public class appHelper extends AppCompatActivity {
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                             header_text_params.setMargins((phone_width / 25),(phone_height / 75),(phone_width / 25),(phone_height / 75));
                             header_text.setLayoutParams(header_text_params);
-                        TextView title = new TextView(this.context);
-                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));
-                            header_text.setGravity(Gravity.CENTER);
+                        TextViewOutline title = new TextViewOutline(this.context);
+                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(30);
+            header_text.setGravity(Gravity.CENTER);
                             header_text.addView(title);
                         this_page_header.addView(header_text);
                 LinearLayout this_page_text = new LinearLayout(this.context);
