@@ -1020,54 +1020,56 @@ public class appHelper extends AppCompatActivity {
             main.addView(this_page);
 
 
-            LinearLayout button_map = new LinearLayout(this.context);
+            if (locations_id.length!=0) {
+
+                LinearLayout button_map = new LinearLayout(this.context);
                 button_map.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950),calcHeightFromDesign(350));
-                layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
+                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950), calcHeightFromDesign(350));
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, 0);
                 button_map.setLayoutParams(layoutParamsButtonMap);
-                button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
+                button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 button_map.setGravity(Gravity.CENTER);
 
-                LinearLayout iconText=new LinearLayout(context);
-                    iconText.setOrientation(LinearLayout.VERTICAL);
-                    iconText.setGravity(Gravity.CENTER_HORIZONTAL);
+                LinearLayout iconText = new LinearLayout(context);
+                iconText.setOrientation(LinearLayout.VERTICAL);
+                iconText.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                    ImageView icon = new ImageView(context);
-                    int size;
-                    if (calcWithFromDesign(150)>calcHeightFromDesign(150)){
-                        size=calcHeightFromDesign(150);
-                    }else {
-                        size=calcHeightFromDesign(150);
-                    }
-                        LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(size,size);
-                        iconLayout.setMargins(0,0,0,calcHeightFromDesign(20));
-                        icon.setLayoutParams(iconLayout);
-                        icon.setImageResource(R.drawable.twotone_map_black_18dp);
+                ImageView icon = new ImageView(context);
+                int size;
+                if (calcWithFromDesign(150) > calcHeightFromDesign(150)) {
+                    size = calcHeightFromDesign(150);
+                } else {
+                    size = calcHeightFromDesign(150);
+                }
+                LinearLayout.LayoutParams iconLayout = new LinearLayout.LayoutParams(size, size);
+                iconLayout.setMargins(0, 0, 0, calcHeightFromDesign(20));
+                icon.setLayoutParams(iconLayout);
+                icon.setImageResource(R.drawable.twotone_map_black_18dp);
 
-                        icon.setColorFilter(getResources().getColor(R.color.hro_red));
+                icon.setColorFilter(getResources().getColor(R.color.hro_red));
 
-                    iconText.addView(icon);
+                iconText.addView(icon);
 
-                    TextView floorplanText=new TextView(context);
-                        floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
-                        floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
-                        floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
-                        floorplanText.setTextColor(getResources().getColor(android.R.color.black));
-                    iconText.addView(floorplanText);
+                TextView floorplanText = new TextView(context);
+                floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350), captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                iconText.addView(floorplanText);
                 button_map.addView(iconText);
-
 
 
                 button_map.isClickable();
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        Intent map = new Intent(context, map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
                 });
                 main.addView(button_map);
+            }
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
