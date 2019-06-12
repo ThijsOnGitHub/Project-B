@@ -992,11 +992,13 @@ public class appHelper extends AppCompatActivity {
                     this_page_header.setBackground(getDrawable(Image));
                     LinearLayout header_text = new LinearLayout(this.context);
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                            header_text_params.setMargins((phone_width / 25),(phone_height / 75),(phone_width / 25),(phone_height / 75));
+                            header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
                             header_text.setLayoutParams(header_text_params);
                         TextViewOutline title = new TextViewOutline(this.context);
+                            title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                            title.setGravity(Gravity.CENTER);
                             title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(30);
-            header_text.setGravity(Gravity.CENTER);
+                        header_text.setGravity(Gravity.CENTER);
                             header_text.addView(title);
                         this_page_header.addView(header_text);
                 LinearLayout this_page_text = new LinearLayout(this.context);
