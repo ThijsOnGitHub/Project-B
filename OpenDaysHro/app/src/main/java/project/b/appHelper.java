@@ -317,7 +317,7 @@ public class appHelper extends AppCompatActivity {
                     String[] instituteInfo= this.db.getInstituteInfo(institutes[i]);
                     studyname =instituteInfo[1];
                     studyid=instituteInfo[3];
-                    icon="";
+                    icon=instituteInfo[5];
                     study_ids.add(studyid);
                     study_names.add(studyname);
                     study_icons.add(icon);
