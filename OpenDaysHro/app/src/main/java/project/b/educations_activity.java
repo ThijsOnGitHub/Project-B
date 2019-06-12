@@ -58,7 +58,7 @@ public class educations_activity extends appHelper {
             if (passedStudyID == null) {
                 // this is the study selector.
                 String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
-                layout.generate_study_program_menu(R.id.page_container, id_all, passedInstituteID, passedPosition_string);
+                layout.generate_study_program_menu(R.id.page_container, id_all, passedInstituteID, passedPosition_string,layout.STUDY_PROGRAM);
             } else {
                 // this is the page for the study selected inside the study selector
                 layout.generate_page_study_programs(R.drawable.gebouw_cmi, passedStudyID, R.id.page_container);

@@ -19,7 +19,7 @@ public class About_activity extends appHelper {
         layout = new LayoutHelper(this);
 
         try {passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e) { System.out.println(e); passedInstituteID = null;}
-
+ /*
         if (passedInstituteID == null) {
             String[] institutes = layout.db.getInstitutes();
             for (int i = 0; i < institutes.length; i++) {
@@ -29,8 +29,13 @@ public class About_activity extends appHelper {
                 }
             }
         }
+*/
+        if (passedInstituteID==null){
+            layout.generate_study_program_menu(R.id.page_container,null,null,null,layout.ABOUT);
+        }else{
+            layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
+        }
 
-        layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
