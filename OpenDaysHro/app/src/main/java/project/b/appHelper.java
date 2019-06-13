@@ -1438,12 +1438,17 @@ public class appHelper extends AppCompatActivity {
 
                         LinearLayout result = new LinearLayout(this.context); result.setGravity(Gravity.CENTER);
                         LinearLayout backbutton = new LinearLayout(this.context); backbutton.setGravity(Gravity.CENTER);
-                            backbutton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, back_button_height));
+                            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, back_button_height);
+                            layoutParams.setMargins(calcWithFromDesign(30),calcHeightFromDesign(20),calcWithFromDesign(30),0);
+                            backbutton.setLayoutParams(layoutParams);
                         TextView result_textview = new TextView(this.context); result.addView(result_textview);
-                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize);
+                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize); result_textview.setTextColor(Color.BLACK);
                         TextView backbutton_text = new TextView(this.context);
-                            backbutton_text.setText("Close the quiz"); backbutton_text.setTextSize(textSize);
-                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.hro_red));
+
+                            backbutton_text.setTextColor(Color.BLACK);
+                            backbutton_text.setText("Close the quiz");
+                            backbutton_text.setTextSize(textSize);
+                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.light_grey));
                             backbutton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
