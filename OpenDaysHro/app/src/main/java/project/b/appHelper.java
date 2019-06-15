@@ -1516,6 +1516,21 @@ public class appHelper extends AppCompatActivity {
                 header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                     header.setLayoutParams(header_lp);
+                    LinearLayout header_text = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                        header_text.setLayoutParams(header_text_params);
+                    TextViewOutline titleText = new TextViewOutline(this.context);
+                        titleText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        titleText.setGravity(Gravity.CENTER);
+                        try {
+                            titleText.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                        titleText.setText(getResources().getString(R.string.Conctact)); titleText.setTextSize(makeTextFit(phone_width-calcWithFromDesign(400),getResources().getString(R.string.Conctact))); titleText.setTextColor(getResources().getColor(R.color.hro_red));titleText.setOutlineColor(Color.WHITE);titleText.setOutlineSize(25);
+                    header_text.setGravity(Gravity.CENTER);
+                header.addView(titleText);
                 header.setBackground(getDrawable(image));
                 main.addView(header);
 
