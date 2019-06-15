@@ -81,9 +81,13 @@ public class appHelper extends AppCompatActivity {
             String ListItem_Time = starttime + "-" + endtime;
             String ListItem_Description = institute_shortname + "\n" + openday[1];
 
+            int default_text_size = (int) ( ( (float) 18 * ( (float) 1080 / (float) 2.625 ) ) / ( (float) phone_width / (float) metrics.density ) );
+
+            int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
+
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
-            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = (int) ( button_height * 0.70); } else { info_button_size = (int) ( info_layout_width * 0.70); }
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -105,11 +109,11 @@ public class appHelper extends AppCompatActivity {
                 info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
