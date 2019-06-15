@@ -1631,7 +1631,23 @@ public class appHelper extends AppCompatActivity {
             // and edited by myself to fit
             TextView textView=new TextView(context);
             textView.setLayoutParams(new LinearLayout.LayoutParams(availableWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+            CharSequence text = tekst;
+            float textSize = 0;
+            textView.setTextSize(textSize);
 
+
+            while (text == (TextUtils.ellipsize(text, textView.getPaint(), availableWidth, TextUtils.TruncateAt.END))) {
+                textSize += 1;
+                textView.setTextSize(textSize);
+            }
+            textSize -= 5;
+            textView.setTextSize(textSize);
+            return  textSize;
+        }
+        private float makeTextFit(int availableWidth,String tekst,TextView textView) {
+
+            //https://stackoverflow.com/questions/7259016/scale-text-in-a-view-to-fit/7259136#7259136
+            // and edited by myself to fit
             CharSequence text = tekst;
             float textSize = 0;
             textView.setTextSize(textSize);
