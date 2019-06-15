@@ -1032,7 +1032,7 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout button_map = new LinearLayout(this.context);
                 button_map.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950), calcHeightFromDesign(350));
-                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, 0);
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, calcHeightFromDesign(20));
                 button_map.setLayoutParams(layoutParamsButtonMap);
                 button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 button_map.setGravity(Gravity.CENTER);
