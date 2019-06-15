@@ -1494,8 +1494,10 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
 
             int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3.5 ); int button_horizontal_margin = (int) (button_size / 5);
-            int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
             LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, 0 );
+
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 24 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
 
             for (int i = 0; i < 2; i++) {
 
