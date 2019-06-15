@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,7 @@ public class MainActivity extends appHelper {
 
     int numOfListItems;
 
-    int[] drawables = new int[]{R.drawable.gebouw_cmi,R.drawable.lerende_student,
-                                    R.drawable.werkende_studenten,R.drawable.wijnhaven};
+    int[] drawables = new int[]{R.drawable.lerende_student, R.drawable.werkende_studenten,R.drawable.header_cmi};
 
 
     private int calcHeightFromDesign(float elementHeight){
