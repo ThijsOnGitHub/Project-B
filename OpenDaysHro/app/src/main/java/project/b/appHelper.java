@@ -235,6 +235,11 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
+            int default_text_size = (int) ( ( (float) 18 * ( (float) 1080 / (float) 2.625 ) ) / ( (float) phone_width / (float) metrics.density ) );
+
+            int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
+
+
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
 
@@ -245,11 +250,11 @@ public class appHelper extends AppCompatActivity {
                 listItem_time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Location = new TextView(this.context);
-                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER);
+                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER); listItem_Location.setTextSize(textSize);
                 listItem_Location.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                 listItem_Location.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
                 listItem_Location.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +271,7 @@ public class appHelper extends AppCompatActivity {
                 });
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
 
