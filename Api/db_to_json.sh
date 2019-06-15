@@ -11,13 +11,6 @@ extention_data_fields="_data_field"
 ### PREPAIR PROGRAM ###
 mkdir ${data_folder}
 
-if $( hash jq ); then
-        echo "-------------------------------- GENERATING JSON --------------------------------"
-else
-        apt-get install jq
-        echo "-------------------------------- GENERATING JSON --------------------------------"
-fi
-
 ### GETTING DB TABLES ###
 touch tableName.sql; echo "USE ${db}; SHOW TABLES;" >> tableName.sql
 
@@ -69,7 +62,7 @@ done
 #done
 
 jq -s 'reduce .[] as $item ({}; . * $item)' ${data_folder}/*${extention_data}_JSON.txt > ${db}.json
-sed -i 's/ \\\\/\\/g' ${db}.json && sed -i 's/\\\\n*/\\n/g' ${db}.json
+sed -i 's/\\\\r//g' ${db}.json &&  sed -i 's/\\\\n/\\n/g' ${db}.json
 cat ${db}.json
 
 rm -r ${data_folder}/; rm tableName.txt
