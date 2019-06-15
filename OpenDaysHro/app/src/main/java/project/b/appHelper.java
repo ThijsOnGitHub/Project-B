@@ -378,7 +378,12 @@ public class appHelper extends AppCompatActivity {
             ArrayList<String> dropdown_items_list = new ArrayList<>();
             for (int i = 0; i <institutes.length; i++) {
                 String id = institutes[i];
-                dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+
+                if (db.language()) {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+                } else {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[6]);
+                }
             }
 
             if (pageID==STUDY_PROGRAM) {
