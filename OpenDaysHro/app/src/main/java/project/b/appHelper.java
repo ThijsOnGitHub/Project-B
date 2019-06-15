@@ -591,18 +591,25 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_page_study_programs(int Image, String ID, int addViewTo){
+        public void generate_page_study_programs(int DefaultImage, String ID, int addViewTo){
             String[] study = this.db.getStudyInfo(ID);
 
             String study_name = study[2];
             String study_information = study[3];
+            String institute_fullName=study[0];
+            String institute_id = db.getInstitute_id(institute_fullName)[0];
+
+
+            String[] InstituteInfo = this.db.getInstituteInfo(institute_id);
+            String Institute =InstituteInfo[1];
+
 
             int amountOfQuestions = db.amountOfQuestions(study_name);
             String[] QuizQuestions = db.getQuizQuestions(study_name);
 
             for (int i = 0; i < amountOfQuestions; i++){ System.out.println(QuizQuestions[i]); };
 
-            String[] contentList = new String[]{study_name,study_information};
+            String[] contentList = new String[]{study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int quiz_height = (int) ( (float) phone_height / (float) 5 );
@@ -617,10 +624,32 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 this_page.setLayoutParams(this_page_lp);
             LinearLayout this_page_header = new LinearLayout(this.context);
-                this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout header_text = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                    header_text.setLayoutParams(header_text_params);
+                TextViewOutline title = new TextViewOutline(this.context);
+                    title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    title.setGravity(Gravity.CENTER);
+                    title.setText(study_name);
+                    try{
+                        title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+                    }catch (Exception e){
+
+                    }
+                    title.setTextSize(makeTextFit(phone_width-calcWithFromDesign(50),study_name,title)); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(20);
+                header_text.setGravity(Gravity.CENTER);
+                header_text.addView(title);
+            this_page_header.addView(header_text);
+
+            this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                 this_page_header.setLayoutParams(this_page_header_lp);
-                this_page_header.setBackground(getDrawable(Image));
+                int header=context.getResources().getIdentifier("header_"+Institute.toLowerCase(), "drawable", this.context.getPackageName());
+                if (header==0){
+                header=DefaultImage;
+                }
+                this_page_header.setBackground(getDrawable(header));
             LinearLayout this_page_text = new LinearLayout(this.context);
                 this_page_text.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
