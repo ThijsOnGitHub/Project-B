@@ -19,7 +19,7 @@ public class About_activity extends appHelper {
         layout = new LayoutHelper(this);
 
         try {passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e) { System.out.println(e); passedInstituteID = null;}
-
+ /*
         if (passedInstituteID == null) {
             String[] institutes = layout.db.getInstitutes();
             for (int i = 0; i < institutes.length; i++) {
@@ -29,8 +29,13 @@ public class About_activity extends appHelper {
                 }
             }
         }
+*/
+        if (passedInstituteID==null){
+            layout.generate_study_program_menu(R.id.page_container,null,null,null,layout.ABOUT);
+        }else{
+            layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
+        }
 
-        layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
 
         Intent home = new Intent(getBaseContext(), MainActivity.class);
         Intent educations = new Intent(getBaseContext(), educations_activity.class);
@@ -40,10 +45,7 @@ public class About_activity extends appHelper {
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_grey_24dp,R.drawable.ic_chat_white_24dp};
 
-        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
-        if(layout.db.language() == true) {
-            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
-        }
+        String[] text = new String[]{getResources().getString(R.string.Home),getResources().getString(R.string.Study_Programs),getResources().getString(R.string.About_Institute),getResources().getString(R.string.Conctact)};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 

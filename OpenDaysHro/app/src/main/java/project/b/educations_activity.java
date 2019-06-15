@@ -3,12 +3,13 @@ package project.b;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class educations_activity extends appHelper {
 
     LayoutHelper layout;
-    String passedStudyID, passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
+    int passedPosition;
+    String passedStudyID;
+    String passedInstituteID; String[] passedQuizQuestions = null; int amountOfQuizQuestions, Progression;
     String[] passedAnswers, myPassedAnswers;
 
     @Override
@@ -26,7 +27,9 @@ public class educations_activity extends appHelper {
 
         try { passedStudyID = getIntent().getStringExtra("StudyID"); } catch (Exception e){ System.out.println(e); passedStudyID = null; passedInstituteID = "NOT NULL"; }
         try { passedInstituteID = getIntent().getStringExtra("InstituteID"); } catch (Exception e){ System.out.println(e); passedInstituteID = null; passedStudyID = "NOT NULL";}
+        try { passedPosition = getIntent().getIntExtra("positionDropdown", 0); } catch (Exception e){ System.out.println(e);}
 
+        String passedPosition_string = String.valueOf(passedPosition);
 
         if (passedInstituteID == null) {
             // gets the information for the right institute.
@@ -55,7 +58,7 @@ public class educations_activity extends appHelper {
             if (passedStudyID == null) {
                 // this is the study selector.
                 String[] id_all = layout.db.getStudiesByInstitute(passedInstituteID);
-                layout.generate_study_program_menu(R.id.page_container, id_all);
+                layout.generate_study_program_menu(R.id.page_container, id_all, passedInstituteID, passedPosition_string,layout.STUDY_PROGRAM);
             } else {
                 // this is the page for the study selected inside the study selector
                 layout.generate_page_study_programs(R.drawable.gebouw_cmi, passedStudyID, R.id.page_container);
@@ -70,10 +73,7 @@ public class educations_activity extends appHelper {
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp,R.drawable.baseline_school_grey_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
 
-        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
-        if(layout.db.language() == true) {
-            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
-        }
+        String[] text = new String[]{getResources().getString(R.string.Home),getResources().getString(R.string.Study_Programs),getResources().getString(R.string.About_Institute),getResources().getString(R.string.Conctact)};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 
