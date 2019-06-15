@@ -955,7 +955,7 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_about_page(int Image, final String institute_id, int addViewTo){
+        public void generate_page_about_page(int DefaultImage, final String institute_id, int addViewTo){
             String[] institute = this.db.getInstituteInfo(institute_id);
             String[] locations_id = this.db.getLocationsByInstitute(institute_id);
 
@@ -989,7 +989,12 @@ public class appHelper extends AppCompatActivity {
                     this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                         this_page_header.setLayoutParams(this_page_header_lp);
-                    this_page_header.setBackground(getDrawable(Image));
+                        int header=context.getResources().getIdentifier("header_"+Title.toLowerCase(), "drawable", this.context.getPackageName());
+                        if (header==0){
+                            header=DefaultImage;
+                        }
+                    this_page_header.setBackground(getDrawable(header));
+
                     LinearLayout header_text = new LinearLayout(this.context);
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                             header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
@@ -2073,7 +2078,7 @@ public class appHelper extends AppCompatActivity {
                     bottomBar.setBackground(getDrawable(R.drawable.onderkant));
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
         }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public void sync(Context context, Integer mseconds, ProgressBar progressBar) {
             Boolean latestVersion = false;
 
