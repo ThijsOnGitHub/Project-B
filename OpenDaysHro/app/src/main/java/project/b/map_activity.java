@@ -29,7 +29,8 @@ class DrawableManager{
 
     //By myself
     public int getID(String name){
-        int resourceId = resources.getIdentifier(name, "drawable", context.getPackageName());
+        int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
         return resourceId;
     }
 

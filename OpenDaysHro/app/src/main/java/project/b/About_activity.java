@@ -33,7 +33,7 @@ public class About_activity extends appHelper {
         if (passedInstituteID==null){
             layout.generate_study_program_menu(R.id.page_container,null,null,null,layout.ABOUT);
         }else{
-            layout.generate_page_about_page(R.drawable.header_cmi,passedInstituteID,R.id.page_container);
+            layout.generate_page_about_page(R.drawable.gebouw_cmi,passedInstituteID,R.id.page_container);
         }
 
 
