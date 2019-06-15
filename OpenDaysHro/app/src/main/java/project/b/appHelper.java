@@ -591,18 +591,25 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_page_study_programs(int Image, String ID, int addViewTo){
+        public void generate_page_study_programs(int DefaultImage, String ID, int addViewTo){
             String[] study = this.db.getStudyInfo(ID);
 
             String study_name = study[2];
             String study_information = study[3];
+            String institute_fullName=study[0];
+            String institute_id = db.getInstitute_id(institute_fullName)[0];
+
+
+            String[] InstituteInfo = this.db.getInstituteInfo(institute_id);
+            String Institute =InstituteInfo[1];
+
 
             int amountOfQuestions = db.amountOfQuestions(study_name);
             String[] QuizQuestions = db.getQuizQuestions(study_name);
 
             for (int i = 0; i < amountOfQuestions; i++){ System.out.println(QuizQuestions[i]); };
 
-            String[] contentList = new String[]{study_name,study_information};
+            String[] contentList = new String[]{study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int quiz_height = (int) ( (float) phone_height / (float) 5 );
@@ -617,10 +624,32 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 this_page.setLayoutParams(this_page_lp);
             LinearLayout this_page_header = new LinearLayout(this.context);
-                this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout header_text = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                    header_text.setLayoutParams(header_text_params);
+                TextViewOutline title = new TextViewOutline(this.context);
+                    title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    title.setGravity(Gravity.CENTER);
+                    title.setText(study_name);
+                    try{
+                        title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+                    }catch (Exception e){
+
+                    }
+                    title.setTextSize(makeTextFit(phone_width-calcWithFromDesign(50),study_name,title)); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(20);
+                header_text.setGravity(Gravity.CENTER);
+                header_text.addView(title);
+            this_page_header.addView(header_text);
+
+            this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                 this_page_header.setLayoutParams(this_page_header_lp);
-                this_page_header.setBackground(getDrawable(Image));
+                int header=context.getResources().getIdentifier("header_"+Institute.toLowerCase(), "drawable", this.context.getPackageName());
+                if (header==0){
+                header=DefaultImage;
+                }
+                this_page_header.setBackground(getDrawable(header));
             LinearLayout this_page_text = new LinearLayout(this.context);
                 this_page_text.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -827,7 +856,7 @@ public class appHelper extends AppCompatActivity {
 
 
 
-        public void calendar_page(int addToThisLayout, int Image, int Calendar_Image,
+        public void calendar_page(int addToThisLayout, int DefaultImage, int Calendar_Image,
                                   int Share_Image, String EVENT_TITLE, String EVENT_DESCRIPTION, String EVENT_LOCATION,
                                   int EVENT_YEAR, int EVENT_MONTH, int EVENT_DAY, int EVENT_START_HOUR, int EVENT_START_MINUTE,
                                   int EVENT_END_HOUR, int EVENT_END_MINUTE, String openday_id){
@@ -853,7 +882,11 @@ public class appHelper extends AppCompatActivity {
             LinearLayout image = new LinearLayout(this.context);
                 LinearLayout.LayoutParams image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 3.5 ) ));
                     image.setLayoutParams(image_params);
-                image.setBackground(getDrawable(Image));
+                    int header=context.getResources().getIdentifier("header_"+EVENT_DESCRIPTION.toLowerCase(), "drawable", this.context.getPackageName());
+                    if (header==0){
+                        header=DefaultImage;
+                    }
+                image.setBackground(getDrawable(header));
             LinearLayout buttons = new LinearLayout(this.context);
                 LinearLayout.LayoutParams buttons_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 7.0 )));
                     buttons_params.setMargins( horizontal_space, vertical_space, horizontal_space, vertical_space );
@@ -955,7 +988,7 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_about_page(int Image, final String institute_id, int addViewTo){
+        public void generate_page_about_page(int DefaultImage, final String institute_id, int addViewTo){
             String[] institute = this.db.getInstituteInfo(institute_id);
             String[] locations_id = this.db.getLocationsByInstitute(institute_id);
 
@@ -989,7 +1022,12 @@ public class appHelper extends AppCompatActivity {
                     this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                         this_page_header.setLayoutParams(this_page_header_lp);
-                    this_page_header.setBackground(getDrawable(Image));
+                        int header=context.getResources().getIdentifier("header_"+Title.toLowerCase(), "drawable", this.context.getPackageName());
+                        if (header==0){
+                            header=DefaultImage;
+                        }
+                    this_page_header.setBackground(getDrawable(header));
+
                     LinearLayout header_text = new LinearLayout(this.context);
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                             header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
@@ -997,10 +1035,11 @@ public class appHelper extends AppCompatActivity {
                         TextViewOutline title = new TextViewOutline(this.context);
                             title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                             title.setGravity(Gravity.CENTER);
-                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(30);
+                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(20);
                         header_text.setGravity(Gravity.CENTER);
                             header_text.addView(title);
                         this_page_header.addView(header_text);
+
                 LinearLayout this_page_text = new LinearLayout(this.context);
                     this_page_text.setOrientation(LinearLayout.VERTICAL);
                     LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -1027,7 +1066,7 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout button_map = new LinearLayout(this.context);
                 button_map.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950), calcHeightFromDesign(350));
-                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, 0);
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, calcHeightFromDesign(20));
                 button_map.setLayoutParams(layoutParamsButtonMap);
                 button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 button_map.setGravity(Gravity.CENTER);
@@ -1477,6 +1516,21 @@ public class appHelper extends AppCompatActivity {
                 header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                     header.setLayoutParams(header_lp);
+                    LinearLayout header_text = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                        header_text.setLayoutParams(header_text_params);
+                    TextViewOutline titleText = new TextViewOutline(this.context);
+                        titleText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        titleText.setGravity(Gravity.CENTER);
+                        try {
+                            titleText.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                        titleText.setText(getResources().getString(R.string.Conctact)); titleText.setTextSize(makeTextFit(phone_width-calcWithFromDesign(400),getResources().getString(R.string.Conctact))); titleText.setTextColor(getResources().getColor(R.color.hro_red));titleText.setOutlineColor(Color.WHITE);titleText.setOutlineSize(25);
+                    header_text.setGravity(Gravity.CENTER);
+                header.addView(titleText);
                 header.setBackground(getDrawable(image));
                 main.addView(header);
 
@@ -1597,7 +1651,23 @@ public class appHelper extends AppCompatActivity {
             // and edited by myself to fit
             TextView textView=new TextView(context);
             textView.setLayoutParams(new LinearLayout.LayoutParams(availableWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+            CharSequence text = tekst;
+            float textSize = 0;
+            textView.setTextSize(textSize);
 
+
+            while (text == (TextUtils.ellipsize(text, textView.getPaint(), availableWidth, TextUtils.TruncateAt.END))) {
+                textSize += 1;
+                textView.setTextSize(textSize);
+            }
+            textSize -= 5;
+            textView.setTextSize(textSize);
+            return  textSize;
+        }
+        private float makeTextFit(int availableWidth,String tekst,TextView textView) {
+
+            //https://stackoverflow.com/questions/7259016/scale-text-in-a-view-to-fit/7259136#7259136
+            // and edited by myself to fit
             CharSequence text = tekst;
             float textSize = 0;
             textView.setTextSize(textSize);
@@ -2073,7 +2143,7 @@ public class appHelper extends AppCompatActivity {
                     bottomBar.setBackground(getDrawable(R.drawable.onderkant));
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
         }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public void sync(Context context, Integer mseconds, ProgressBar progressBar) {
             Boolean latestVersion = false;
 
