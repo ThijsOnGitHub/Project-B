@@ -2,14 +2,17 @@ package project.b;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends appHelper {
@@ -76,24 +79,26 @@ public class MainActivity extends appHelper {
         try { firstdatefirst = getIntent().getBooleanExtra("opendaylist", true); } catch (Exception e){ System.out.println(e); firstdatefirst = true;}
 
         LinearLayout main = (LinearLayout) findViewById(R.id.page_container);
-        LinearLayout buttonForSorting = new LinearLayout(this);
-            LinearLayout.LayoutParams buttonForSorting_params = new LinearLayout.LayoutParams(calcWithFromDesign(600),calcHeightFromDesign(125));
-            buttonForSorting_params.setMargins(calcWithFromDesign(450),calcHeightFromDesign(20),0,calcWithFromDesign(20));
+        FrameLayout buttonForSorting = new FrameLayout(this);
+        FrameLayout.LayoutParams buttonForSorting_params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            buttonForSorting_params.setMargins(0,0,0,0);
             buttonForSorting.setLayoutParams(buttonForSorting_params);
-        buttonForSorting.setGravity(Gravity.CENTER_VERTICAL);
-            buttonForSorting.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView dateText = new TextView(this);
-                LinearLayout.LayoutParams dateText_params= new LinearLayout.LayoutParams(calcWithFromDesign(400), ViewGroup.LayoutParams.WRAP_CONTENT);
-                dateText_params.setMargins(calcWithFromDesign(30),0,0,0);
+                FrameLayout.LayoutParams dateText_params= new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                dateText_params.setMargins(0,0,0,0);
+                dateText_params.gravity=Gravity.CENTER;
                 dateText.setLayoutParams(dateText_params);
-                dateText.setText(captFirstLetter(getResources().getString(R.string.sort_on_Date)));
-                dateText.setTextSize(makeTextFit(calcWithFromDesign(400),getResources().getString(R.string.sort_on_Date)));
+                dateText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                dateText.setText(captFirstLetter(getResources().getString(R.string.open_days)));
+                dateText.setTextSize(makeTextFit(calcWithFromDesign(500),getResources().getString(R.string.sort_on_Date)));
                 dateText.setTextColor(getResources().getColor(android.R.color.black));
                 buttonForSorting.addView(dateText);
 
+
             ImageView sortOrderIcon = new ImageView(this);
-                LinearLayout.LayoutParams sortOrderIcon_layout= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                FrameLayout.LayoutParams sortOrderIcon_layout= new FrameLayout.LayoutParams(calcWithFromDesign(150), calcWithFromDesign(150));
+                sortOrderIcon_layout.gravity=Gravity.RIGHT;
                 sortOrderIcon.setLayoutParams(sortOrderIcon_layout);
                 sortOrderIcon.setBackgroundColor(getResources().getColor(R.color.dark_grey));
         sortOrderIcon.setColorFilter(getResources().getColor(R.color.hro_red));
@@ -122,6 +127,7 @@ public class MainActivity extends appHelper {
 
                 }
             });
+
         main.addView(buttonForSorting);
 
         String[] opendays_ids = layout.db.getUpcomingOpendays(firstdatefirst);

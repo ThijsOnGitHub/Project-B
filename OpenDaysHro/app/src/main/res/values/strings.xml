@@ -26,4 +26,5 @@
     <string name="Study_Programs">Study Programs</string>
     <string name="About_Institute">About Institute</string>
     <string name="Conctact" translatable="false">Contact</string>
+    <string name="open_days">Open Days</string>
 </resources>
