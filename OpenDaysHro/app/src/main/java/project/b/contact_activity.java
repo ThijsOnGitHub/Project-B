@@ -45,6 +45,6 @@ public class contact_activity extends appHelper {
         int[] social_images = new int[]{ R.drawable.facebook_logo, R.drawable.instagram, R.drawable.twitter };
 
         layout.generate_menu(R.id.menu_bar, images, text, myIntents);
-        layout.contact_page(R.drawable.blaak, contact_images, social_images, passedInstituteID);
+        layout.contact_page(R.drawable.header_cmi, contact_images, social_images, passedInstituteID);
     }
 }
