@@ -81,9 +81,8 @@ public class appHelper extends AppCompatActivity {
             String ListItem_Time = starttime + "-" + endtime;
             String ListItem_Description = institute_shortname + "\n" + openday[1];
 
-            int default_text_size = (int) ( ( (float) 18 * ( (float) 1080 / (float) 2.625 ) ) / ( (float) phone_width / (float) metrics.density ) );
-
-            int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
@@ -160,10 +159,8 @@ public class appHelper extends AppCompatActivity {
             String[] all_workshops = this.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
             String workshops = "Workshops: " + String.valueOf(all_workshops.length);
 
-            int default_text_size = (int) ( ( (float) 18 * ( (float) 1080 / (float) 2.625 ) ) / ( (float) phone_width / (float) metrics.density ) );
-
-            int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
-
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -235,10 +232,8 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
-            int default_text_size = (int) ( ( (float) 18 * ( (float) 1080 / (float) 2.625 ) ) / ( (float) phone_width / (float) metrics.density ) );
-
-            int int_tested_width = 1080; int textSize = (int) ((float) ( (float) default_text_size * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
-
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
