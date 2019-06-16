@@ -17,5 +17,9 @@
     <string name="classroom">klaslokaal</string>
     <string name="roomnumber">lokaalnummer</string>
     <string name="Classroom_highlighted">Klaslokaal wordt uitgelicht</string>
-    <string name="floorPlan">plattegrond</string>
+    <string name="floorPlan">Plattegrond</string>
+    <string name="sort_on_Date">sorteer op datum</string>
+    <string name="Study_Programs">Studies</string>
+    <string name="About_Institute">Over Instituten</string>
+    <string name="open_days">Open Dagen</string>
 </resources>

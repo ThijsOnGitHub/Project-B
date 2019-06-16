@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int HROOPENDAY_VERSION = 79;
+    private static final int HROOPENDAY_VERSION = 81;
     private static final String HROOPENDAY = "hro_openday.db";
         private static final String HROOPENDAY_OPENDAY = "openday";
             private static final String OPENDAY_ID = "id";
@@ -38,10 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         private static final String HROOPENDAY_INSTITUTE = "institute";
             private static final String INSTITUTE_ID = "id";
             private static final String INSTITUTE_FULLNAME = "fullname";
+            private static final String INSTITUTE_FULLNAME_ENGLISH = "fullname_english";
             private static final String INSTITUTE_SHORTNAME = "shortname";
             private static final String INSTITUTE_GENERALINFORMATION_ENGLISH = "generalinformation_english";
             private static final String INSTITUTE_GENERALINFORMATION_DUTCH = "generalinformation_dutch";
             private static final String INSTITUTE_PHONENUMBER = "phonenumber";
+            private static final String INSTITUTE_ICON = "icon";
 
         private static final String HROOPENDAY_STUDY = "study";
             private static final String STUDY_ID = "id";
@@ -92,6 +94,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             private static final String QUIZ_ANSWER3 = "answer3";
             private static final String QUIZ_ANSWER3_POINTS = "answer3_points";
             private static final String QUIZ_TARGET_STUDY = "target_study";
+
+    Context mainContext;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GET DATA
@@ -392,24 +396,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return stringListType(result);
     }
 
-    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
-        ArrayList<String> result = new ArrayList<>();
-        String image_description = "";
-
-        String[] location = getLocationInfo(location_id);
-        if (location.length > 0) {
-            image_description = location[0];
-        }
-
-        String[] images_id = getImage_id(image_description, floorplan);
-        if (images_id.length > 0) {
-            for (int i = 0; i < images_id.length; i++) {
-                result.add(images_id[i]);
-            }
-        }
-
-        return stringListType(result);
-    }
+//    public String[] getImagesByLocation(String location_id, Boolean floorplan) {
+//        ArrayList<String> result = new ArrayList<>();
+//        String image_description = "";
+//
+//        String[] location = getLocationInfo(location_id);
+//        if (location.length > 0) {
+//            image_description = location[0];
+//        }
+//
+//        String[] images_id = getImage_id(image_description, floorplan);
+//        if (images_id.length > 0) {
+//            for (int i = 0; i < images_id.length; i++) {
+//                result.add(images_id[i]);
+//            }
+//        }
+//
+//        return stringListType(result);
+//    }
     public String[] getImageInfo(String image_id) {
         ArrayList<String> result = new ArrayList<>();
 
@@ -509,11 +513,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         result.add(institute_id);
         result.add(getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID),Arrays.asList(institute_id), INSTITUTE_PHONENUMBER, true)[0]);
+        result.add(getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(institute_id), INSTITUTE_ICON, true)[0]);
+        result.add(getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_ID), Arrays.asList(institute_id), INSTITUTE_FULLNAME_ENGLISH, true)[0]);
 
         return stringListType(result);
     }
     public String[] getInstitute_id(String institute_fullname) {
-        return getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
+        String[] dutch = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
+        String[] english = getHandler(HROOPENDAY_INSTITUTE, Arrays.asList(INSTITUTE_FULLNAME_ENGLISH), Arrays.asList(institute_fullname), INSTITUTE_ID, true);
+
+        if (dutch.length > english.length) {
+            return dutch;
+        } else {
+            return english;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -551,15 +564,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // if result == true then the values are inserted
     }
 
-    public Boolean createInstitute(String fullname, String shortname, String generalinformation_english, String generalinformation_dutch, String phonenumber) {
+    public Boolean createInstitute(String fullname, String fullname_english, String shortname, String generalinformation_english, String generalinformation_dutch, String phonenumber, String icon) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
             contentValues.put(INSTITUTE_FULLNAME, fullname);
+            contentValues.put(INSTITUTE_FULLNAME_ENGLISH, fullname_english);
             contentValues.put(INSTITUTE_SHORTNAME, shortname);
             contentValues.put(INSTITUTE_GENERALINFORMATION_ENGLISH, generalinformation_english);
             contentValues.put(INSTITUTE_GENERALINFORMATION_DUTCH, generalinformation_dutch);
             contentValues.put(INSTITUTE_PHONENUMBER, phonenumber);
+            contentValues.put(INSTITUTE_ICON, icon);
 
         long result = db.insert(HROOPENDAY_INSTITUTE, null, contentValues);
         db.close();
@@ -711,12 +726,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 JSONObject institute = institute_all.getJSONObject(i);
 
                 String fullname = institute.getString("fullname");
+                String fullname_english = institute.getString("fullname_english");
                 String shortname = institute.getString("shortname");
                 String generalinformation_english = institute.getString("generalinformation_english");
                 String generalinformation_dutch = institute.getString("generalinformation_dutch");
                 String phonenumber = institute.getString("phonenumber");
+                String icon = institute.getString("icon");
 
-                createInstitute(fullname, shortname, generalinformation_english, generalinformation_dutch, phonenumber);
+                createInstitute(fullname, fullname_english, shortname, generalinformation_english, generalinformation_dutch, phonenumber, icon);
                 items += 1;
             }
             Log.d("Syncing", "fillDatabaseWithJson: " + "institute table synced, " + items.toString() + " institutes added.  (table 4/8)");
@@ -796,7 +813,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         setAppinfoFirst();
 
         // Create CMI
-        createInstitute("Communicatie, Media en Informatietechnologie", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.", "0107944000");
+        createInstitute("Communicatie, Media en Informatietechnologie", "", "CMI", "The School of Communication, Media and Information Technology (CMI) provides higher education and applied research for the creative industry. As a committed partner CMI creates knowledge, skills and expertise for the ongoing development of the industry.", "Het instituut voor Communicatie, Media en Informatietechnologie (CMI) heeft met de opleidingen Communicatie, Informatica, Technische Informatica, Creative Media and Game Technologies en Communication and Multimedia Design maar liefst 3000 studenten die een waardevolle bijdrage leveren aan de onbegrensde wereld van communicatie, media en ICT.", "0107944000", "");
 
         // CMI Studies
         createStudy("Communicatie, Media en Informatietechnologie", "Informatica", "Software engineering", "Full-time / Part-time", "informatica info dutch", "informatica info english", "calendar_icon");
@@ -939,14 +956,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Integer local_version = Integer.parseInt(appinfo[0]);
 
         String link = appinfo[1] + "/version";
-        jsonApi json = new jsonApi();
-        json.execute(link);
+        versionApi version = new versionApi();
+        version.execute(link);
 
-        while(!json.finish) {
+        while(!version.finish) {
             //wait
         }
-        String online = json.data.substring(0, json.data.length() - 4);
-        Integer online_version = Integer.parseInt(online);
+        Integer online_version = Integer.parseInt(version.data);
 
         if (online_version == local_version) {
             return false;
@@ -987,25 +1003,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // GET Handler
-    private String[] stringListType(ArrayList<String> mArraylist) {
+    public String[] stringListType(ArrayList<String> mArraylist) {
         return mArraylist.toArray(new String[mArraylist.size()]);
     }
     private String[] getHandler(String table, List<String> arguments, List<String> values, String returnColumn, Boolean doubleCheck) {
         ArrayList<String> mArrayList = new ArrayList<>();
         Cursor mCursor = viewAll(table, arguments, values);
 
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-            while (!mCursor.isAfterLast()) {
-                if (doubleCheck == true){
-                    if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+        try {
+            if (mCursor != null) {
+                mCursor.moveToFirst();
+                while (!mCursor.isAfterLast()) {
+                    if (doubleCheck == true) {
+                        if (!mArrayList.contains(mCursor.getString(mCursor.getColumnIndex(returnColumn)))) {
+                            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                        }
+                    } else {
                         mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
                     }
-                } else {
-                    mArrayList.add(mCursor.getString(mCursor.getColumnIndex(returnColumn)));
+                    mCursor.moveToNext();
                 }
-                mCursor.moveToNext();
             }
+        } finally {
+             if (mCursor != null) {
+                 mCursor.close();
+             }
         }
 
         return stringListType(mArrayList);
@@ -1069,11 +1091,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, HROOPENDAY, null, HROOPENDAY_VERSION);
+        mainContext = context;
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + HROOPENDAY_OPENDAY + "(" + OPENDAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + OPENDAY_DATE + " TEXT, " + OPENDAY_STARTTIME + " TEXT, " + OPENDAY_ENDTIME + " TEXT, " + OPENDAY_INSTITUTEFULLNAME + " TEXT" + ")");
-        db.execSQL("CREATE TABLE " + HROOPENDAY_INSTITUTE + "(" + INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + INSTITUTE_FULLNAME + " TEXT, " + INSTITUTE_SHORTNAME + " TEXT, " + INSTITUTE_PHONENUMBER + " TEXT, " + INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
+        db.execSQL("CREATE TABLE " + HROOPENDAY_INSTITUTE + "(" + INSTITUTE_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " + INSTITUTE_FULLNAME + " TEXT, " + INSTITUTE_FULLNAME_ENGLISH + " TEXT, " + INSTITUTE_SHORTNAME + " TEXT, " + INSTITUTE_PHONENUMBER + " TEXT, " + INSTITUTE_ICON + " TEXT, " + INSTITUTE_GENERALINFORMATION_ENGLISH + " TEXT, " + INSTITUTE_GENERALINFORMATION_DUTCH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_STUDY + "(" + STUDY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STUDY_INSTITUTEFULLNAME + " TEXT, " + STUDY_GENERALINFORMATION_DUTCH + " TEXT, " + STUDY_GENERALINFORMATION_ENGLISH + " TEXT, " + STUDY_NAME_DUTCH + " TEXT, " + STUDY_TYPE + " TEXT, " + STUDY_ICON + " TEXT, " + STUDY_NAME_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_ACTIVITY + "(" + ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ACTIVITY_OPENDAYDATE + " TEXT, " + ACTIVITY_STUDYNAME + " TEXT, " + ACTIVITY_STARTTIME + " TEXT, " + ACTIVITY_ENDTIME + " TEXT, " + ACTIVITY_CLASSROOM + " TEXT, " + ACTIVITY_INFORMATION_DUTCH + " TEXT, " + ACTIVITY_INFORMATION_ENGLISH + " TEXT" + ")");
         db.execSQL("CREATE TABLE " + HROOPENDAY_LOCATION + "(" + LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOCATION_STREET + " TEXT, " + LOCATION_CITY + " TEXT, " + LOCATION_ZIPCODE + " TEXT, " + LOCATION_INSTITUTEFULLNAME + " TEXT, " + LOCATION_IMAGEDESCRIPTION + " TEXT" + ")");

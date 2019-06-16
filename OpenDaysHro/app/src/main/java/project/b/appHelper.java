@@ -3,21 +3,19 @@ package project.b;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.text.InputFilter;
-import android.text.Spanned;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,10 +23,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -36,8 +34,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -85,9 +81,12 @@ public class appHelper extends AppCompatActivity {
             String ListItem_Time = starttime + "-" + endtime;
             String ListItem_Description = institute_shortname + "\n" + openday[1];
 
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
+
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
-            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = (int) ( button_height * 0.70); } else { info_button_size = (int) ( info_layout_width * 0.70); }
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -96,6 +95,7 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5));
@@ -108,11 +108,11 @@ public class appHelper extends AppCompatActivity {
                 info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
@@ -153,11 +153,14 @@ public class appHelper extends AppCompatActivity {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
-            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = (int) ( button_height * 0.70 ); } else { info_button_size = (int) ( info_layout_width * 0.70 ); }
 
             String ListItem_Description = this.db.getStudyInfo(study_id)[2];
             String[] all_workshops = this.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
             String workshops = "Workshops: " + String.valueOf(all_workshops.length);
+
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -178,11 +181,11 @@ public class appHelper extends AppCompatActivity {
                 info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
@@ -218,7 +221,7 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , int addToThisLayout) {
+        public void workshop( String ListItem_Description, String ListItem_Location, String ListItem_Time , String institute_id, int addToThisLayout) {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
 
@@ -228,6 +231,9 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams LinearLayout_main_layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, button_height);
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
+
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
 
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
@@ -239,11 +245,11 @@ public class appHelper extends AppCompatActivity {
                 listItem_time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Location = new TextView(this.context);
-                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER);
+                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER); listItem_Location.setTextSize(textSize);
                 listItem_Location.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                 listItem_Location.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
                 listItem_Location.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +257,7 @@ public class appHelper extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent openMap = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         String[] locationList= ListItem_Location.split("\\.");
+                        openMap.putExtra("InstituteID", institute_id);
                         openMap.putExtra("building",locationList[0].toLowerCase());
                         openMap.putExtra("floor",Integer.parseInt(locationList[1]));
                         openMap.putExtra("rawString",ListItem_Location);
@@ -259,7 +266,7 @@ public class appHelper extends AppCompatActivity {
                 });
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
 
@@ -281,8 +288,10 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public int ABOUT = 0;
+        public int STUDY_PROGRAM = 1;
 
-        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id){
+        public void generate_study_program_menu(int addToThisLayout, String[] List_with_id, String current_institute_id, String position,int pageID){
 
             /*
              https://stackoverflow.com/questions/8833825/error-getting-window-size-on-android-the-method-getwindowmanager-is-undefined
@@ -301,15 +310,28 @@ public class appHelper extends AppCompatActivity {
             String studyname = "";
             String studyid = "";
             String icon = "";
-            for (int i = 0; i < List_with_id.length; i++) {
-                studyname = this.db.getStudyInfo(List_with_id[i])[2];
-                studyid = this.db.getStudyInfo(List_with_id[i])[4];
-                icon = this.db.getStudyInfo(List_with_id[i])[5];
-                study_ids.add(studyid);
-                study_names.add(studyname);
-                study_icons.add(icon);
-            }
 
+            if (pageID==STUDY_PROGRAM) {
+                for (int i = 0; i < List_with_id.length; i++) {
+                    studyname = this.db.getStudyInfo(List_with_id[i])[2];
+                    studyid = this.db.getStudyInfo(List_with_id[i])[4];
+                    icon = this.db.getStudyInfo(List_with_id[i])[5];
+                    study_ids.add(studyid);
+                    study_names.add(studyname);
+                    study_icons.add(icon);
+                }
+            }else{
+                String[] institutes=this.db.getInstitutes();
+                for (int i=0;i < institutes.length;i++){
+                    String[] instituteInfo= this.db.getInstituteInfo(institutes[i]);
+                    studyname =instituteInfo[1];
+                    studyid=instituteInfo[3];
+                    icon=instituteInfo[5];
+                    study_ids.add(studyid);
+                    study_names.add(studyname);
+                    study_icons.add(icon);
+                }
+            }
 
             String[] List_with_text = study_names.toArray(new String[study_names.size()]);
             List_with_id = study_ids.toArray(new String[study_ids.size()]);
@@ -317,15 +339,22 @@ public class appHelper extends AppCompatActivity {
 
             // Get icons -->
             // https://stackoverflow.com/questions/16369814/how-to-access-the-drawable-resources-by-name-in-android
-            ArrayList<Integer> icons = new ArrayList<>();
-            Resources resources = this.context.getResources();
 
-            for (int i = 0; i < study_icons.size(); i++) {
-                icon = study_icons.get(i);
-                icons.add(resources.getIdentifier(icon, "drawable", this.context.getPackageName()));
-            }
+                ArrayList<Integer> icons = new ArrayList<>();
+                Resources resources = this.context.getResources();
 
-            Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
+                for (int i = 0; i < study_icons.size(); i++) {
+                    icon = study_icons.get(i);
+                    int id = resources.getIdentifier(icon, "drawable", this.context.getPackageName());
+                    if (id != 0) {
+                        icons.add(id);
+                    } else {
+                        icons.add(R.drawable.twotone_school_24);
+                    }
+
+                }
+
+                Integer[] List_with_images = icons.toArray(new Integer[icons.size()]);
 
 
 
@@ -353,11 +382,83 @@ public class appHelper extends AppCompatActivity {
                     Main_layout.setLayoutParams(my_main_params);
                 Main_layout.setOrientation(LinearLayout.VERTICAL);
 
+
+            String[] institutes = this.db.getInstitutes();
+            ArrayList<String> dropdown_items_list = new ArrayList<>();
+            for (int i = 0; i <institutes.length; i++) {
+                String id = institutes[i];
+
+                if (db.language()) {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+                } else {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[6]);
+                }
+            }
+
+            if (pageID==STUDY_PROGRAM) {
+                Spinner instituteSelector = new Spinner(context);
+
+                String[] arraySpinner = this.db.stringListType(dropdown_items_list);
+                instituteSelector.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_ATOP);//<--https://stackoverflow.com/questions/24677414/how-to-change-line-color-in-edittext
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, arraySpinner);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                instituteSelector.setAdapter(adapter);
+
+                if (position != null) {
+                    instituteSelector.setSelection(Integer.parseInt(position));
+                }
+
+                instituteSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String selected = instituteSelector.getSelectedItem().toString();
+                        String[] institute_id = db.getInstitute_id(selected);
+                        int select_pos = instituteSelector.getSelectedItemPosition();
+
+                        if (!institute_id[0].equals(current_institute_id)) {
+                            Intent gotoPage = new Intent(context, educations_activity.class);
+                            gotoPage.putExtra("InstituteID", institute_id[0]);
+                            gotoPage.putExtra("positionDropdown", select_pos);
+                            gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(gotoPage);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+
+                Main_layout.addView(instituteSelector);
+            }
+
             String longest_string;
             int Chars = 0;
 
+            String[] final_text_array = new String[List_with_text.length];
+            int[] final_text_array_length = new int[List_with_text.length];
+
             for ( int counter = 0; counter < List_with_text.length; counter++ ) {
-                if ( List_with_text[counter].length() > Chars ) { longest_string = List_with_text[counter]; Chars = List_with_text[counter].length(); }
+                String[] words = List_with_text[counter].split(" ");
+                if (words.length > 1) {
+                    int split = words.length / 2; String part_one = ""; String part_two = "";
+                    for (int i = 0; i < split; i++) { part_one += words[i]; if ( i != (split - 1) ) { part_one+= " "; } }
+                    for (int i = split; i < words.length; i++) { part_two += words[i]; if ( i != (words.length - 1) ) { part_two+= " "; } }
+                    final_text_array[counter] = part_one + "\n" + part_two;
+                    if ( part_one.length() >= part_two.length() ) { final_text_array_length[counter] = part_one.length(); } else { final_text_array_length[counter] = part_two.length(); }
+                }
+                else {
+                    final_text_array[counter] = List_with_text[counter];
+                    final_text_array_length[counter] = List_with_text[counter].length();
+                }
+            }
+
+            List_with_text = final_text_array;
+
+            for ( int counter = 0; counter < final_text_array.length; counter++ ) {
+                if ( final_text_array_length[counter] > Chars ) { Chars = final_text_array_length[counter]; }
             }
 
             // Technische Informatica = 22 char. textSize = 17 for 500 width (22 char). textSize = 22 for 500 width (12 char).
@@ -377,42 +478,55 @@ public class appHelper extends AppCompatActivity {
 
                     for (int y = 0; y < max_ammount_of_buttons_in_a_row; y++) {
                         LinearLayout Button = new LinearLayout(this.context);
-                            Button.setOrientation(LinearLayout.VERTICAL);
-                            Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                            LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
-                                btnSize.setMargins(button_margin,button_margin,button_margin,button_margin);
-                                Button.setLayoutParams(btnSize);
-                            RelativeLayout button_image = new RelativeLayout(this.context);
-                                button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
-                                button_image.setGravity(Gravity.CENTER);
-                                LinearLayout the_image = new LinearLayout(this.context);
-                                    LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ));
-                                        the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
-                                        the_image.setLayoutParams(the_image_params);
-                                    the_image.setBackground(getDrawable(List_with_images[i]));
-                                    button_image.addView(the_image);
-                            RelativeLayout button_text = new RelativeLayout(this.context);
-                                button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
-                                button_text.setGravity(Gravity.CENTER);
-                                TextView text = new TextView(this.context);
-                                    text.setText(List_with_text[i]);
-                                    text.setTextSize(textSize);
-                                    button_text.addView(text);
-                            Button.addView(button_image);
-                            Button.addView(button_text);
+                        Button.setOrientation(LinearLayout.VERTICAL);
+                        Button.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                        LinearLayout.LayoutParams btnSize = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(button_size, button_size));
+                        btnSize.setMargins(button_margin, button_margin, button_margin, button_margin);
+                        Button.setLayoutParams(btnSize);
+                        RelativeLayout button_image = new RelativeLayout(this.context);
+                        button_image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+                        button_image.setGravity(Gravity.CENTER);
+                        LinearLayout the_image = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams the_image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
+                        the_image.setLayoutParams(the_image_params);
+                        the_image.setBackground(getDrawable(List_with_images[i]));
+                        the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red), PorterDuff.Mode.SRC_IN);
+                        button_image.addView(the_image);
+                        RelativeLayout button_text = new RelativeLayout(this.context);
+                        button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
+                        button_text.setGravity(Gravity.CENTER);
+                        TextView text = new TextView(this.context);
+                        text.setText(List_with_text[i]);
+                        text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        text.setTextSize(textSize);
+                        button_text.addView(text);
+                        Button.addView(button_image);
+                        Button.addView(button_text);
 
                         final String this_button_id = List_with_id[i];
                         Button.isClickable();
-                        Button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent gotoPage = new Intent(context, educations_activity.class);
+                    if (pageID == STUDY_PROGRAM){
+                            Button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent gotoPage = new Intent(context, educations_activity.class);
                                     gotoPage.putExtra("StudyID", this_button_id);
                                     gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(gotoPage);
+                                }
+                            });
+                    }else{
+                        Button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent gotoPage = new Intent(context, About_activity.class);
+                                gotoPage.putExtra("InstituteID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
                             }
                         });
-
+                    }
                         i++;
 
                         horizontal.addView(Button);
@@ -443,12 +557,14 @@ public class appHelper extends AppCompatActivity {
                                     the_image_params.setMargins(picture_margin[0], picture_margin[1], picture_margin[2], picture_margin[3]);
                                     the_image.setLayoutParams(the_image_params);
                                 the_image.setBackground(getDrawable(List_with_images[i]));
+                                the_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                                 button_image.addView(the_image);
                         RelativeLayout button_text = new RelativeLayout(this.context);
                             button_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 5));
                             button_text.setGravity(Gravity.CENTER);
                             TextView text = new TextView(this.context);
                                 text.setText(List_with_text[i]);
+                                text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 text.setTextSize(textSize);
                                 button_text.addView(text);
                         Button.addView(button_image);
@@ -456,15 +572,27 @@ public class appHelper extends AppCompatActivity {
 
                         final String this_button_id = List_with_id[i];
                         Button.isClickable();
+                    if (pageID == STUDY_PROGRAM){
                         Button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent gotoPage = new Intent(context, educations_activity.class);
-                                    gotoPage.putExtra("StudyID", this_button_id);
-                                    gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(gotoPage);
+                                gotoPage.putExtra("StudyID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
                             }
                         });
+                    }else{
+                        Button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent gotoPage = new Intent(context, About_activity.class);
+                                gotoPage.putExtra("InstituteID", this_button_id);
+                                gotoPage.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(gotoPage);
+                            }
+                        });
+                    }
 
                     horizontal.addView(Button);
                     Main_layout.addView(horizontal);
@@ -477,18 +605,25 @@ public class appHelper extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void generate_page_study_programs(int Image, String ID, int addViewTo){
+        public void generate_page_study_programs(int DefaultImage, String ID, int addViewTo){
             String[] study = this.db.getStudyInfo(ID);
 
             String study_name = study[2];
             String study_information = study[3];
+            String institute_fullName=study[0];
+            String institute_id = db.getInstitute_id(institute_fullName)[0];
+
+
+            String[] InstituteInfo = this.db.getInstituteInfo(institute_id);
+            String Institute =InstituteInfo[1];
+
 
             int amountOfQuestions = db.amountOfQuestions(study_name);
             String[] QuizQuestions = db.getQuizQuestions(study_name);
 
             for (int i = 0; i < amountOfQuestions; i++){ System.out.println(QuizQuestions[i]); };
 
-            String[] contentList = new String[]{study_name,study_information};
+            String[] contentList = new String[]{study_information};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int quiz_height = (int) ( (float) phone_height / (float) 5 );
@@ -503,10 +638,32 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout.LayoutParams this_page_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 this_page.setLayoutParams(this_page_lp);
             LinearLayout this_page_header = new LinearLayout(this.context);
-                this_page_header.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout header_text = new LinearLayout(this.context);
+                    LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                    header_text.setLayoutParams(header_text_params);
+                TextViewOutline title = new TextViewOutline(this.context);
+                    title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    title.setGravity(Gravity.CENTER);
+                    title.setText(study_name);
+                    try{
+                        title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+                    }catch (Exception e){
+
+                    }
+                    title.setTextSize(makeTextFit(phone_width-calcWithFromDesign(50),study_name,title)); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(20);
+                header_text.setGravity(Gravity.CENTER);
+                header_text.addView(title);
+            this_page_header.addView(header_text);
+
+            this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                 this_page_header.setLayoutParams(this_page_header_lp);
-                this_page_header.setBackground(getDrawable(Image));
+                int header=context.getResources().getIdentifier("header_"+Institute.toLowerCase(), "drawable", this.context.getPackageName());
+                if (header==0){
+                header=DefaultImage;
+                }
+                this_page_header.setBackground(getDrawable(header));
             LinearLayout this_page_text = new LinearLayout(this.context);
                 this_page_text.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -658,6 +815,7 @@ public class appHelper extends AppCompatActivity {
                     the_image.setLayoutParams(image_lp);
                 the_image.setBackground(getDrawable(images[0]));
 
+
             RelativeLayout button_left = new RelativeLayout(this.context);
                 button_left.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 2));
                 TextView button1_txt = new TextView(this.context);
@@ -712,7 +870,7 @@ public class appHelper extends AppCompatActivity {
 
 
 
-        public void calendar_page(int addToThisLayout, int Image, int Calendar_Image,
+        public void calendar_page(int addToThisLayout, int DefaultImage, int Calendar_Image,
                                   int Share_Image, String EVENT_TITLE, String EVENT_DESCRIPTION, String EVENT_LOCATION,
                                   int EVENT_YEAR, int EVENT_MONTH, int EVENT_DAY, int EVENT_START_HOUR, int EVENT_START_MINUTE,
                                   int EVENT_END_HOUR, int EVENT_END_MINUTE, String openday_id){
@@ -738,7 +896,11 @@ public class appHelper extends AppCompatActivity {
             LinearLayout image = new LinearLayout(this.context);
                 LinearLayout.LayoutParams image_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 3.5 ) ));
                     image.setLayoutParams(image_params);
-                image.setBackground(getDrawable(Image));
+                    int header=context.getResources().getIdentifier("header_"+EVENT_DESCRIPTION.toLowerCase(), "drawable", this.context.getPackageName());
+                    if (header==0){
+                        header=DefaultImage;
+                    }
+                image.setBackground(getDrawable(header));
             LinearLayout buttons = new LinearLayout(this.context);
                 LinearLayout.LayoutParams buttons_params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int) ( (float) phone_height / (float) 7.0 )));
                     buttons_params.setMargins( horizontal_space, vertical_space, horizontal_space, vertical_space );
@@ -755,6 +917,7 @@ public class appHelper extends AppCompatActivity {
                 addToCalendar.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout addToCalendar_inner_image = new LinearLayout(this.context);
                     addToCalendar_inner_image.setBackground(getDrawable(Calendar_Image));
+                    addToCalendar_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams addToCalendar_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         addToCalendar_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         addToCalendar_inner_image.setLayoutParams(addToCalendar_inner_image_params);
@@ -801,6 +964,7 @@ public class appHelper extends AppCompatActivity {
                 share.setBackgroundColor(getResources().getColor(R.color.light_grey));
                 LinearLayout share_inner_image = new LinearLayout(this.context);
                     share_inner_image.setBackground(getDrawable(Share_Image));
+                    share_inner_image.getBackground().mutate().setColorFilter(getResources().getColor(R.color.hro_red),PorterDuff.Mode.SRC_IN);
                     LinearLayout.LayoutParams share_inner_image_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,1);
                         share_inner_image_params.setMargins(( (button_size / 4) + (button_size / 60)),(button_size / 30),( (button_size / 4) + (button_size / 60)),0);
                         share_inner_image.setLayoutParams(share_inner_image_params);
@@ -838,13 +1002,26 @@ public class appHelper extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void generate_page_about_page(int Image, final String institute_id, int addViewTo){
+        public void generate_page_about_page(int DefaultImage, final String institute_id, int addViewTo){
             String[] institute = this.db.getInstituteInfo(institute_id);
+            String[] locations_id = this.db.getLocationsByInstitute(institute_id);
 
             String Title = institute[1];
             String Text = institute[2];
+            String location_info = "";
 
-            String[] contentList = new String[]{Text};
+            if (this.db.language() == true) {
+                location_info = "\nLocaties van dit instituut zijn:\n";
+            } else {
+                location_info = "\nLocation of this institute are:\n";
+            }
+
+            for(int i = 0; i < locations_id.length; i++) {
+                String[] location = this.db.getLocationInfo(locations_id[i]);
+                location_info += " - " + location[3] + " " + location[1] + "\n";
+            }
+
+            String[] contentList = new String[]{Text, location_info};
 
             int header_height = (int) ( (float) phone_height / (float) 3.5 );
             int textSize = (int) ( (float) ( (float) (float) 16 * (float) ((float) phone_height / (float) 2200) / (float) metrics.density ) * (float) 2.625 );
@@ -859,16 +1036,24 @@ public class appHelper extends AppCompatActivity {
                     this_page_header.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout.LayoutParams this_page_header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                         this_page_header.setLayoutParams(this_page_header_lp);
-                    this_page_header.setBackground(getDrawable(Image));
+                        int header=context.getResources().getIdentifier("header_"+Title.toLowerCase(), "drawable", this.context.getPackageName());
+                        if (header==0){
+                            header=DefaultImage;
+                        }
+                    this_page_header.setBackground(getDrawable(header));
+
                     LinearLayout header_text = new LinearLayout(this.context);
                         LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                            header_text_params.setMargins((phone_width / 25),(phone_height / 75),(phone_width / 25),(phone_height / 75));
+                            header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
                             header_text.setLayoutParams(header_text_params);
-                        TextView title = new TextView(this.context);
-                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));
-                            header_text.setGravity(Gravity.CENTER);
+                        TextViewOutline title = new TextViewOutline(this.context);
+                            title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                            title.setGravity(Gravity.CENTER);
+                            title.setText(Title); title.setTextSize(textSize_header); title.setTextColor(getResources().getColor(R.color.hro_red));title.setOutlineColor(Color.WHITE);title.setOutlineSize(20);
+                        header_text.setGravity(Gravity.CENTER);
                             header_text.addView(title);
                         this_page_header.addView(header_text);
+
                 LinearLayout this_page_text = new LinearLayout(this.context);
                     this_page_text.setOrientation(LinearLayout.VERTICAL);
                     LinearLayout.LayoutParams this_page_text_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -890,42 +1075,56 @@ public class appHelper extends AppCompatActivity {
             main.addView(this_page);
 
 
-            LinearLayout button_map = new LinearLayout(this.context);
+            if (db.getFloorplansByInstitute(institute_id).length!=0) {
+
+                LinearLayout button_map = new LinearLayout(this.context);
                 button_map.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950),calcHeightFromDesign(350));
-                layoutParamsButtonMap.setMargins(calcWithFromDesign(70),calcHeightFromDesign(20),0,0);
+                LinearLayout.LayoutParams layoutParamsButtonMap = new LinearLayout.LayoutParams(calcWithFromDesign(950), calcHeightFromDesign(350));
+                layoutParamsButtonMap.setMargins(calcWithFromDesign(70), calcHeightFromDesign(20), 0, calcHeightFromDesign(20));
                 button_map.setLayoutParams(layoutParamsButtonMap);
-                button_map.setBackgroundColor(getResources().getColor( R.color.light_grey));
-                button_map.setGravity(Gravity.CENTER_HORIZONTAL);
+                button_map.setBackgroundColor(getResources().getColor(R.color.light_grey));
+                button_map.setGravity(Gravity.CENTER);
+
+                LinearLayout iconText = new LinearLayout(context);
+                iconText.setOrientation(LinearLayout.VERTICAL);
+                iconText.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 ImageView icon = new ImageView(context);
-                    LinearLayout.LayoutParams iconLayout=new LinearLayout.LayoutParams(calcWithFromDesign(150),calcWithFromDesign(150));
-                    iconLayout.setMargins(0,calcHeightFromDesign(40),0,0);
-                    icon.setLayoutParams(iconLayout);
-                    icon.setImageResource(R.drawable.twotone_map_black_18dp);
+                int size;
+                if (calcWithFromDesign(150) > calcHeightFromDesign(150)) {
+                    size = calcHeightFromDesign(150);
+                } else {
+                    size = calcHeightFromDesign(150);
+                }
+                LinearLayout.LayoutParams iconLayout = new LinearLayout.LayoutParams(size, size);
+                iconLayout.setMargins(0, 0, 0, calcHeightFromDesign(20));
+                icon.setLayoutParams(iconLayout);
+                icon.setImageResource(R.drawable.twotone_map_black_18dp);
 
-                    icon.setColorFilter(getResources().getColor(R.color.hro_red));
-                button_map.addView(icon);
+                icon.setColorFilter(getResources().getColor(R.color.hro_red));
 
-                TextView floorplanText=new TextView(context);
-                    floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
-                    floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350),captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
-                    floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
-                    floorplanText.setTextColor(getResources().getColor(android.R.color.black));
-                button_map.addView(floorplanText);
+                iconText.addView(icon);
 
+                TextView floorplanText = new TextView(context);
+                floorplanText.setText(captFirstLetter(getResources().getText(R.string.floorPlan).toString()));
+                floorplanText.setTextSize(makeTextFit(calcWithFromDesign(350), captFirstLetter(getResources().getText(R.string.floorPlan).toString())));
+                floorplanText.setGravity(Gravity.CENTER_HORIZONTAL);
+                floorplanText.setTextColor(getResources().getColor(android.R.color.black));
+                iconText.addView(floorplanText);
+                button_map.addView(iconText);
 
 
                 button_map.isClickable();
                 button_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent map = new Intent(context,map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);;
+                        Intent map = new Intent(context, map_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         map.putExtra("InstituteID", institute_id);
                         startActivity(map);
                     }
                 });
                 main.addView(button_map);
+            }
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1292,12 +1491,17 @@ public class appHelper extends AppCompatActivity {
 
                         LinearLayout result = new LinearLayout(this.context); result.setGravity(Gravity.CENTER);
                         LinearLayout backbutton = new LinearLayout(this.context); backbutton.setGravity(Gravity.CENTER);
-                            backbutton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, back_button_height));
+                            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, back_button_height);
+                            layoutParams.setMargins(calcWithFromDesign(30),calcHeightFromDesign(20),calcWithFromDesign(30),0);
+                            backbutton.setLayoutParams(layoutParams);
                         TextView result_textview = new TextView(this.context); result.addView(result_textview);
-                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize);
+                            if (check) { result_textview.setText("This study is for you!"); } else { result_textview.setText("This study is not for you!"); } result_textview.setTextSize(textSize); result_textview.setTextColor(Color.BLACK);
                         TextView backbutton_text = new TextView(this.context);
-                            backbutton_text.setText("Close the quiz"); backbutton_text.setTextSize(textSize);
-                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.hro_red));
+
+                            backbutton_text.setTextColor(Color.BLACK);
+                            backbutton_text.setText("Close the quiz");
+                            backbutton_text.setTextSize(textSize);
+                            backbutton.addView(backbutton_text); backbutton.setBackgroundColor(getResources().getColor(R.color.light_grey));
                             backbutton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -1326,6 +1530,21 @@ public class appHelper extends AppCompatActivity {
                 header.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams header_lp = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, header_height));
                     header.setLayoutParams(header_lp);
+                    LinearLayout header_text = new LinearLayout(this.context);
+                        LinearLayout.LayoutParams header_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        header_text_params.setMargins(0,(phone_height / 75),0,(phone_height / 75));
+                        header_text.setLayoutParams(header_text_params);
+                    TextViewOutline titleText = new TextViewOutline(this.context);
+                        titleText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        titleText.setGravity(Gravity.CENTER);
+                        try {
+                            titleText.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                        titleText.setText(getResources().getString(R.string.Conctact)); titleText.setTextSize(makeTextFit(phone_width-calcWithFromDesign(400),getResources().getString(R.string.Conctact))); titleText.setTextColor(getResources().getColor(R.color.hro_red));titleText.setOutlineColor(Color.WHITE);titleText.setOutlineSize(25);
+                    header_text.setGravity(Gravity.CENTER);
+                header.addView(titleText);
                 header.setBackground(getDrawable(image));
                 main.addView(header);
 
@@ -1334,8 +1553,10 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
 
             int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3.5 ); int button_horizontal_margin = (int) (button_size / 5);
-            int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
             LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, 0 );
+
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 24 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
 
             for (int i = 0; i < 2; i++) {
 
@@ -1446,7 +1667,23 @@ public class appHelper extends AppCompatActivity {
             // and edited by myself to fit
             TextView textView=new TextView(context);
             textView.setLayoutParams(new LinearLayout.LayoutParams(availableWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+            CharSequence text = tekst;
+            float textSize = 0;
+            textView.setTextSize(textSize);
 
+
+            while (text == (TextUtils.ellipsize(text, textView.getPaint(), availableWidth, TextUtils.TruncateAt.END))) {
+                textSize += 1;
+                textView.setTextSize(textSize);
+            }
+            textSize -= 5;
+            textView.setTextSize(textSize);
+            return  textSize;
+        }
+        private float makeTextFit(int availableWidth,String tekst,TextView textView) {
+
+            //https://stackoverflow.com/questions/7259016/scale-text-in-a-view-to-fit/7259136#7259136
+            // and edited by myself to fit
             CharSequence text = tekst;
             float textSize = 0;
             textView.setTextSize(textSize);
@@ -1499,29 +1736,27 @@ public class appHelper extends AppCompatActivity {
             if(name.length()>0 && subject.length()>0&&textField.length()>0) {
                 //https://developer.android.com/training/basics/intents/sending.html#java
                 if(isEmailValid(email)) {
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setType("text/html");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"0967161@hr.nl"}); // recipients
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contact Form Openday: " + subject);
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, textField + "\n\nThis email was send by " + name+" with the opendag app.\nPleas anwser on: "+email);
-                    startActivity(emailIntent);
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:0967161@hr.nl")); // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Contact Form Openday: " + subject);
+                    intent.putExtra(Intent.EXTRA_TEXT, textField + "\n\nThis email was send by " + name+" with the opendag app.\nPleas anwser on: "+email);
+                    startActivity(intent);
                 }else{
                     Toast.makeText(context,R.string.email_not_valid,Toast.LENGTH_LONG).show();
                 }
             }else{
                 String finalText=getString(R.string.fields_empty)+" ";
                 if (name.length()==0){
-                    finalText+=getText(R.string.name)+", ";
+                    finalText+=captFirstLetter(getText(R.string.name)+", ");
+                }
+                if (subject.length()==0){
+                    finalText+=captFirstLetter(getString(R.string.subject)+", ");
                 }
                 if (email.length() == 0) {
-                    finalText+=getString(R.string.email)+", ";
+                    finalText+=captFirstLetter(getString(R.string.email)+", ");
                 }
-                if (email.length()==0){
-                    finalText+=getString(R.string.subject)+", ";
-                }
-
                 if (textField.length() == 0) {
-                    finalText+=getString(R.string.question)+", ";
+                    finalText+=captFirstLetter(getString(R.string.question)+", ");
                 }
 
                 finalText=finalText.substring(0,finalText.length()-2);
@@ -1554,7 +1789,7 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout.LayoutParams layoutParamsTitle=new LinearLayout.LayoutParams(totalWidth/4 ,ViewGroup.LayoutParams.WRAP_CONTENT);
                     title.setLayoutParams(layoutParamsTitle);
                     title.setGravity(Gravity.RIGHT|Gravity.TOP);
-                    title.setText(name+":");
+                    title.setText(captFirstLetter(name+":"));
                     title.setTextSize(textSize);
                 group.addView(title);
 
@@ -1564,7 +1799,7 @@ public class appHelper extends AppCompatActivity {
                     editText.setGravity(Gravity.TOP);
                     editText.setInputType(InputType.TYPE_CLASS_TEXT|inputType);
                     editText.setTag(name);
-                    editText.setHint(name);
+                    editText.setHint(captFirstLetter(name));
                 group.addView(editText);
 
             return new QuestionItemReturn(group,editText);
@@ -1582,7 +1817,7 @@ public class appHelper extends AppCompatActivity {
                 int newWidth=phone_width-margin*2;
 
 
-                float textSize= calcTextSizeFloat(25,calcMaxTextLength(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)),newWidth);
+                float textSize= makeTextFit(newWidth/4,getMaxText(getString(R.string.name),getString(R.string.subject),getString(R.string.email),getString(R.string.question)));
 
                 EditText[] inputFields=new EditText[4];
 
@@ -1689,8 +1924,12 @@ public class appHelper extends AppCompatActivity {
                         String titleText = getText(R.string.Search_Classroom_Title).toString();
                         Title.setText(titleText);
                         Title.setTextSize(makeTextFit(calcWithFromDesign(500),titleText));
-                        Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
-                        Title.setTextColor(getResources().getColor(R.color.white));
+                        try {
+                            Title.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold)); //<-- https://stackoverflow.com/questions/14343903/what-is-the-equivalent-of-androidfontfamily-sans-serif-light-in-java-code
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
+                            Title.setTextColor(getResources().getColor(R.color.white));
 
                     topBar.addView(Title);
 
@@ -1918,11 +2157,50 @@ public class appHelper extends AppCompatActivity {
                 LinearLayout bottomBar=new LinearLayout(context);
                     bottomBar.setBackground(getDrawable(R.drawable.onderkant));
                 pop.addView(bottomBar,calcWithFromDesign(900),calcHeightFromDesign(195));
-
-
-
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        public void sync(Context context, Integer mseconds, ProgressBar progressBar) {
+            Boolean latestVersion = false;
 
+            if (this.db.emptyDatabase()) {
+                Log.d("Syncing", "onCreate: " + "Database is empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context, mseconds, progressBar);
+                        json.execute(this.db.latestAppInfo()[1]);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
+                    }
+                } else {
+                    Log.d("Syncing", "onCreate: " + "Phone is offline");
+                    this.db.fillDatabase_offline();
+                    latestVersion = true;
+                }
+            } else {
+                Log.d("Syncing", "onCreate: " + "Database is not empty");
+                if (this.db.isOnline(context) == true) {
+                    Log.d("Syncing", "onCreate: " + "Phone is online");
+                    if (this.db.versionDatabase() == true) {
+                        Log.d("Syncing", "onCreate: " + "Database is not the latest version");
+                        jsonApi json = new jsonApi(context, mseconds, progressBar);
+                        json.execute(this.db.latestAppInfo()[1]);
+                    } else {
+                        Log.d("Syncing", "onCreate: " + "Database is up-to-date");
+                        latestVersion = true;
+                    }
+                } else {
+                    latestVersion = true;
+                }
+            }
 
+            if (latestVersion) {
+                System.out.println("latest version");
+                waitInBackground wait = new waitInBackground(context, progressBar);
+                wait.execute(mseconds);
+            }
+        }
     }
 }

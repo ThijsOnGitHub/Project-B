@@ -21,4 +21,10 @@
     <string name="roomnumber">roomnumber</string>
     <string name="Classroom_highlighted">The classroom is going to be \n highlighted</string>
     <string name="floorPlan">Floor Plan</string>
+    <string name="sort_on_Date">sort on date</string>
+    <string name="Home" translatable="false">Home</string>
+    <string name="Study_Programs">Study Programs</string>
+    <string name="About_Institute">About Institute</string>
+    <string name="Conctact" translatable="false">Contact</string>
+    <string name="open_days">Open Days</string>
 </resources>

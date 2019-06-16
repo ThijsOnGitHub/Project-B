@@ -21,8 +21,8 @@ public class opendays_activity extends appHelper {
 
         layout = new LayoutHelper(this);
 
-        int header_image = R.drawable.blaak;
-        int add_to_calendar_image = R.drawable.calendar_icon;
+        int header_image = R.drawable.header_cmi;
+        int add_to_calendar_image = R.drawable.twotone_calendar_today_24;
         int share_image = R.drawable.twotone_share_24px;
 
 
@@ -68,8 +68,9 @@ public class opendays_activity extends appHelper {
 
             for (int i = 0; i < activities.length; i++) {
                 String[] activity = layout.db.getActivityInfo(activities[i]);
+                String institute_id = layout.db.getInstitute_id(openday[0])[0];
 
-                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), R.id.page_container);
+                layout.workshop(activity[0], activity[2], activity[3].substring(0, activity[3].length() - 3) + "-" + activity[4].substring(0, activity[4].length() -3), institute_id, R.id.page_container);
             }
         }
 
@@ -81,10 +82,7 @@ public class opendays_activity extends appHelper {
         Intent[] myIntents = new Intent[]{home,educations,about_cmi,contact};
         int[] images = new int[]{R.drawable.ic_home_grey_24dp,R.drawable.baseline_school_24px,R.drawable.ic_location_city_white_24dp,R.drawable.ic_chat_white_24dp};
 
-        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
-        if(layout.db.language() == true) {
-            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
-        }
+        String[] text = new String[]{getResources().getString(R.string.Home),getResources().getString(R.string.Study_Programs),getResources().getString(R.string.About_Institute),getResources().getString(R.string.Conctact)};
 
         layout.generate_menu(R.id.menu_bar,images,text,myIntents);
 

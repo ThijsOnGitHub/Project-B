@@ -36,16 +36,15 @@ public class contact_activity extends appHelper {
         Intent[] myIntents = new Intent[]{home, educations, about_cmi, contact};
         int[] images = new int[]{R.drawable.ic_home_white_24dp, R.drawable.baseline_school_24px, R.drawable.ic_location_city_white_24dp, R.drawable.ic_chat_grey_24dp};
 
-        String[] text = new String[]{"Home","Study Programs","About CMI","Contact"};
+        String[] text = new String[]{getResources().getString(R.string.Home),getResources().getString(R.string.Study_Programs),getResources().getString(R.string.About_Institute),getResources().getString(R.string.Conctact)};
         int[] contact_images = new int[]{ R.drawable.button_website, R.drawable.ask_question, R.drawable.button_call_us };
         if(layout.db.language() == true) {
-            text = new String[]{"Home", "Studies", "Over CMI", "Contact"};
             contact_images = new int[] { R.drawable.button_website, R.drawable.ask_question_nl, R.drawable.button_call_nl};
         }
 
         int[] social_images = new int[]{ R.drawable.facebook_logo, R.drawable.instagram, R.drawable.twitter };
 
         layout.generate_menu(R.id.menu_bar, images, text, myIntents);
-        layout.contact_page(R.drawable.blaak, contact_images, social_images, passedInstituteID);
+        layout.contact_page(R.drawable.header_cmi, contact_images, social_images, passedInstituteID);
     }
 }
