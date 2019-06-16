@@ -47,6 +47,7 @@ public class launch extends appHelper {
             resumeCounter+=1;
         }else{
             finish();
+            System.exit(0);
         }
     }
 }
