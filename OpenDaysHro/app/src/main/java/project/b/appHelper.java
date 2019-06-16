@@ -1736,7 +1736,9 @@ public class appHelper extends AppCompatActivity {
             if(name.length()>0 && subject.length()>0&&textField.length()>0) {
                 //https://developer.android.com/training/basics/intents/sending.html#java
                 if(isEmailValid(email)) {
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:" + "0967161@hr.nl"));
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    emailIntent.setType("text/html");    //<--https://stackoverflow.com/questions/8701634/send-email-intent
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"0967161@hr.nl"}); // recipients
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contact Form Openday: " + subject);
                     emailIntent.putExtra(Intent.EXTRA_TEXT, textField + "\n\nThis email was send by " + name+" with the opendag app.\nPleas anwser on: "+email);
                     startActivity(emailIntent);
