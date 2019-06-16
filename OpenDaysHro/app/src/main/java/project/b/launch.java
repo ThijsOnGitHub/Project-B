@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class launch extends appHelper {
-
+    int resumeCounter=0;
     LayoutHelper layoutHelper;
     TextView hro, version;
     ProgressBar pb;
@@ -38,5 +38,15 @@ public class launch extends appHelper {
         }
 
         layoutHelper.sync(this, 2250, pb);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(resumeCounter==0){
+            resumeCounter+=1;
+        }else{
+            finish();
+        }
     }
 }
