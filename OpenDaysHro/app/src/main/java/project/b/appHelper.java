@@ -81,9 +81,12 @@ public class appHelper extends AppCompatActivity {
             String ListItem_Time = starttime + "-" + endtime;
             String ListItem_Description = institute_shortname + "\n" + openday[1];
 
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
+
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
-            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = (int) ( button_height * 0.70); } else { info_button_size = (int) ( info_layout_width * 0.70); }
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -105,11 +108,11 @@ public class appHelper extends AppCompatActivity {
                 info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
@@ -150,11 +153,14 @@ public class appHelper extends AppCompatActivity {
 
             int button_height = (int) ( (float) ( (float) 200 / (float) 2200) * (float) phone_height );
             int info_layout_width = phone_width / 6;
-            int info_button_size; if (button_height < info_layout_width) { info_button_size = button_height; } else { info_button_size = info_layout_width; }
+            int info_button_size; if (button_height < info_layout_width) { info_button_size = (int) ( button_height * 0.70 ); } else { info_button_size = (int) ( info_layout_width * 0.70 ); }
 
             String ListItem_Description = this.db.getStudyInfo(study_id)[2];
             String[] all_workshops = this.db.getActivitiesByStudyAndOpenday(openday_id, study_id);
             String workshops = "Workshops: " + String.valueOf(all_workshops.length);
+
+            int textfield_size = ( ( phone_width * 5 ) / 12 );
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 450 ) / (float) metrics.density) * (float) 2.625);
 
             LinearLayout LinearLayout_main = new LinearLayout(this.context);
                 LinearLayout_main.setOrientation(LinearLayout.HORIZONTAL);
@@ -175,11 +181,11 @@ public class appHelper extends AppCompatActivity {
                 info_layout.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(workshops); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout info_button = new LinearLayout(this.context);
@@ -226,6 +232,9 @@ public class appHelper extends AppCompatActivity {
                     LinearLayout_main_layoutParams.setMargins(0,0,0,0);
                     LinearLayout_main.setLayoutParams(LinearLayout_main_layoutParams);
 
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 18 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
+
             RelativeLayout listItem_description_layout = new RelativeLayout(this.context);
                 listItem_description_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
 
@@ -236,11 +245,11 @@ public class appHelper extends AppCompatActivity {
                 listItem_time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,2));
 
             TextView listItem_description = new TextView(this.context);
-                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER);
+                listItem_description.setText(ListItem_Description); listItem_description.setGravity(Gravity.CENTER); listItem_description.setTextSize(textSize);
                 listItem_description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
             TextView listItem_Location = new TextView(this.context);
-                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER);
+                listItem_Location.setText(ListItem_Location); listItem_Location.setGravity(Gravity.CENTER); listItem_Location.setTextSize(textSize);
                 listItem_Location.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                 listItem_Location.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
                 listItem_Location.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +266,7 @@ public class appHelper extends AppCompatActivity {
                 });
 
             TextView listItem_Time = new TextView(this.context);
-                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER);
+                listItem_Time.setText(ListItem_Time); listItem_Time.setGravity(Gravity.CENTER); listItem_Time.setTextSize(textSize);
                 listItem_Time.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
 
@@ -378,7 +387,12 @@ public class appHelper extends AppCompatActivity {
             ArrayList<String> dropdown_items_list = new ArrayList<>();
             for (int i = 0; i <institutes.length; i++) {
                 String id = institutes[i];
-                dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+
+                if (db.language()) {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[0]);
+                } else {
+                    dropdown_items_list.add(this.db.getInstituteInfo(id)[6]);
+                }
             }
 
             if (pageID==STUDY_PROGRAM) {
@@ -1539,8 +1553,10 @@ public class appHelper extends AppCompatActivity {
             for (int i = 0; i < title.length; i++){ if ( title[i].length() >= longest_title ) { longest_title = title[i].length(); } }
 
             int amountOfButtons = 3; int button_size = (int) ( ( ( (float) phone_width / amountOfButtons ) / 5) * 3.5 ); int button_horizontal_margin = (int) (button_size / 5);
-            int default_text_size = 24; int int_tested_width = 1080; int textSize = (int) ((float) ((float) ((float) default_text_size - ((float) longest_title / 2)) * (float) ((float) int_tested_width / (float) phone_width) / (float) metrics.density) * (float) 2.625);
             LinearLayout.LayoutParams button_lp = new LinearLayout.LayoutParams(button_size, button_size); button_lp.setMargins(button_horizontal_margin,0,button_horizontal_margin, 0 );
+
+            int textfield_size = ( ( phone_width * 2 ) / 5 ); System.out.println(textfield_size);
+            int textSize = (int) ((float) ( (float) 24 * (float) ( (float) textfield_size / (float) 432 ) / (float) metrics.density) * (float) 2.625);
 
             for (int i = 0; i < 2; i++) {
 
