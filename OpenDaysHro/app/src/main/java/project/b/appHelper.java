@@ -1075,7 +1075,7 @@ public class appHelper extends AppCompatActivity {
             main.addView(this_page);
 
 
-            if (locations_id.length!=0) {
+            if (db.getFloorplansByInstitute(institute_id).length!=0) {
 
                 LinearLayout button_map = new LinearLayout(this.context);
                 button_map.setOrientation(LinearLayout.VERTICAL);
